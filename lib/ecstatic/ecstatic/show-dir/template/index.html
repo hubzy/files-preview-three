@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>files-preview</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+  <style src="./index.css"></style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="header"></div>
+    <div class="content">
+      <h2 class="title">
+        <a :href="path[path.length-3].path" class="back-icon" v-if="path && path.length >= 3"></a>
+        <span>{{current == '/' ? '项目总览': current || '项目总览' }}</span>
+      </h2>
+      <p class="path">
+        快速导航：<a :href="item.path" v-for="(item,index) in path">{{item.text}}{{index == path.length - 1 ? '' : '/'}}</a>
+      </p>
+
+
+      <ul class="project-list row row-4" v-if="project.length > 0">
+        <li class="project-item col-item" v-for="(item,index) in project" :key="index">
+          <a class="project" :href="current+item.name+'/'">
+            <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
+            <div class="project-info">
+              <div class="file-name">{{item.name}}</div>
+              <div class="update-time">{{item.atime}}</div>
+            </div>
+          </a>
+        </li>
+      </ul>
+
+
+      <div class="file-type-wrap type-folder" v-if="folder.length > 0">
+        <div class="file-type-name">
+          文件夹
+        </div>
+
+        <ul class="folder row row-6">
+          <li class="col-item" v-for="(item,index) in folder" :key="index">
+            <a :href="current+item.name+'/'" class="folder-item">
+              <i class="folder-icon"></i>
+              <div class="file-name">
+                {{item.name}}
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="file-type-wrap type-image" v-if="images.length > 0">
+        <div class="file-type-name">
+          图片
+        </div>
+
+        <ul class="images row row-6">
+          <li class="col-item" v-for="(item,index) in images" :key="index">
+            <a :href="current+item.fileName" class="images-item">
+              <div class="image-preview">
+                <div class="preview" :style="{backgroundImage:`url('`+current + item.fileName+`')`}">
+                </div>
+              </div>
+
+              <div class="file-name">
+                {{item.fileName}}
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+<script>
+  var treeData = '{{treeData}}';
+  console.log(treeData);
+  (function () {
+    let imgExt = ['png', 'jpg', 'jpeg', 'svg']
+    var app = new Vue({
+      el: '#app',
+      data: {
+        project: [],
+        folder: [],
+        imageObj: [],
+        path: [],
+
+        current: treeData.current
+      },
+      created() {
+        this.initImageList()
+        this.initFloder()
+        this.initNav()
+      },
+      methods: {
+        initNav() {
+          let current = treeData.current.split('/')
+          let path = ''
+          current = current.map(item => {
+            return {
+              text: item,
+              path: path += (item + '/')
+            }
+          })
+          this.path = current
+          console.log(current, 'current')
+        },
+        initFloder() {
+          let dirs = treeData.dirs
+
+          // 项目目录
+          let projectList = []
+
+          // 普通文件夹
+          let folderList = []
+          dirs.forEach(item => {
+            let [name, dirData] = item
+            if (name !== '..') {
+              let imgInfo = this.imageObj[name]
+              if (imgInfo) {
+                projectList.push({
+                  ...dirData,
+                  name: name,
+                  cover: treeData.current + imgInfo.fileName
+                })
+              } else {
+                folderList.push({
+                  ...dirData,
+                  name: name,
+                })
+              }
+            }
+          })
+
+          this.project = projectList || []
+          this.folder = folderList || []
+        },
+        initImageList() {
+          let files = treeData.renderFiles
+          let imageObj = {}
+          let images = []
+          files.forEach(item => {
+            let fileName = item[0]
+            let nameArr = fileName.split('.')
+            let ext = nameArr.pop()
+            fileName = nameArr.join('.')
+
+            if (imgExt.indexOf(ext) !== -1) {
+              imageObj[fileName] = {
+                fileName: item[0],
+                ...item[1]
+              }
+
+              images.push({
+                fileName: item[0],
+                ...item[1]
+              })
+            }
+          })
+
+          this.imageObj = imageObj
+          this.images = images
+        },
+      },
+    })
+  })()
+</script>
+
+</html>

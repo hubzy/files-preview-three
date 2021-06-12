@@ -1,0 +1,67 @@
+{
+  "name": "files-preview",
+  "version": "0.0.5",
+  "description": "基于 http-server 和 ecstatic 魔改的静态文件启动项目",
+  "main": "./lib/files-preview",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/Jioho/files-preview"
+  },
+  "keywords": [
+    "cli",
+    "command",
+    "file",
+    "server"
+  ],
+  "scripts": {
+    "start": "node ./bin/files-preview",
+    "pretest": "common bin/files-preview lib/ test",
+    "test": "vows --spec --isolate"
+  },
+  "files": [
+    "lib",
+    "bin",
+    "doc"
+  ],
+  "man": "./doc/files-preview.1",
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "basic-auth": "^1.0.3",
+    "charset": "^1.0.1",
+    "colors": "^1.4.0",
+    "corser": "^2.0.1",
+    "http-proxy": "^1.18.0",
+    "minimist": "^1.2.5",
+    "on-finished": "^2.3.0",
+    "opener": "^1.5.1",
+    "portfinder": "^1.0.25",
+    "secure-compare": "3.0.1",
+    "union": "~0.5.0",
+    "url-join": "^2.0.5",
+    "he": "^1.1.1",
+    "mime": "^1.6.0"
+  },
+  "devDependencies": {
+    "common-style": "^3.0.0",
+    "vows": "~0.8.3",
+    "eol": "^0.9.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.14.0",
+    "express": "^4.16.3",
+    "mkdirp": "^0.5.0",
+    "request": "^2.88.0",
+    "tap": "^12.0.1"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "files-preview": "./bin/files-preview",
+    "hs": "./bin/files-preview"
+  }
+}
