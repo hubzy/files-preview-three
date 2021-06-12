@@ -1,6 +1,6 @@
 {
   "name": "files-preview",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "基于 http-server 和 ecstatic 魔改的静态文件启动项目",
   "main": "./lib/files-preview",
   "repository": {
@@ -14,6 +14,7 @@
     "server"
   ],
   "scripts": {
+    "serve": "nodemon ./bin/files-preview",
     "start": "node ./bin/files-preview",
     "pretest": "common bin/files-preview lib/ test",
     "test": "vows --spec --isolate"
@@ -45,18 +46,16 @@
   },
   "devDependencies": {
     "common-style": "^3.0.0",
-    "vows": "~0.8.3",
     "eol": "^0.9.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.14.0",
     "express": "^4.16.3",
     "mkdirp": "^0.5.0",
+    "nodemon": "^2.0.7",
     "request": "^2.88.0",
-    "tap": "^12.0.1"
-  },
-  "bugs": {
-    "url": ""
+    "tap": "^12.0.1",
+    "vows": "~0.8.3"
   },
   "license": "MIT",
   "preferGlobal": true,
