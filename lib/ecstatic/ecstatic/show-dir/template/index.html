@@ -85,6 +85,7 @@
   var treeData = '{{treeData}}';
   (function () {
     let imgExt = ['png', 'jpg', 'jpeg', 'svg']
+    let coverExt = ['png']
     var app = new Vue({
       el: '#app',
       data: {
@@ -102,7 +103,7 @@
       },
       methods: {
         hasCover(name) {
-          return Promise.any(imgExt.map(item => this.getCover(`${this.current}${name}/assets/cover.${item}`)))
+          return Promise.any(coverExt.map(item => this.getCover(`${this.current}${name}/assets/cover.${item}`)))
             .then(res => {
               return res
             }).catch(res => {

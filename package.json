@@ -1,6 +1,6 @@
 {
   "name": "files-preview",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "基于 http-server 和 ecstatic 魔改的静态文件启动项目",
   "main": "./lib/files-preview",
   "repository": {
