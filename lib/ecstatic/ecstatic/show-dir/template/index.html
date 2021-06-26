@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>files-preview</title>
-
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 
   <style src="./index.css"></style>
@@ -14,25 +13,32 @@
 
 <body>
   <div id="app">
-    <div class="header">
-      <div class="logo">
-        <img src="logo.png">
+    <div :class="['header-wrap',{blurHeder:blurHeder}]">
+      <div class="header">
+        <div class="logo">
+        </div>
       </div>
     </div>
-    <div class="hero"></div>
-    <div class="content">
+    <div class="hero" style="background-image: url('https://source.boringavatars.com/marble/440/?square&color=2f54eb,f5222d,ffc53d,#13c2c2,1890ff')">
+    </div>
+    <div class="content" ref="content">
+
       <h2 class="title">
         <a :href="path[path.length-3].path" class="back-icon" v-if="path && path.length >= 3"></a>
         <span>{{current == '/' ? '项目总览': current || '项目总览' }}</span>
       </h2>
       <p class="path">
-        快速导航：<a :href="item.path" v-for="(item,index) in path">{{item.text}}{{index == path.length - 1 ? '' : '/'}}</a>
+        快速导航：
+        <template v-for="(item,index) in path">
+          <a :href="item.path" :key="index">{{item.text || 'home'}}</a>
+          <span :key="'split_'+index" class="nav-split" v-if="index < path.length - 1">/</span>
+        </template>
       </p>
 
 
       <ul class="project-list row row-4" v-if="project.length > 0">
         <li class="project-item col-item" v-for="(item,index) in project" :key="index">
-          <a class="project" :href="current+item.name+'/'">
+          <a class="project" :href="item.name+'/'">
             <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
             <div class="project-info">
               <div class="file-name">{{item.name}}</div>
@@ -50,8 +56,44 @@
 
         <ul class="folder row row-6">
           <li class="col-item" v-for="(item,index) in folder" :key="index">
-            <a :href="current+item.name+'/'" class="folder-item">
-              <i class="folder-icon"></i>
+            <a :href="item.name+'/'" class="folder-item">
+              <!-- <i class="folder-icon"></i> -->
+              <svg width="188" height="159" viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_d)">
+                  <path
+                    d="M38.661 116.318H150C154.418 116.318 158 112.736 158 108.318V33.7879C158 29.3696 154.418 25.7879 150 25.7879H95.1835C92.705 25.7879 90.4202 24.4478 89.2105 22.2846C88.0009 20.1214 85.7161 18.7813 83.2376 18.7813H38.661C34.2427 18.7813 30.661 22.363 30.661 26.7813V108.318C30.661 112.736 34.2428 116.318 38.661 116.318Z"
+                    fill="#007EDC" />
+                  <rect x="36.0796" y="29.3176" width="113.792" height="82.1833" rx="6" fill="black"
+                    fill-opacity="0.05" />
+                  <rect x="37.2842" y="30.8228" width="113.792" height="82.1833" rx="6" fill="white" />
+                  <path
+                    d="M150 115.414H38.6611C34.2429 115.414 30.6611 111.833 30.6611 107.414V51.9014C30.6611 47.4831 34.2429 43.9014 38.6611 43.9014H92.8756C95.8212 43.9014 98.4895 42.1635 99.6804 39.4694C100.871 36.7752 103.539 35.0374 106.485 35.0374H150C154.418 35.0374 158 38.6191 158 43.0373V107.414C158 111.833 154.418 115.414 150 115.414Z"
+                    fill="black" fill-opacity="0.06" />
+                  <path
+                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H92.8756C95.8212 44.8045 98.4895 43.0666 99.6804 40.3725C100.871 37.6783 103.539 35.9405 106.485 35.9405H150C154.418 35.9405 158 39.5222 158 43.9405V108.318C158 112.736 154.418 116.318 150 116.318Z"
+                    fill="#0092FF" />
+                  <path
+                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H92.8756C95.8212 44.8045 98.4895 43.0666 99.6804 40.3725C100.871 37.6783 103.539 35.9405 106.485 35.9405H150C154.418 35.9405 158 39.5222 158 43.9405V108.318C158 112.736 154.418 116.318 150 116.318Z"
+                    fill="url(#paint0_linear)" fill-opacity="0.1" />
+                </g>
+                <defs>
+                  <filter id="filter0_d" x="0.661133" y="0.781319" width="187.339" height="157.536"
+                    filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dy="12" />
+                    <feGaussianBlur stdDeviation="15" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
+                  </filter>
+                  <linearGradient id="paint0_linear" x1="117" y1="36" x2="117" y2="116" gradientUnits="userSpaceOnUse">
+                    <stop stop-opacity="0" />
+                    <stop offset="1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
               <div class="file-name">
                 {{item.name}}
               </div>
@@ -68,7 +110,7 @@
 
         <ul class="images row row-6">
           <li class="col-item" v-for="(item,index) in images" :key="index">
-            <a :href="current+item.fileName" class="images-item">
+            <a :href="item.fileName" class="images-item">
               <div class="image-preview">
                 <div class="preview" :style="{backgroundImage:`url('`+current + item.fileName+`')`}">
                 </div>
@@ -98,15 +140,36 @@
         folder: [],
         imageObj: [],
         path: [],
-
-        current: treeData.current
+        blurHeder: false,
+        current: treeData.current,
       },
       created() {
         this.initImageList()
         this.initFloder()
         this.initNav()
       },
+
+      mounted() {
+        this.$nextTick(() => {
+          window.addEventListener("scroll", this.handleScroll); // 监听（绑定）滚轮滚动事件
+          this.handleScroll()
+        });
+      },
+      beforeDestroy() {
+        window.removeEventListener("scroll", this.handleScroll);
+      },
+
       methods: {
+
+        handleScroll() {
+          let scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
+          if (scrollHeight >= 100) {
+            this.blurHeder = true;
+          } else {
+            this.blurHeder = false;
+          }
+        },
+
         hasCover(name) {
           return Promise.any(coverExt.map(item => this.getCover(`${this.current}${name}/assets/cover.${item}`)))
             .then(res => {
@@ -129,15 +192,20 @@
           })
         },
         initNav() {
-          let current = treeData.current.split('/')
+          let routes = treeData.current.split('/')
+
           let path = ''
-          current = current.map(item => {
-            return {
-              text: item,
+          let paths = []
+
+          routes.forEach((item, index) => {
+            (item || index == 0) && paths.push({
+              text: item || 'home',
               path: path += (item + '/')
-            }
+            })
           })
-          this.path = current
+
+          this.current = paths[paths.length - 1].text
+          this.path = paths
         },
         initFloder() {
           let dirs = treeData.dirs
