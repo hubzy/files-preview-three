@@ -66,7 +66,7 @@ npm install --global files-preview
 files-preview [path] [options]
 ```
 
-`[]` 内容均为非必填参数，感兴趣的可以看下 http-server 的参数描述 [](./Http-server-readme)
+`[]` 内容均为非必填参数，感兴趣的可以看下 http-server 的参数描述 [Http-server-readme](./Http-server-readme)
 
 `[path]` 为要展示的根目录。 默认为 `./public` if the folder exists, and `./` otherwise.
 
@@ -77,9 +77,7 @@ files-preview [path] [options]
 
 更多功能可查看 http-server 的说明文档，虽然没有一一进行过测试，但原版的所有功能应该都是支持的。
 
-我们对以上文档进行了简单翻译，可在以下地址查阅：[](./Http-server-readme)
-
-> 地址待补充
+我们对以上文档进行了简单翻译，可在以下地址查阅：[Http-server-readme](./Http-server-readme)
 
 # 它有什么优势？
 
