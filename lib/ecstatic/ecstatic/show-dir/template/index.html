@@ -29,9 +29,9 @@
         <span>{{currentName == '/' ? '项目总览': currentName || '项目总览' }}</span>
       </h2>
       <p class="path">
-        快速导航：
+        快速导航 : 
         <template v-for="(item,index) in path">
-          <a :href="item.path" :key="index">{{item.text || 'home'}}</a>
+          <a :href="item.path" :key="index">{{item.text || 'Home'}}</a>
           <span :key="'split_'+index" class="nav-split" v-if="index < path.length - 1">/</span>
         </template>
       </p>
@@ -179,6 +179,7 @@
       </div>
 
     </div>
+    <div id="footer">Files preview · Gitee 地址 · 关于</div>
   </div>
 </body>
 
@@ -254,7 +255,7 @@
 
           routes.forEach((item, index) => {
             (item || index == 0) && paths.push({
-              text: item || 'home',
+              text: item || 'Home',
               path: path += (item + '/')
             })
           })
