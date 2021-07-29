@@ -13,23 +13,22 @@
 
 <body>
   <div id="app">
-    <div :class="['header-wrap',{blurHeder:blurHeder}]">
+    <header :class="['header-wrap',{blurHeder:blurHeder}]">
       <div class="header">
-        <div class="logo">
-        </div>
+        <div class="logo">FILES PREVIEW</div>
       </div>
-    </div>
+    </header>
     <div class="hero"
       style="background-image: url('https://source.boringavatars.com/marble/440/?square&color=2f54eb,f5222d,ffc53d,#13c2c2,1890ff')">
     </div>
-    <div class="content" ref="content">
+    <main class="content" ref="content">
 
       <h2 class="title">
         <a :href="path[path.length-3].path" class="back-icon" v-if="path && path.length >= 3"></a>
         <span>{{currentName == '/' ? '项目总览': currentName || '项目总览' }}</span>
       </h2>
       <p class="path">
-        快速导航 : 
+        快速导航 :
         <template v-for="(item,index) in path">
           <a :href="item.path" :key="index">{{item.text || 'Home'}}</a>
           <span :key="'split_'+index" class="nav-split" v-if="index < path.length - 1">/</span>
@@ -38,12 +37,12 @@
 
 
       <ul class="project-list row row-4" v-if="project.length > 0">
-        <li class="project-item col-item" v-for="(item,index) in project" :key="index">
+        <li class="project-item col-item" v-for="(item,index) in getProjectList" :key="index">
           <a class="project" :href="item.name+'/'">
             <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
             <div class="project-info">
               <div class="file-name">{{item.name}}</div>
-              <div class="update-time">{{item.atime}}</div>
+              <div class="update-time">{{getUpdateTime(item.mtimeMs)}}</div>
             </div>
           </a>
         </li>
@@ -64,24 +63,24 @@
                   <path
                     d="M38.661 116.318H150C154.418 116.318 158 112.736 158 108.318V33.7879C158 29.3696 154.418 25.7879 150 25.7879H95.1835C92.705 25.7879 90.4202 24.4478 89.2105 22.2846C88.0009 20.1214 85.7161 18.7813 83.2376 18.7813H38.661C34.2427 18.7813 30.661 22.363 30.661 26.7813V108.318C30.661 112.736 34.2428 116.318 38.661 116.318Z"
                     fill="#007EDC" />
-                  <rect x="36.0796" y="29.3176" width="113.792" height="82.1833" rx="6" fill="black"
-                    fill-opacity="0.05" />
-                  <rect x="37.2842" y="30.8228" width="113.792" height="82.1833" rx="6" fill="white" />
+                  <rect x="39" y="31" width="110" height="83" rx="6" fill="black" fill-opacity="0.05" />
+                  <rect x="40" y="32.8228" width="108" height="82.1833" rx="6" fill="white" />
                   <path
-                    d="M150 115.414H38.6611C34.2429 115.414 30.6611 111.833 30.6611 107.414V51.9014C30.6611 47.4831 34.2429 43.9014 38.6611 43.9014H92.8756C95.8212 43.9014 98.4895 42.1635 99.6804 39.4694C100.871 36.7752 103.539 35.0374 106.485 35.0374H150C154.418 35.0374 158 38.6191 158 43.0373V107.414C158 111.833 154.418 115.414 150 115.414Z"
+                    d="M150 115.414H38.6611C34.2429 115.414 30.6611 111.833 30.6611 107.414V51C30.6611 46.5817 34.2429 43 38.6611 43H150C154.418 43 158 46.5817 158 51V107.414C158 111.833 154.418 115.414 150 115.414Z"
                     fill="black" fill-opacity="0.06" />
                   <path
-                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H92.8756C95.8212 44.8045 98.4895 43.0666 99.6804 40.3725C100.871 37.6783 103.539 35.9405 106.485 35.9405H150C154.418 35.9405 158 39.5222 158 43.9405V108.318C158 112.736 154.418 116.318 150 116.318Z"
+                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H150C154.418 44.8045 158 48.3862 158 52.8045V108.318C158 112.736 154.418 116.318 150 116.318Z"
                     fill="#0092FF" />
                   <path
-                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H92.8756C95.8212 44.8045 98.4895 43.0666 99.6804 40.3725C100.871 37.6783 103.539 35.9405 106.485 35.9405H150C154.418 35.9405 158 39.5222 158 43.9405V108.318C158 112.736 154.418 116.318 150 116.318Z"
+                    d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H150C154.418 44.8045 158 48.3862 158 52.8045V108.318C158 112.736 154.418 116.318 150 116.318Z"
                     fill="url(#paint0_linear)" fill-opacity="0.1" />
                 </g>
                 <defs>
                   <filter id="filter0_d" x="0.661133" y="0.781319" width="187.339" height="157.536"
                     filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
                     <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                      result="hardAlpha" />
                     <feOffset dy="12" />
                     <feGaussianBlur stdDeviation="15" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
@@ -178,16 +177,36 @@
         </ul>
       </div>
 
-    </div>
-    <div id="footer">Files preview · Gitee 地址 · 关于</div>
+    </main>
+    <footer id="footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a> · <a
+        href="https://gitee.com/Jioho/files-preview">关于</a></footer>
   </div>
 </body>
 
 <script>
   var treeData = '{{treeData}}';
   (function () {
+    var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"]
+    var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s"
     let imgExt = ['png', 'jpg', 'jpeg', 'svg']
     let coverExt = ['png']
+    let beforeTime = [{
+      time: 31536000001,
+      format: 'YYYY年MM月DD日 更新',
+      useDiffTime: false
+    }, {
+      time: 31536000000,
+      format: 'MM月DD日 更新',
+      useDiffTime: false
+    }, {
+      time: 259200000,
+      format: 'D天前 更新',
+      useDiffTime: true
+    }, {
+      time: 0,
+      format: 'h小时前 更新',
+      useDiffTime: true
+    }]
     var app = new Vue({
       el: '#app',
       data: {
@@ -215,7 +234,116 @@
         window.removeEventListener("scroll", this.handleScroll);
       },
 
+      computed: {
+        getProjectList() {
+          let _list = this.project || []
+          _list = _list.sort((item, item2) => {
+            return item2.mtimeMs - item.mtimeMs
+          })
+          return _list
+        }
+      },
+
       methods: {
+
+        getUpdateTime(time) {
+          time = parseInt(time)
+          let nowTime = new Date().getTime()
+          let diffTime = nowTime - time
+          let formatStr = 'YYYY年MM月DD日 更新'
+          beforeTime.some(item => {
+            if (diffTime >= item.time) {
+              formatStr = item.format
+              if (item.useDiffTime) {
+                time = diffTime
+              }
+              return true
+            }
+            return false
+          })
+          return this.formateTime(time, formatStr)
+        },
+
+        /**
+         * 格式化时间戳
+         * @param  {Number}    time           需要转换的时间戳。默认当前时间
+         * @param  {String}    format         时间格式 默认 yyyy-mm-dd HH:ii:ss
+         * @return {String}    timeStr        格式化后的字符串
+         */
+        formateTime(time = new Date().getTime(), format = "yyyy-mm-dd hh:ii:ss") {
+          time = parseInt(time)
+          // 转换时间对象
+          var timeObj = this.timeToDateObj(time)
+          // 正则
+          format = format.toLocaleLowerCase().match(new RegExp(dateType + "|.", "g")) || []
+
+          // 匹配格式
+          format.forEach((v, i) => {
+            if (/yyyy|y/.test(v)) {
+              //年
+              format[i] = this.digit(timeObj.year, v.length)
+            } else if (/mm|m/.test(v)) {
+              //月
+              format[i] = this.digit(timeObj.month, v.length)
+            } else if (/dd|d/.test(v)) {
+              //日
+              format[i] = this.digit(timeObj.day, v.length)
+            } else if (/hh|h/.test(v)) {
+              //时
+              format[i] = this.digit(timeObj.hours, v.length)
+            } else if (/ii|i/.test(v)) {
+              //分
+              format[i] = this.digit(timeObj.minutes, v.length)
+            } else if (/ss|s/.test(v)) {
+              //秒
+              format[i] = this.digit(timeObj.seconds, v.length)
+            }
+          })
+
+          return format.join("")
+        },
+
+        /**
+        * 数字前置补零
+        * @param  {Number}  num     传入的数字
+        * @param  {Number}  length  需要的长度。默认2位
+        * @return {Number}  num     转换好的数字
+        */
+        digit(num, length = 2) {
+          var str = ""
+          num = String(num)
+          length = length || 2
+          for (var i = num.length; i < length; i++) {
+            str += "0"
+          }
+          return num < Math.pow(10, length) ? str + (num | 0) : num
+        },
+
+        /**
+         * 时间戳转换为对象 (new Date()) => (timeObject)
+         * @param  {Number}   time   传入原时间
+         * @return {Object}   object 转换后的时间戳，和时间对象
+         */
+        timeToDateObj(time = new Date().getTime()) {
+          var date = new Date()
+          date.setTime(time)
+
+          return {
+            time: time,
+            day: date.getDate(),
+            month: date.getMonth() + 1,
+            year: date.getFullYear(),
+            week: weeks_ch[date.getDay()],
+            hours: date.getHours(),
+            minutes: date.getMinutes(),
+            seconds: date.getSeconds(),
+            monthStr: this.digit(date.getMonth() + 1),
+            dayStr: this.digit(date.getDate()),
+            hoursStr: this.digit(date.getHours()),
+            minutesStr: this.digit(date.getMinutes()),
+            secondsStr: this.digit(date.getSeconds())
+          }
+        },
 
         handleScroll() {
           let scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
@@ -298,7 +426,7 @@
           let files = treeData.renderFiles
           let imageObj = {}
           let images = []
-          
+
           let otherFiles = []
           files.forEach(item => {
             let fileName = item[0]
@@ -317,7 +445,6 @@
                 ...item[1]
               })
             } else {
-              console.log(item, '普通文件')
               otherFiles.push({
                 fileName: item[0],
                 ...item[1]

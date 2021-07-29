@@ -15,8 +15,7 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 ## Measure 对项目管理的缺失
 
 使用 Measure 只能对单文件导出标注文档，在涉及多文件及多个版本的文件管理上一直没有一个较好的方式来管理。
-在Measure论坛上也有人曾经提出过类似的疑问。
-
+在 Measure 论坛上也有人曾经提出过类似的疑问。
 
 ## Measure Plus 的小尝试
 
@@ -79,6 +78,18 @@ files-preview [path] [options]
 
 我们对以上文档进行了简单翻译，可在以下地址查阅：[Http-server-readme](./Http-server-readme.md)
 
+## 更新
+
+通过 `npm` 进行更新，打开终端后输入以下命令：
+
+```
+npm install --global files-preview
+```
+
+这样能够全局安装/更新 files-preview，你可以在任何地方使用命令行运行该工具。
+
+> 使用 mac 并且要全局更新的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`
+
 # 它有什么优势？
 
 ## 方便易用
@@ -93,7 +104,5 @@ files-preview [path] [options]
 # 反馈及联系
 
 - 提交[Issue](https://gitee.com/Jioho/files-preview/issues)
-  
 
 备注：Measure 插件已暂停更新，有其他的开发者为其进行了新版本的适配和功能更新，并更名为 [MeaXure](https://gitee.com/Jioho/sketch-meaxure)，以上提到的 Measure 可等同于 MeaXure 来理解。
-
