@@ -24,7 +24,7 @@
     <main class="content" ref="content">
 
       <h2 class="title">
-        <a :href="path[path.length-3].path" class="back-icon" v-if="path && path.length >= 3"></a>
+        <a :href="path[path.length-2].path" class="back-icon" v-if="path && path.length >= 2"></a>
         <span>{{currentName == '/' ? '项目总览': currentName || '项目总览' }}</span>
       </h2>
       <p class="path">
@@ -201,11 +201,11 @@
     }, {
       time: 259200000,
       format: 'D天前 更新',
-      useDiffTime: true
+      useDiffTime: 'day'
     }, {
       time: 0,
       format: 'h小时前 更新',
-      useDiffTime: true
+      useDiffTime: 'hours'
     }]
     var app = new Vue({
       el: '#app',
@@ -251,17 +251,33 @@
           let nowTime = new Date().getTime()
           let diffTime = nowTime - time
           let formatStr = 'YYYY年MM月DD日 更新'
+          let useDiffTime = false
           beforeTime.some(item => {
             if (diffTime >= item.time) {
               formatStr = item.format
-              if (item.useDiffTime) {
-                time = diffTime
-              }
+              useDiffTime = item.useDiffTime
               return true
             }
             return false
           })
-          return this.formateTime(time, formatStr)
+          if (!useDiffTime) {
+            return this.formateTime(time, formatStr)
+          } else {
+            return this.calcTime(diffTime, useDiffTime)
+          }
+        },
+
+        // 计算相差的时间
+        // TODO 支持 format 格式
+        calcTime(time, diffType = 'hours') {
+          // 转换时间对象
+          var timeObj = this.timeToDateObj(time)
+          switch (diffType) {
+            case 'day':
+              return timeObj.day + '天前 更新'
+            case 'hours':
+              return ((timeObj.day - 1) * 24 + timeObj.hours) + '小时前 更新'
+          }
         },
 
         /**
