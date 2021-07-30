@@ -271,12 +271,12 @@
         // TODO 支持 format 格式
         calcTime(time, diffType = 'hours') {
           // 转换时间对象
-          var timeObj = this.timeToDateObj(time)
+          // var timeObj = this.timeToDateObj(time)
           switch (diffType) {
             case 'day':
-              return timeObj.day + '天前 更新'
+              return parseInt(time / 86400000) + '天前 更新'
             case 'hours':
-              return ((timeObj.day - 1) * 24 + timeObj.hours) + '小时前 更新'
+              return parseInt(time / 3600000) + '小时前 更新'
           }
         },
 
