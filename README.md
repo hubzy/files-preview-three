@@ -97,7 +97,7 @@ npm install --global files-preview
 3. 在终端内输入以下命令：`npm i`
 4. 在终端内输入以下命令：`npm run server ./example`，如果运行正常的话，终端内将会显示两个地址；
 5. 打开浏览器，输入上一步显示的地址，你会看到以下的界面：
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0816/001313_6e9e781a_8421994.png "WechatIMG915.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0816/001818_0164e7a2_8421994.png "Frame 12.png")
 6. 对项目中以下目录 ./lib/ecstatic/ecstatic/show-dir/template 进行开发修改后，刷新以上地址即可看到修改效果。
 
 # 它有什么优势？
