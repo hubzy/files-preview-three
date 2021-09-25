@@ -184,13 +184,77 @@
 </body>
 
 <script>
+  "use strict";
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+
+    var _s, _e;
+
+    try {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
   var treeData = '{{treeData}}';
+
   (function () {
-    var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"]
-    var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s"
-    let imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga']
-    let coverExt = ['png']
-    let beforeTime = [{
+    var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
+    var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
+    var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
+    var coverExt = ['png'];
+    var beforeTime = [{
       time: 31536000000,
       format: 'YYYY年MM月DD日 更新',
       useDiffTime: false
@@ -206,7 +270,7 @@
       time: 0,
       format: 'h小时前 更新',
       useDiffTime: 'hours'
-    }]
+    }];
     var app = new Vue({
       el: '#app',
       data: {
@@ -216,67 +280,70 @@
         path: [],
         otherFiles: [],
         blurHeder: false,
-        current: treeData.current,
+        current: treeData.current
       },
-      created() {
-        this.initFileList()
-        this.initFloder()
-        this.initNav()
+      created: function created() {
+        this.initFileList();
+        this.initFloder();
+        this.initNav();
       },
+      mounted: function mounted() {
+        var _this = this;
 
-      mounted() {
-        this.$nextTick(() => {
-          window.addEventListener("scroll", this.handleScroll); // 监听（绑定）滚轮滚动事件
-          this.handleScroll()
+        this.$nextTick(function () {
+          window.addEventListener("scroll", _this.handleScroll); // 监听（绑定）滚轮滚动事件
+
+          _this.handleScroll();
         });
       },
-      beforeDestroy() {
+      beforeDestroy: function beforeDestroy() {
         window.removeEventListener("scroll", this.handleScroll);
       },
-
       computed: {
-        getProjectList() {
-          let _list = this.project || []
-          _list = _list.sort((item, item2) => {
-            return item2.mtimeMs - item.mtimeMs
-          })
-          return _list
+        getProjectList: function getProjectList() {
+          var _list = this.project || [];
+
+          _list = _list.sort(function (item, item2) {
+            return item2.mtimeMs - item.mtimeMs;
+          });
+          return _list;
         }
       },
-
       methods: {
-
-        getUpdateTime(time) {
-          time = parseInt(time)
-          let nowTime = new Date().getTime()
-          let diffTime = nowTime - time
-          let formatStr = 'YYYY年MM月DD日 更新'
-          let useDiffTime = false
-          beforeTime.some(item => {
+        getUpdateTime: function getUpdateTime(time) {
+          time = parseInt(time);
+          var nowTime = new Date().getTime();
+          var diffTime = nowTime - time;
+          var formatStr = 'YYYY年MM月DD日 更新';
+          var useDiffTime = false;
+          beforeTime.some(function (item) {
             if (diffTime >= item.time) {
-              formatStr = item.format
-              useDiffTime = item.useDiffTime
-              return true
+              formatStr = item.format;
+              useDiffTime = item.useDiffTime;
+              return true;
             }
-            return false
-          })
+
+            return false;
+          });
+
           if (!useDiffTime) {
-            return this.formateTime(time, formatStr)
+            return this.formateTime(time, formatStr);
           } else {
-            return this.calcTime(diffTime, useDiffTime)
+            return this.calcTime(diffTime, useDiffTime);
           }
         },
-
         // 计算相差的时间
         // TODO 支持 format 格式
-        calcTime(time, diffType = 'hours') {
-          // 转换时间对象
+        calcTime: function calcTime(time) {
+          var diffType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'hours'; // 转换时间对象
           // var timeObj = this.timeToDateObj(time)
+
           switch (diffType) {
             case 'day':
-              return parseInt(time / 86400000) + '天前 更新'
+              return parseInt(time / 86400000) + '天前 更新';
+
             case 'hours':
-              return parseInt(time / 3600000) + '小时前 更新'
+              return parseInt(time / 3600000) + '小时前 更新';
           }
         },
 
@@ -286,37 +353,39 @@
          * @param  {String}    format         时间格式 默认 yyyy-mm-dd HH:ii:ss
          * @return {String}    timeStr        格式化后的字符串
          */
-        formateTime(time = new Date().getTime(), format = "yyyy-mm-dd hh:ii:ss") {
-          time = parseInt(time)
-          // 转换时间对象
-          var timeObj = this.timeToDateObj(time)
-          // 正则
-          format = format.toLocaleLowerCase().match(new RegExp(dateType + "|.", "g")) || []
+        formateTime: function formateTime() {
+          var _this2 = this;
 
-          // 匹配格式
-          format.forEach((v, i) => {
+          var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
+          var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "yyyy-mm-dd hh:ii:ss";
+          time = parseInt(time); // 转换时间对象
+
+          var timeObj = this.timeToDateObj(time); // 正则
+
+          format = format.toLocaleLowerCase().match(new RegExp(dateType + "|.", "g")) || []; // 匹配格式
+
+          format.forEach(function (v, i) {
             if (/yyyy|y/.test(v)) {
               //年
-              format[i] = this.digit(timeObj.year, v.length)
+              format[i] = _this2.digit(timeObj.year, v.length);
             } else if (/mm|m/.test(v)) {
               //月
-              format[i] = this.digit(timeObj.month, v.length)
+              format[i] = _this2.digit(timeObj.month, v.length);
             } else if (/dd|d/.test(v)) {
               //日
-              format[i] = this.digit(timeObj.day, v.length)
+              format[i] = _this2.digit(timeObj.day, v.length);
             } else if (/hh|h/.test(v)) {
               //时
-              format[i] = this.digit(timeObj.hours, v.length)
+              format[i] = _this2.digit(timeObj.hours, v.length);
             } else if (/ii|i/.test(v)) {
               //分
-              format[i] = this.digit(timeObj.minutes, v.length)
+              format[i] = _this2.digit(timeObj.minutes, v.length);
             } else if (/ss|s/.test(v)) {
               //秒
-              format[i] = this.digit(timeObj.seconds, v.length)
+              format[i] = _this2.digit(timeObj.seconds, v.length);
             }
-          })
-
-          return format.join("")
+          });
+          return format.join("");
         },
 
         /**
@@ -325,14 +394,17 @@
         * @param  {Number}  length  需要的长度。默认2位
         * @return {Number}  num     转换好的数字
         */
-        digit(num, length = 2) {
-          var str = ""
-          num = String(num)
-          length = length || 2
+        digit: function digit(num) {
+          var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+          var str = "";
+          num = String(num);
+          length = length || 2;
+
           for (var i = num.length; i < length; i++) {
-            str += "0"
+            str += "0";
           }
-          return num < Math.pow(10, length) ? str + (num | 0) : num
+
+          return num < Math.pow(10, length) ? str + (num | 0) : num;
         },
 
         /**
@@ -340,10 +412,10 @@
          * @param  {Number}   time   传入原时间
          * @return {Object}   object 转换后的时间戳，和时间对象
          */
-        timeToDateObj(time = new Date().getTime()) {
-          var date = new Date()
-          date.setTime(time)
-
+        timeToDateObj: function timeToDateObj() {
+          var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
+          var date = new Date();
+          date.setTime(time);
           return {
             time: time,
             day: date.getDate(),
@@ -358,123 +430,132 @@
             hoursStr: this.digit(date.getHours()),
             minutesStr: this.digit(date.getMinutes()),
             secondsStr: this.digit(date.getSeconds())
-          }
+          };
         },
+        handleScroll: function handleScroll() {
+          var scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
 
-        handleScroll() {
-          let scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
           if (scrollHeight >= 100) {
             this.blurHeder = true;
           } else {
             this.blurHeder = false;
           }
         },
+        hasCover: function hasCover(name) {
+          var _this3 = this;
 
-        hasCover(name) {
-          return Promise.any(coverExt.map(item => this.getCover(`${this.current}${name}/assets/cover.${item}`)))
-            .then(res => {
-              return res
-            }).catch(res => {
-              return false
-            })
+          return new Promise(function (resolve, reject) {
+            var errorNum = 0;
+            coverExt.forEach(function (item) {
+              _this3.getCover("".concat(_this3.current).concat(name, "/assets/cover.").concat(item)).then(resolve).catch(function (res) {
+                errorNum += 1;
+
+                if (errorNum == coverExt.length) {
+                  resolve(false);
+                }
+              });
+            });
+          });
         },
-        getCover(path) {
-          return new Promise((resolve, reject) => {
+        getCover: function getCover(path) {
+          return new Promise(function (resolve, reject) {
             if (!path) {
-              reject()
+              reject();
             }
-            let img = new Image
+
+            var img = new Image();
+
             img.onload = function () {
-              resolve(path)
-            }
-            img.onerror = reject
-            img.src = path
-          })
+              resolve(path);
+            };
+
+            img.onerror = reject;
+            img.src = path;
+          });
         },
-        initNav() {
-          let routes = treeData.current.split('/')
-
-          let path = ''
-          let paths = []
-
-          routes.forEach((item, index) => {
+        initNav: function initNav() {
+          var routes = treeData.current.split('/');
+          var path = '';
+          var paths = [];
+          routes.forEach(function (item, index) {
             (item || index == 0) && paths.push({
               text: item || 'Home',
-              path: path += (item + '/')
-            })
-          })
-
-          this.currentName = paths[paths.length - 1].text
-          this.path = paths
+              path: path += item + '/'
+            });
+          });
+          this.currentName = paths[paths.length - 1].text;
+          this.path = paths;
         },
-        initFloder() {
-          let dirs = treeData.dirs
-          // 项目目录
-          let projectList = []
-          // 普通文件夹
-          let folderList = []
-          dirs.forEach(item => {
-            let [name, dirData] = item
+        initFloder: function initFloder() {
+          var _this4 = this;
+
+          var dirs = treeData.dirs; // 项目目录
+
+          var projectList = []; // 普通文件夹
+
+          var folderList = [];
+          dirs.forEach(function (item) {
+            var _item = _slicedToArray(item, 2),
+              name = _item[0],
+              dirData = _item[1];
+
             if (name !== '..') {
-              this.hasCover(name).then(cover => {
+              _this4.hasCover(name).then(function (cover) {
                 if (cover) {
                   projectList.push({
                     ...dirData,
                     name: name,
                     cover: cover
-                  })
+                  });
                 } else {
                   folderList.push({
                     ...dirData,
-                    name: name,
-                  })
+                    name: name
+                  });
                 }
-              })
-              // let imgInfo = this.imageObj[name]
-              let imgInfo = false
+              }); // let imgInfo = this.imageObj[name]
+
+
+              var imgInfo = false;
             }
-          })
-
-          this.project = projectList || []
-          this.folder = folderList || []
+          });
+          this.project = projectList || [];
+          this.folder = folderList || [];
         },
-        initFileList() {
-          let files = treeData.renderFiles
-          let imageObj = {}
-          let images = []
-
-          let otherFiles = []
-          files.forEach(item => {
-            let fileName = item[0]
-            let nameArr = fileName.split('.')
-            let ext = nameArr.pop()
-            fileName = nameArr.join('.')
+        initFileList: function initFileList() {
+          var files = treeData.renderFiles;
+          var imageObj = {};
+          var images = [];
+          var otherFiles = [];
+          files.forEach(function (item) {
+            var fileName = item[0];
+            var nameArr = fileName.split('.');
+            var ext = nameArr.pop();
+            fileName = nameArr.join('.');
 
             if (imgExt.indexOf(ext) !== -1) {
               // imageObj[fileName] = {
               //   fileName: item[0],
               //   ...item[1]
               // }
-
               images.push({
                 fileName: item[0],
                 ...item[1]
-              })
+              });
             } else {
               otherFiles.push({
                 fileName: item[0],
                 ...item[1]
-              })
+              });
             }
-          })
+          }); // this.imageObj = imageObj
 
-          // this.imageObj = imageObj
-          this.images = images
-          this.otherFiles = otherFiles
-        },
-      },
-    })
-  })()
+          this.images = images;
+          this.otherFiles = otherFiles;
+        }
+      }
+    });
+  })();
 </script>
 
 </html>
