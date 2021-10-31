@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>files-preview</title>
+  <meta name="referrer" content="never">
+  <style src="./index.css"></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <header class="navbar">
+      <div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+          viewBox="0 0 448 512" class="icon">
+          <path fill="currentColor"
+            d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z">
+          </path>
+        </svg>
+      </div>
+    </header> -->
+
+    <div class="theme-container">
+
+      <div class="sidebar tree" v-if="fileTree.length > 0">
+        <ul class="sidebar-links">
+          <li>
+            <tree-node :tree-data="fileTree" :active-file="currentFile"></tree-node>
+          </li>
+        </ul>
+      </div>
+
+      <div class="page">
+        <div class="content">
+          {{contentHTML}}
+        </div>
+      </div>
+
+      <div class="sidebar anchor" v-if="anchor.length > 0">
+        <ul class="sidebar-links">
+          <li>
+            <tree-node :tree-data="anchor" :active-file="currentHash"></tree-node>
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</body>
+
+<script>
+  let fileTree = '{{fileTree}}';
+
+  (function () {
+    Vue.component('tree-node', {
+      template: `
+      <ul class="sidebar-links">
+        <li class="sidebar-group" v-for="item in treeData">
+          <p class="sidebar-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
+          <ul class="sidebar-group-items" v-if="item.files && item.files.length > 0">
+            <li v-for="file in item.files">
+              <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+            </li>
+            <li v-if="item.children && item.children.length > 0">
+              <tree-node :treeData="item.children" :active-file="activeFile"></tree-node>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      `,
+      props: {
+        treeData: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        activeFile: {
+          type: String,
+          default: ''
+        }
+      }
+    })
+    var app = new Vue({
+      el: '#app',
+      components: {},
+      data() {
+        return {
+          fileTree: [fileTree],
+          currentFile: decodeURIComponent(window.location.pathname),
+          currentHash: decodeURIComponent(window.location.hash),
+          anchor: {}
+        }
+      },
+      mounted() {
+        let _ts = this
+        this.createMenu()
+        window.addEventListener("hashchange", this.changeHash, false)
+      },
+      beforeDestroy() {
+        window.removeEventListener("hashchange", this.changeHash, false)
+      },
+      methods: {
+        changeHash() {
+          this.currentHash = decodeURIComponent(window.location.hash)
+        },
+        createMenu() {
+          // 首先获取所有H标签，若页面中有h4，h5，h6则可以添加到参数中
+          var headList = [...document.querySelectorAll('h1,h2,h3,h4,h5')] // 将H标签构造成一棵树，就可以明确H标签之间的层级
+          if (headList.length == 0) {
+            return false
+          }
+          var root = {
+            children: []
+          }
+          var h = {
+            node: headList[0],
+            files: [{
+              name: headList[0].innerText,
+              relative: '#' + headList[0].id
+            }],
+            children: [],
+            parent: root
+          }
+          root.children.push(h)
+          headList.reduce(function (pre, cur) {
+            var n = {
+              node: cur,
+              children: [],
+              files: []
+            }
+
+            while (h.node.localName[1] - n.node.localName[1] >= 0) {
+              h = h.parent
+              if (h === root) {
+                break
+              }
+            }
+            n.parent = h
+            n.files.push({ ...n, name: cur.innerText, relative: '#' + cur.id })
+            h.children.push(n)
+            h = n
+            return h
+          })
+
+          this.anchor = root.children || []
+
+          if (!this.currentHash) {
+            this.currentHash = root.children[0].relative || ''
+          }
+        }
+      },
+    })
+  })()
+</script>
+
+</html>

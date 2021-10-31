@@ -14,7 +14,7 @@
     "server"
   ],
   "scripts": {
-    "serve": "nodemon ./bin/files-preview",
+    "serve": "nodemon ./bin/files-preview ./example",
     "start": "node ./bin/files-preview",
     "pretest": "common bin/files-preview lib/ test",
     "test": "vows --spec --isolate"
