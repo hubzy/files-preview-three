@@ -46,7 +46,7 @@
           </li>
         </ul>
       </div>
-      
+
     </div>
   </div>
 </body>
@@ -125,6 +125,11 @@
             children: [],
             parent: root
           }
+
+          if (!this.currentHash) {
+            this.currentHash = '#' + headList[0].id || ''
+          }
+
           root.children.push(h)
           headList.reduce(function (pre, cur) {
             var n = {
@@ -148,9 +153,6 @@
 
           this.anchor = root.children || []
 
-          if (!this.currentHash) {
-            this.currentHash = root.children[0].relative || ''
-          }
         }
       },
     })
