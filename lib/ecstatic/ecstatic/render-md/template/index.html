@@ -13,7 +13,6 @@
 
 <body>
   <div id="app">
-<!-- https://moonvy.gitbook.io/moonvy-spec/ -->
     <div class="fp-doc">
 
       <header class="fp-doc-navbar">
@@ -27,29 +26,34 @@
         </div>
       </header>
 
+      <!-- style="background-image: linear-gradient(#e5f6fe, #fff 12%);" -->
+      <div class="fp-doc-container">
 
-      <div class="fp-doc-container theme-container" style="background-image: linear-gradient(#e5f6fe, #fff 12%);">
-
-        <div class="sidebar tree" v-if="fileTree.length > 0">
-          <ul class="sidebar-links">
-            <li>
-              <tree-node :tree-data="fileTree" :active-file="currentFile"></tree-node>
-            </li>
-          </ul>
-        </div>
-
-        <div class="page">
-          <div class="content">
-            {{contentHTML}}
+        <div class="fp-doc-tree">
+          <div class="fp-tree-links">
+            <div class="fp-tree-node-wrap">
+              <!-- <div v-for="item in 1000">1</div> -->
+              <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
+            </div>
           </div>
         </div>
 
-        <div class="sidebar anchor" v-if="anchor.length > 0">
-          <ul class="sidebar-links">
-            <li>
-              <tree-node :tree-data="anchor" :active-file="currentHash"></tree-node>
-            </li>
-          </ul>
+        <div class="fp-doc-main">
+          <div class="fp-doc-main-wrap">
+            <div class="fp-doc-body">
+              <div class="content">
+                {{contentHTML}}
+              </div>
+            </div>
+
+            <div class="fp-doc-anchor" v-if="anchor.length > 0">
+              <ul class="sidebar-links">
+                <li>
+                  <tree-node :tree-data="anchor" :active-file="currentHash"></tree-node>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
       </div>
