@@ -16,7 +16,7 @@
     <div class="fp-doc">
 
       <header class="fp-doc-navbar">
-        <div class="logo">FILES PREVIEW DOCS</div>
+        <div class="logo">FP DOCS</div>
         <div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
             viewBox="0 0 448 512" class="icon">
             <path fill="currentColor"
@@ -26,8 +26,7 @@
         </div>
       </header>
 
-      <!-- style="background-image: linear-gradient(#e5f6fe, #fff 12%);" -->
-      <div class="fp-doc-container">
+      <div class="fp-doc-container" style="background-image: linear-gradient(#e5f6fe, #fff 20%);">
 
         <div class="fp-doc-tree">
           <div class="fp-tree-links">
@@ -47,7 +46,7 @@
             </div>
 
             <div class="fp-doc-anchor" v-if="anchor.length > 0">
-              <ul class="sidebar-links">
+              <ul class="sidebar-anchor-links">
                 <li>
                   <tree-node :tree-data="anchor" :active-file="currentHash"></tree-node>
                 </li>
