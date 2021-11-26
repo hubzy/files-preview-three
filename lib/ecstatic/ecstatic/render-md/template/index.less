@@ -1,4 +1,5 @@
 @main-color: #0092ff;
+@gray-6: #718096;
 
 #app {
   position: fixed;
@@ -13,6 +14,63 @@
 
 * {
   box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.65rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+a.header-anchor {
+  font-size: 0.85em;
+  float: left;
+  margin-left: -0.87em;
+  padding-right: 0.23em;
+  margin-top: 0.125em;
+  opacity: 0;
+}
+
+a.header-anchor:hover {
+  text-decoration: none;
+}
+
+code,
+kbd {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
+}
+
+ol,
+p,
+ul {
+  line-height: 1.7;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+tr {
+  border-top: 1px solid #dfe2e5;
+}
+
+tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+td,
+th {
+  border: 1px solid #dfe2e5;
+  padding: 0.6em 1em;
 }
 
 ul,
@@ -99,6 +157,7 @@ p a code {
   position: relative;
 
   height: 64px;
+  z-index: 10000;
 }
 
 .fp-doc-container {
@@ -159,6 +218,7 @@ p a code {
   .fp-doc-main-wrap {
     transform: translateZ(0px);
     overflow-y: auto;
+    scroll-behavior:smooth;
     overflow-x: hidden;
     flex-shrink: 1;
     flex-grow: 1;
@@ -206,6 +266,261 @@ p a code {
   }
 }
 
+code[class*='language-'],
+pre[class*='language-'] {
+  color: #ccc;
+  background: none;
+  font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre[class*='language-'] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+
+:not(pre) > code[class*='language-'],
+pre[class*='language-'] {
+  background: #2d2d2d;
+}
+
+:not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+
+.content pre,
+.content pre[class*='language-'] {
+  background-color: #282c34;
+  line-height: 1.4;
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin: 0.85rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+  position: relative;
+}
+
+.content pre[class*='language-'] code,
+.content pre code {
+  color: #fff;
+  padding: 0;
+  background-color: none;
+  border-radius: 0;
+}
+
+.content pre:before,
+.content pre[class*='language-']:before {
+  position: absolute;
+  top: 0.8em;
+  right: 1em;
+  font-size: 0.75rem;
+  color: hsla(0, 0%, 100%, 0.4);
+}
+
+.content .highlighted-line {
+  background-color: rgba(0, 0, 0, 0.66);
+  display: block;
+  margin: 0.1rem -1.5rem 0;
+  padding: 0.1rem 1.8rem;
+}
+
+pre[class='language-javascript']:before,
+pre[class='language-js']:before {
+  content: 'js';
+}
+
+pre[class='language-html']:before,
+pre[class='language-markup']:before {
+  content: 'html';
+}
+
+pre[class='language-markdown']:before,
+pre[class='language-md']:before {
+  content: 'md';
+}
+
+pre[class='language-vue']:before {
+  content: 'vue';
+}
+
+pre[class='language-css']:before {
+  content: 'css';
+}
+
+pre[class='language-sass']:before {
+  content: 'sass';
+}
+
+pre[class='language-less']:before {
+  content: 'less';
+}
+
+pre[class='language-scss']:before {
+  content: 'scss';
+}
+
+pre[class='language-stylus']:before {
+  content: 'stylus';
+}
+
+pre[class='language-json']:before {
+  content: 'json';
+}
+
+pre[class='language-ruby']:before {
+  content: 'rb';
+}
+
+pre[class='language-python']:before {
+  content: 'py';
+}
+
+pre[class='language-go']:before {
+  content: 'go';
+}
+
+pre[class='language-java']:before {
+  content: 'java';
+}
+
+pre[class='language-c']:before {
+  content: 'c';
+}
+
+pre[class='language-bash']:before {
+  content: 'sh';
+}
+
+.content:not(.custom) {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 2rem 2.5rem;
+}
+
+.content:not(.custom) > :first-child {
+  margin-top: 3.6rem;
+}
+
+.content:not(.custom) a:hover {
+  text-decoration: underline;
+}
+
+.content:not(.custom) p.demo {
+  padding: 1rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.content:not(.custom) img {
+  max-width: 100%;
+}
+
+.content.custom {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a,
+p a code {
+  color: @main-color;
+}
+
+p a code {
+  font-weight: 400;
+}
+
+kbd {
+  background: #eee;
+  border: 0.15rem solid #ddd;
+  border-bottom: 0.25rem solid #ddd;
+  border-radius: 0.15rem;
+  padding: 0 0.15em;
+}
+
+blockquote {
+  font-size: 1.2rem;
+  color: @gray-6;
+  border-left: 0.25rem solid #dfe2e5;
+  margin-left: 0;
+  padding-left: 1rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.content:not(.custom) > h1,
+.content:not(.custom) > h2,
+.content:not(.custom) > h3,
+.content:not(.custom) > h4,
+.content:not(.custom) > h5,
+.content:not(.custom) > h6 {
+  margin-top: -3.1rem;
+  padding-top: 4.6rem;
+  margin-bottom: 0;
+}
+
+.content:not(.custom) > h1:first-child,
+.content:not(.custom) > h2:first-child,
+.content:not(.custom) > h3:first-child,
+.content:not(.custom) > h4:first-child,
+.content:not(.custom) > h5:first-child,
+.content:not(.custom) > h6:first-child {
+  margin-top: -1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content:not(.custom) > h1:first-child + .custom-block,
+.content:not(.custom) > h1:first-child + p,
+.content:not(.custom) > h1:first-child + pre,
+.content:not(.custom) > h2:first-child + .custom-block,
+.content:not(.custom) > h2:first-child + p,
+.content:not(.custom) > h2:first-child + pre,
+.content:not(.custom) > h3:first-child + .custom-block,
+.content:not(.custom) > h3:first-child + p,
+.content:not(.custom) > h3:first-child + pre,
+.content:not(.custom) > h4:first-child + .custom-block,
+.content:not(.custom) > h4:first-child + p,
+.content:not(.custom) > h4:first-child + pre,
+.content:not(.custom) > h5:first-child + .custom-block,
+.content:not(.custom) > h5:first-child + p,
+.content:not(.custom) > h5:first-child + pre,
+.content:not(.custom) > h6:first-child + .custom-block,
+.content:not(.custom) > h6:first-child + p,
+.content:not(.custom) > h6:first-child + pre {
+  margin-top: 2rem;
+}
+
 @media (max-width: 1430px) {
   .fp-doc-anchor {
     display: none;
@@ -220,5 +535,21 @@ p a code {
     .content.content {
       margin: 0 16px;
     }
+  }
+}
+
+@media (max-width: 419px) {
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  .content:not(.custom) {
+    padding: 1.5rem;
+  }
+
+  .content pre,
+  .content pre[class*='language-'] {
+    margin: 0.85rem -1.5rem;
+    border-radius: 0;
   }
 }
