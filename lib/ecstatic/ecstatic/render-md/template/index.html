@@ -46,9 +46,9 @@
             </div>
 
             <div class="fp-doc-anchor" v-if="anchor.length > 0">
-              <ul class="sidebar-anchor-links">
+              <ul class="sidebar-anchor-links" style="border-left: 1px solid #eaecef;">
                 <li>
-                  <tree-node :tree-data="anchor" :active-file="currentHash"></tree-node>
+                  <tree-anchor-node :tree-data="anchor" :active-file="currentHash"></tree-anchor-node>
                 </li>
               </ul>
             </div>
@@ -75,6 +75,35 @@
             </li>
             <li v-if="item.children && item.children.length > 0">
               <tree-node :treeData="item.children" :active-file="activeFile"></tree-node>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      `,
+      props: {
+        treeData: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        activeFile: {
+          type: String,
+          default: ''
+        }
+      }
+    })
+    Vue.component('tree-anchor-node', {
+      template: `
+      <ul class="sidebar-anchor-links">
+        <li class="sidebar-anchor-group" v-for="item in treeData">
+          <p class="sidebar-anchor-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
+          <ul class="sidebar-anchor-group-items" v-if="item.files && item.files.length > 0">
+            <li v-for="file in item.files">
+              <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+            </li>
+            <li v-if="item.children && item.children.length > 0">
+              <tree-anchor-node :treeData="item.children" :active-file="activeFile"></tree-anchor-node>
             </li>
           </ul>
         </li>
