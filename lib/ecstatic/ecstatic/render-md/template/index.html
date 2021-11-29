@@ -31,9 +31,14 @@
         <div class="fp-doc-tree">
           <div class="fp-tree-links">
             <div class="fp-tree-node-wrap">
+
               <!-- <div v-for="item in 1000">1</div> -->
               <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
+            
+            
+            
             </div>
+          <div class="fp-tree-footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a></div>
           </div>
         </div>
 
@@ -43,10 +48,11 @@
               <div class="content">
                 {{contentHTML}}
               </div>
+              <!-- <footer id="footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a> · <a href="https://gitee.com/Jioho/files-preview">关于</a></footer> -->
             </div>
 
             <div class="fp-doc-anchor" v-if="anchor.length > 0">
-              <ul class="sidebar-anchor-links" style="border-left: 1px solid #eaecef;">
+              <ul class="sidebar-anchor-links" style="border-left: 1px solid #E2E8F0;">
                 <li>
                   <tree-anchor-node :tree-data="anchor" :active-file="currentHash"></tree-anchor-node>
                 </li>
