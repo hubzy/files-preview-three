@@ -42,7 +42,6 @@ item中的部分配置说明：
 - 虽然官方文档上写明必须使用 https 链接，但经测试 http 也是可以的；
 - 组件库文件与 XML 文件需要放置在同一层级下；
 
-### 
 ## 二、添加组件库
 复制完整的订阅地址到浏览器的地址栏中后点击跳转，会弹出打开 Sketch 的提示，点击打开后即安装成功。
 
@@ -51,5 +50,6 @@ item中的部分配置说明：
 2. 更新 XML 文件中的 sparkle:version；
 3. 其他成员在 Sketch 内会收到更新提示，有增加内容时，需在 Preference 中的 Libraries 下载更新；
 
-四、参考文档
+## 四、参考文档
+
 - 官方文档地址：[Sharing a Library](https://www.sketch.com/docs/designing/libraries/sharing-a-library/)
