@@ -153,11 +153,12 @@ p a code {
 
 .sidebar-links {
   margin-left: -10px;
-  border-left: 1px solid #e2e8f0;
+  // border-left: 1px solid #e2e8f0;
 }
 
 .sidebar-group {
   margin: 1em 0;
+  position: relative;
 
   li {
     padding-left: 12px;
@@ -174,12 +175,21 @@ p a code {
     margin-top: 1rem;
     line-height: 2rem;
     margin-bottom: 0.5rem;
+
+    &::before {
+      position: absolute;
+      top: 32px;
+      bottom: 0;
+      width: 1px;
+      background-color: #e2e8f0;
+      content: '';
+    }
   }
 
   .sidebar-group-items {
     transition: height 0.1s ease-out;
     overflow: hidden;
-    // border-left: 1px solid #eaecef;
+    // border-left: 1px solid #e2e8f0;
   }
 }
 
