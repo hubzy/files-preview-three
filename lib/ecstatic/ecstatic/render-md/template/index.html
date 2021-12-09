@@ -14,31 +14,29 @@
 <body>
   <div id="app">
     <div class="fp-doc">
-
       <header class="fp-doc-navbar">
-        <div class="logo">FP DOCS</div>
-        <div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-            viewBox="0 0 448 512" class="icon">
-            <path fill="currentColor"
-              d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z">
-            </path>
-          </svg>
+        <div class="fp-doc-logo">
+
+          <div :class="['fp-menu-icon',{close:!hideTree}]" @click="hideTree = !hideTree">
+            <span class="fp-menu-line"></span>
+            <span class="fp-menu-line"></span>
+            <span class="fp-menu-line"></span>
+          </div>
+          <a href="/" class="logo">FP DOCS</a>
         </div>
+
       </header>
 
       <div class="fp-doc-container" style="background-image: linear-gradient(#e5f6fe, #fff 20%);">
 
-        <div class="fp-doc-tree">
+        <div :class="['fp-doc-tree',{'fp-hide-tree':hideTree},{'fp-open-tree':!hideTree}]">
           <div class="fp-tree-links">
             <div class="fp-tree-node-wrap">
-
               <!-- <div v-for="item in 1000">1</div> -->
               <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
-            
-            
-            
             </div>
-          <div class="fp-tree-footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a></div>
+            <div class="fp-tree-footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
+            </div>
           </div>
         </div>
 
@@ -70,6 +68,28 @@
   let fileTree = '{{fileTree}}';
 
   (function () {
+
+    function debounce(func, wait, immediate) {
+      let timeout
+
+      return function () {
+        let context = this
+        let args = arguments
+
+        if (timeout) clearTimeout(timeout)
+        if (immediate) {
+          var callNow = !timeout
+          timeout = setTimeout(() => {
+            timeout = null
+          }, wait)
+          if (callNow) func.apply(context, args)
+        } else {
+          timeout = setTimeout(function () {
+            func.apply(context, args)
+          }, wait)
+        }
+      }
+    }
     Vue.component('tree-node', {
       template: `
       <ul class="sidebar-links">
@@ -136,21 +156,28 @@
           fileTree: [fileTree],
           currentFile: decodeURIComponent(window.location.pathname),
           currentHash: decodeURIComponent(window.location.hash),
-          anchor: {}
+          anchor: {},
+          hideTree: window.innerWidth <= 700,
+          prevWidth: window.innerWidth
         }
       },
       mounted() {
         let _ts = this
         this.createMenu()
         window.addEventListener("hashchange", this.changeHash, false)
+        window.addEventListener('resize', this.changeWindowSize, false)
       },
       beforeDestroy() {
+        window.addEventListener('resize', this.changeWindowSize, false)
         window.removeEventListener("hashchange", this.changeHash, false)
       },
       methods: {
         changeHash() {
           this.currentHash = decodeURIComponent(window.location.hash)
         },
+        changeWindowSize: debounce(function () {
+          this.hideTree = window.innerWidth <= 700
+        }, 10, false),
         createMenu() {
           // 首先获取所有H标签，若页面中有h4，h5，h6则可以添加到参数中
           var headList = [...document.querySelectorAll('h1,h2,h3,h4,h5')] // 将H标签构造成一棵树，就可以明确H标签之间的层级
