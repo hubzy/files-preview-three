@@ -137,14 +137,9 @@ p a code {
   // background-image: linear-gradient(rgba(249,250,252,10), rgba(249,250,252,1));
   background-color: linear-gradient(rgba(249, 250, 252, 10), rgba(249, 250, 252, 1));
 }
-.sidebar-group {
-  margin: 1em 0;
 
-  li {
-    padding-left: 12px;
-    line-height: 2rem;
-  }
-
+.sidebar-group,
+.sidebar-anchor-group {
   a.sidebar-link:hover {
     color: @main-color;
   }
@@ -154,10 +149,19 @@ p a code {
     color: @main-color;
     border-left-color: @main-color;
   }
+}
 
-  .sidebar-links {
-    margin-left: -10px;
-    border-left: 1px solid #e2e8f0;
+.sidebar-links {
+  margin-left: -10px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.sidebar-group {
+  margin: 1em 0;
+
+  li {
+    padding-left: 12px;
+    line-height: 2rem;
   }
 
   .sidebar-heading {
@@ -179,6 +183,10 @@ p a code {
   }
 }
 
+.sidebar-anchor-links {
+  max-width: 300px;
+}
+
 .sidebar-anchor-group {
   margin: 1em 0;
 
@@ -197,10 +205,6 @@ p a code {
     color: #ff0000; //测试用颜色
     border-left-color: @main-color;
     border-left: 2px solid;
-  }
-
-  .sidebar-anchor-links {
-    margin-left: -8px;
   }
 
   .sidebar-anchor-heading {
