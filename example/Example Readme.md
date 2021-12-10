@@ -105,3 +105,4 @@ Google 拥有专门设计的系统，可以自动捕获不适当的预测结果�
 <center>
     <img src="https://gitee.com/yanglbme/resource/raw/master/doocs-md/qrcode.png" style="width: 100px;">
 </center>
+

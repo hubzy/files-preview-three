@@ -166,12 +166,24 @@
         this.createMenu()
         window.addEventListener("hashchange", this.changeHash, false)
         window.addEventListener('resize', this.changeWindowSize, false)
+
+        this.highlightAll()
+
       },
       beforeDestroy() {
         window.addEventListener('resize', this.changeWindowSize, false)
         window.removeEventListener("hashchange", this.changeHash, false)
       },
       methods: {
+        highlightAll() {
+          if (window.hljs && window.hljs.highlightAll) {
+            window.hljs.highlightAll()
+          } else {
+            setTimeout(() => {
+              this.highlightAll()
+            }, 50)
+          }
+        },
         changeHash() {
           this.currentHash = decodeURIComponent(window.location.hash)
         },
@@ -229,5 +241,10 @@
     })
   })()
 </script>
+
+<!-- 代码高亮的样式 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet" />
+
 
 </html>
