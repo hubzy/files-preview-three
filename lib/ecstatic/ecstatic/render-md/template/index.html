@@ -25,11 +25,13 @@
           <a href="/" class="logo">FP DOCS</a>
         </div>
 
+        <div class="fp-nav-action" @click="focusTree = !focusTree">{{focusTree ? '全部目录':'聚焦文档'}}</div>
+
       </header>
 
       <div class="fp-doc-container" style="background-image: linear-gradient(#e5f6fe, #fff 20%);">
 
-        <div :class="['fp-doc-tree',{'fp-hide-tree':hideTree},{'fp-open-tree':!hideTree}]">
+        <div :class="['fp-doc-tree',{'fp-hide-tree':hideTree},{'fp-open-tree':!hideTree},{'fp-focus-tree':focusTree}]">
           <div class="fp-tree-links">
             <div class="fp-tree-node-wrap">
               <!-- <div v-for="item in 1000">1</div> -->
@@ -93,10 +95,10 @@
     Vue.component('tree-node', {
       template: `
       <ul class="sidebar-links">
-        <li class="sidebar-group" v-for="item in treeData">
-          <p class="sidebar-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
+        <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
+          <p class="sidebar-heading" v-if="item.name && item.name !== '/'"><span :href="item.relative">{{item.name}}</span></p>
           <ul class="sidebar-group-items" v-if="item.files && item.files.length > 0">
-            <li v-for="file in item.files">
+            <li class="group-link-item" v-for="file in item.files">
               <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
             </li>
             <li v-if="item.children && item.children.length > 0">
@@ -117,6 +119,26 @@
           type: String,
           default: ''
         }
+      },
+      methods: {
+        groupLinkStyle(path) {
+          let style = []
+          let urlArr = window.location.pathname.split('/')
+          // 移除最后一个文件名
+          urlArr.pop()
+          let url = urlArr.join('/')
+          let pathUrl = encodeURI(path)
+
+          if (url.indexOf(pathUrl) !== -1) {
+            style.push('focus')
+            if (url === pathUrl) {
+              style.push('focus-last')
+            }
+          } else {
+            style.push('default')
+          }
+          return style
+        },
       }
     })
     Vue.component('tree-anchor-node', {
@@ -148,9 +170,9 @@
         }
       }
     })
+
     var app = new Vue({
       el: '#app',
-      components: {},
       data() {
         return {
           fileTree: [fileTree],
@@ -158,7 +180,8 @@
           currentHash: decodeURIComponent(window.location.hash),
           anchor: {},
           hideTree: window.innerWidth <= 700,
-          prevWidth: window.innerWidth
+          prevWidth: window.innerWidth,
+          focusTree: true
         }
       },
       mounted() {
@@ -168,7 +191,6 @@
         window.addEventListener('resize', this.changeWindowSize, false)
 
         this.highlightAll()
-
       },
       beforeDestroy() {
         window.addEventListener('resize', this.changeWindowSize, false)
@@ -184,9 +206,12 @@
             }, 50)
           }
         },
+
+        // 页面hash改变
         changeHash() {
           this.currentHash = decodeURIComponent(window.location.hash)
         },
+
         changeWindowSize: debounce(function () {
           this.hideTree = window.innerWidth <= 700
         }, 10, false),

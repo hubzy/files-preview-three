@@ -352,6 +352,16 @@ p a code {
     flex-grow: 1;
     flex-basis: 0%;
   }
+
+  &.fp-focus-tree {
+    .sidebar-group.default,
+    .sidebar-group-items .group-link-item {
+      display: none;
+    }
+    .focus-last .sidebar-group-items .group-link-item {
+      display: block;
+    }
+  }
 }
 
 .fp-hide-tree {
