@@ -1,6 +1,6 @@
 {
   "name": "files-preview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "基于 http-server 增强对 Measure 导出的项目的管理",
   "main": "./lib/files-preview",
   "repository": {
@@ -29,6 +29,7 @@
     "node": ">=6"
   },
   "dependencies": {
+    "marked": "^3.0.8",
     "basic-auth": "^1.0.3",
     "charset": "^1.0.1",
     "colors": "^1.4.0",
@@ -51,7 +52,6 @@
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.14.0",
     "express": "^4.16.3",
-    "marked": "^3.0.8",
     "mkdirp": "^0.5.0",
     "nodemon": "^2.0.15",
     "request": "^2.88.0",
