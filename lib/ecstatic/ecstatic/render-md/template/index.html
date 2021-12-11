@@ -26,7 +26,7 @@
           <a href="/" class="logo">FP DOCS</a>
         </div>
 
-        <div class="fp-nav-action" @click="toggleFocus(!focusTree)">{{focusTree ? '全部目录':'聚焦文档'}}</div>
+        <!-- <div class="fp-nav-action" @click="toggleFocus(!focusTree)">{{focusTree ? '全部目录':'聚焦文档'}}</div> -->
 
       </header>
 
@@ -38,7 +38,7 @@
               <!-- <div v-for="item in 1000">1</div> -->
               <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
             </div>
-            <div class="fp-tree-footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
+            <div class="fp-tree-footer">Files preview · <a target="_blank" href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
             </div>
           </div>
         </div>
