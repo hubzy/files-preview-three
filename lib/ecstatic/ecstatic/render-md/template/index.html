@@ -25,7 +25,7 @@
           <a href="/" class="logo">FP DOCS</a>
         </div>
 
-        <div class="fp-nav-action" @click="focusTree = !focusTree">{{focusTree ? '全部目录':'聚焦文档'}}</div>
+        <div class="fp-nav-action" @click="toggleFocus(!focusTree)">{{focusTree ? '全部目录':'聚焦文档'}}</div>
 
       </header>
 
@@ -71,6 +71,9 @@
 
   (function () {
 
+    let docConfig = window.localStorage.getItem('FPDocConfig') || '{}'
+    docConfig = JSON.parse(docConfig)
+
     function debounce(func, wait, immediate) {
       let timeout
 
@@ -97,10 +100,12 @@
       <ul class="sidebar-links">
         <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
           <p class="sidebar-heading" v-if="item.name && item.name !== '/'"><span :href="item.relative">{{item.name}}</span></p>
-          <ul class="sidebar-group-items" v-if="item.files && item.files.length > 0">
-            <li class="group-link-item" v-for="file in item.files">
-              <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
-            </li>
+          <ul class="sidebar-group-items">
+            <template v-if="item.files && item.files.length > 0">
+              <li class="group-link-item" v-for="file in item.files">
+                <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+              </li>
+            </template>
             <li v-if="item.children && item.children.length > 0">
               <tree-node :treeData="item.children" :active-file="activeFile"></tree-node>
             </li>
@@ -126,14 +131,12 @@
           let urlArr = window.location.pathname.split('/')
           // 移除最后一个文件名
           urlArr.pop()
-          let url = urlArr.join('/')
+          let url = urlArr.join('/') || '/'
           let pathUrl = encodeURI(path)
 
           if (url.indexOf(pathUrl) !== -1) {
             style.push('focus')
-            if (url === pathUrl) {
-              style.push('focus-last')
-            }
+            style.push(url === pathUrl ? 'focus-last' : 'focus-broder')
           } else {
             style.push('default')
           }
@@ -181,7 +184,7 @@
           anchor: {},
           hideTree: window.innerWidth <= 700,
           prevWidth: window.innerWidth,
-          focusTree: true
+          focusTree: docConfig.focusTree || false
         }
       },
       mounted() {
@@ -191,6 +194,7 @@
         window.addEventListener('resize', this.changeWindowSize, false)
 
         this.highlightAll()
+        this.toggleFocus(this.focusTree)
       },
       beforeDestroy() {
         window.addEventListener('resize', this.changeWindowSize, false)
@@ -205,6 +209,27 @@
               this.highlightAll()
             }, 50)
           }
+        },
+
+        setConfig(config = {}) {
+          docConfig = Object.assign(docConfig, config)
+          window.localStorage.setItem('FPDocConfig', JSON.stringify(docConfig))
+        },
+
+        toggleFocus(isFocus) {
+          this.focusTree = isFocus
+          this.setConfig({ focusTree: isFocus })
+
+          this.$nextTick(() => {
+            let activeElemt = document.querySelector('.fp-doc-tree .sidebar-link.active')
+            let treeNodeElemt = document.querySelector('.fp-tree-node-wrap')
+            if (!activeElemt || !treeNodeElemt) { return false }
+            let scrollTop = activeElemt.getBoundingClientRect().top - (window.innerHeight / 2.5)
+            treeNodeElemt.scrollTo({
+              top: scrollTop,
+              behavior: 'smooth'
+            })
+          })
         },
 
         // 页面hash改变

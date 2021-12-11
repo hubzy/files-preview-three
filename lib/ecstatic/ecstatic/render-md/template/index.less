@@ -354,13 +354,40 @@ p a code {
   }
 
   &.fp-focus-tree {
-    .sidebar-group.default,
-    .sidebar-group-items .group-link-item {
+    .default {
       display: none;
+      .sidebar-group,
+      .sidebar-heading {
+        display: none;
+
+        li {
+          padding-left: 0;
+        }
+      }
     }
-    .focus-last .sidebar-group-items .group-link-item {
-      display: block;
+
+    .focus-broder {
+      margin: 0;
+      .sidebar-heading,
+      .group-link-item {
+        display: none;
+      }
+      li {
+        padding-left: 0;
+      }
     }
+
+    .focus-last.focus-last {
+      .sidebar-group,
+      .sidebar-heading,
+      .group-link-item {
+        display: block;
+      }
+      li {
+        padding-left: 12px;
+      }
+    }
+
   }
 }
 
