@@ -397,6 +397,12 @@
           var copy = function (e) {
             e.preventDefault()
             e.clipboardData.setData('text/plain', window.location.href + itemInfo.fileName)
+
+            window.VsToast.show({
+              title: '复制成功',
+              variant: 'success',
+            });
+
             document.removeEventListener('copy', copy)
           }
           document.addEventListener('copy', copy)
@@ -677,5 +683,8 @@
 
 <!-- 下载服务 -->
 <script src="https://cdn.bootcdn.net/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+
+<!-- toast -->
+<script src="https://unpkg.com/@vuesimple/vs-toast@1.4.0/dist/vs-toast.min.js"></script>
 
 </html>
