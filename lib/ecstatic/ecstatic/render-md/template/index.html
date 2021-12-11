@@ -16,11 +16,12 @@
     <div class="fp-doc">
       <header class="fp-doc-navbar">
         <div class="fp-doc-logo">
-
-          <div :class="['fp-menu-icon',{close:!hideTree}]" @click="hideTree = !hideTree">
-            <span class="fp-menu-line"></span>
-            <span class="fp-menu-line"></span>
-            <span class="fp-menu-line"></span>
+          <div class="fp-menu-icon-wrap">
+            <div :class="['fp-menu-icon',{close:!hideTree}]" @click="hideTree = !hideTree">
+              <span class="fp-menu-line"></span>
+              <span class="fp-menu-line"></span>
+              <span class="fp-menu-line"></span>
+            </div>
           </div>
           <a href="/" class="logo">FP DOCS</a>
         </div>
@@ -99,14 +100,14 @@
       template: `
       <ul class="sidebar-links">
         <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
-          <p class="sidebar-heading" v-if="item.name && item.name !== '/'"><span :href="item.relative">{{item.name}}</span></p>
-          <ul class="sidebar-group-items">
+          <p @click="toggleOpen(item.relative)" :class="['sidebar-heading',{close:!!closeKeys[item.relative]}]" v-if="item.name && item.name !== '/'"><a @click.stop :href="item.relative">{{item.name}}</a></p>
+          <ul :class="['sidebar-group-items',{close:!!closeKeys[item.relative]}]" style="max-height:auto;" :ref="'groupItem_'+item.relative">
             <template v-if="item.files && item.files.length > 0">
               <li class="group-link-item" v-for="file in item.files">
                 <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
               </li>
             </template>
-            <li v-if="item.children && item.children.length > 0">
+            <li style="padding-left:0;" v-if="item.children && item.children.length > 0">
               <tree-node :treeData="item.children" :active-file="activeFile"></tree-node>
             </li>
           </ul>
@@ -125,7 +126,31 @@
           default: ''
         }
       },
+      data() {
+        return {
+          closeKeys: {}
+        }
+      },
       methods: {
+        toggleOpen(key) {
+          if (key) {
+            let isClose = !!this.closeKeys[key]
+
+            let element = this.$refs['groupItem_' + key][0]
+            if (!isClose) {
+              element.style['max-height'] = element.clientHeight + 'px'
+            } else {
+              // 时长0.2s
+              setTimeout(() => {
+                element.style['max-height'] = 'none'
+              }, 200)
+            }
+
+            setTimeout(() => {
+              this.$set(this.closeKeys, key, !isClose)
+            }, 1)
+          }
+        },
         groupLinkStyle(path) {
           let style = []
           let urlArr = window.location.pathname.split('/')

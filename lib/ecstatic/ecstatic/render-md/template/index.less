@@ -122,7 +122,6 @@ p a code {
 
 .logo {
   display: inline-block;
-  height: 2rem;
   min-width: 2rem;
   font-size: 22px;
   font-weight: bold;
@@ -206,6 +205,12 @@ p a code {
     margin-top: 1rem;
     line-height: 2rem;
     margin-bottom: 0.5rem;
+    position: relative;
+    a {
+      color: @gray-8;
+      padding: 10px;
+      padding-left: 0;
+    }
 
     &::before {
       position: absolute;
@@ -215,12 +220,35 @@ p a code {
       background-color: #e2e8f0;
       content: '';
     }
+
+    &::after {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iOSIgdmlld0JveD0iMCAwIDE0IDkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQo8cGF0aCBkPSJNMSAxTDcuMTcxNDMgN0wxMyAxIiBzdHJva2U9IiNBMEFFQzAiIHN0cm9rZS13aWR0aD0iMiIvPg0KPC9zdmc+DQo=);
+      background-repeat: no-repeat;
+      background-size: contain;
+      top: 50%;
+      right: 0;
+      margin-top: -6px;
+      content: '';
+      transition: all 0.2s;
+      transform-origin: center;
+    }
+
+    &.close {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
   }
 
   .sidebar-group-items {
-    transition: height 0.1s ease-out;
+    transition: all 0.2s ease-in;
     overflow: hidden;
-    // border-left: 1px solid #e2e8f0;
+    &.close {
+      max-height: 0 !important;
+    }
   }
 }
 
@@ -293,14 +321,14 @@ p a code {
 
 .fp-doc-logo {
   justify-content: flex-end;
-  padding-left: 24px;
+  padding-left: 36px;
   padding-right: 24px;
   width: max(300px, ((100vw - 910px) / 2) - 0px);
   display: flex;
   align-items: center;
   .logo {
     flex: 1;
-    text-align: center;
+    text-align: left;
   }
 }
 
@@ -387,7 +415,6 @@ p a code {
         padding-left: 12px;
       }
     }
-
   }
 }
 
@@ -396,16 +423,21 @@ p a code {
   transform: translate(-100%, 0);
 }
 
+.fp-menu-icon-wrap {
+  width: 0;
+  margin-right: 0;
+  overflow: hidden;
+  transition: all 0.2s;
+}
 .fp-menu-icon {
   display: -ms-flexbox;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 26px;
+  height: 26px;
   transition: all 0.3s;
-  opacity: 0;
+  display: flex;
 
   .fp-menu-line {
     display: block;
@@ -425,6 +457,7 @@ p a code {
     background-color: rgba(55, 113, 228, 0.1);
     .fp-menu-line {
       background-color: #3771e4;
+      width: 14px;
     }
 
     .fp-menu-line:first-child {
@@ -791,8 +824,9 @@ h6 {
     }
   }
 
-  .fp-menu-icon {
-    opacity: 1;
+  .fp-menu-icon-wrap {
+    width: auto;
+    margin-right: 1em;
   }
 }
 
