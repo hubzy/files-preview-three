@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>files-preview</title>
+  <meta name="referrer" content="never">
+  <style src="./index.css"></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="fp-doc">
+      <header class="fp-doc-navbar">
+        <div class="fp-doc-logo">
+          <div class="fp-menu-icon-wrap">
+            <div :class="['fp-menu-icon',{close:!hideTree}]" @click="hideTree = !hideTree">
+              <span class="fp-menu-line"></span>
+              <span class="fp-menu-line"></span>
+              <span class="fp-menu-line"></span>
+            </div>
+          </div>
+          <a href="/" class="logo">FP DOCS</a>
+        </div>
+
+        <!-- <div class="fp-nav-action" @click="toggleFocus(!focusTree)">{{focusTree ? '全部目录':'聚焦文档'}}</div> -->
+
+      </header>
+
+      <div class="fp-doc-container" style="background-image: linear-gradient(#e5f6fe, #fff 20%);">
+
+        <div :class="['fp-doc-tree',{'fp-hide-tree':hideTree},{'fp-open-tree':!hideTree},{'fp-focus-tree':focusTree}]">
+          <div class="fp-tree-links">
+            <div class="fp-tree-node-wrap">
+              <!-- <div v-for="item in 1000">1</div> -->
+              <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
+            </div>
+            <div class="fp-tree-footer">Files preview · <a target="_blank" href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="fp-doc-main">
+          <div class="fp-doc-main-wrap">
+            <div class="fp-doc-body">
+              <div class="content">
+                {{contentHTML}}
+              </div>
+              <!-- <footer id="footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a> · <a href="https://gitee.com/Jioho/files-preview">关于</a></footer> -->
+            </div>
+
+            <div class="fp-doc-anchor" v-if="anchor.length > 0">
+              <ul class="sidebar-anchor-links" style="border-left: 1px solid #E2E8F0;">
+                <li>
+                  <tree-anchor-node :tree-data="anchor" :active-file="currentHash"></tree-anchor-node>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  let fileTree = '{{fileTree}}';
+
+  (function () {
+
+    let docConfig = window.localStorage.getItem('FPDocConfig') || '{}'
+    docConfig = JSON.parse(docConfig)
+
+    function debounce(func, wait, immediate) {
+      let timeout
+
+      return function () {
+        let context = this
+        let args = arguments
+
+        if (timeout) clearTimeout(timeout)
+        if (immediate) {
+          var callNow = !timeout
+          timeout = setTimeout(() => {
+            timeout = null
+          }, wait)
+          if (callNow) func.apply(context, args)
+        } else {
+          timeout = setTimeout(function () {
+            func.apply(context, args)
+          }, wait)
+        }
+      }
+    }
+    Vue.component('tree-node', {
+      template: `
+      <ul class="sidebar-links">
+        <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
+          <p @click="toggleOpen(item.relative)" :class="['sidebar-heading',{close:!!closeKeys[item.relative]}]" v-if="item.name && item.name !== '/'"><a @click.stop :href="item.relative">{{item.name}}</a></p>
+          <ul :class="['sidebar-group-items',{close:!!closeKeys[item.relative]}]" style="max-height:auto;" :ref="'groupItem_'+item.relative">
+            <template v-if="item.files && item.files.length > 0">
+              <li class="group-link-item" v-for="file in item.files">
+                <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+              </li>
+            </template>
+            <li style="padding-left:0;" v-if="item.children && item.children.length > 0">
+              <tree-node :treeData="item.children" :active-file="activeFile"></tree-node>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      `,
+      props: {
+        treeData: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        activeFile: {
+          type: String,
+          default: ''
+        }
+      },
+      data() {
+        return {
+          closeKeys: {}
+        }
+      },
+      methods: {
+        toggleOpen(key) {
+          if (key) {
+            let isClose = !!this.closeKeys[key]
+
+            let element = this.$refs['groupItem_' + key][0]
+            if (!isClose) {
+              element.style['max-height'] = element.clientHeight + 'px'
+            } else {
+              // 时长0.2s
+              setTimeout(() => {
+                element.style['max-height'] = 'none'
+              }, 200)
+            }
+
+            setTimeout(() => {
+              this.$set(this.closeKeys, key, !isClose)
+            }, 1)
+          }
+        },
+        groupLinkStyle(path) {
+          let style = []
+          let urlArr = window.location.pathname.split('/')
+          // 移除最后一个文件名
+          urlArr.pop()
+          let url = urlArr.join('/') || '/'
+          let pathUrl = encodeURI(path)
+
+          if (url.indexOf(pathUrl) !== -1) {
+            style.push('focus')
+            style.push(url === pathUrl ? 'focus-last' : 'focus-broder')
+          } else {
+            style.push('default')
+          }
+          return style
+        },
+      }
+    })
+    Vue.component('tree-anchor-node', {
+      template: `
+      <ul class="sidebar-anchor-links">
+        <li class="sidebar-anchor-group" v-for="item in treeData">
+          <p class="sidebar-anchor-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
+          <ul class="sidebar-anchor-group-items" v-if="item.files && item.files.length > 0">
+            <li v-for="file in item.files">
+              <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+            </li>
+            <li v-if="item.children && item.children.length > 0">
+              <tree-anchor-node :treeData="item.children" :active-file="activeFile"></tree-anchor-node>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      `,
+      props: {
+        treeData: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        activeFile: {
+          type: String,
+          default: ''
+        }
+      }
+    })
+
+    var app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          fileTree: [fileTree],
+          currentFile: decodeURIComponent(window.location.pathname),
+          currentHash: decodeURIComponent(window.location.hash),
+          anchor: {},
+          hideTree: window.innerWidth <= 700,
+          prevWidth: window.innerWidth,
+          focusTree: docConfig.focusTree || false
+        }
+      },
+      mounted() {
+        let _ts = this
+        this.createMenu()
+        window.addEventListener("hashchange", this.changeHash, false)
+        window.addEventListener('resize', this.changeWindowSize, false)
+
+        this.highlightAll()
+        this.toggleFocus(this.focusTree)
+      },
+      beforeDestroy() {
+        window.addEventListener('resize', this.changeWindowSize, false)
+        window.removeEventListener("hashchange", this.changeHash, false)
+      },
+      methods: {
+        highlightAll() {
+          if (window.hljs && window.hljs.highlightAll) {
+            window.hljs.highlightAll()
+          } else {
+            setTimeout(() => {
+              this.highlightAll()
+            }, 50)
+          }
+        },
+
+        setConfig(config = {}) {
+          docConfig = Object.assign(docConfig, config)
+          window.localStorage.setItem('FPDocConfig', JSON.stringify(docConfig))
+        },
+
+        toggleFocus(isFocus) {
+          this.focusTree = isFocus
+          this.setConfig({ focusTree: isFocus })
+
+          this.$nextTick(() => {
+            let activeElemt = document.querySelector('.fp-doc-tree .sidebar-link.active')
+            let treeNodeElemt = document.querySelector('.fp-tree-node-wrap')
+            if (!activeElemt || !treeNodeElemt) { return false }
+            let scrollTop = activeElemt.getBoundingClientRect().top - (window.innerHeight / 2.5)
+            treeNodeElemt.scrollTo({
+              top: scrollTop,
+              behavior: 'smooth'
+            })
+          })
+        },
+
+        // 页面hash改变
+        changeHash() {
+          this.currentHash = decodeURIComponent(window.location.hash)
+        },
+
+        changeWindowSize: debounce(function () {
+          this.hideTree = window.innerWidth <= 700
+        }, 10, false),
+        createMenu() {
+          // 首先获取所有H标签，若页面中有h4，h5，h6则可以添加到参数中
+          var headList = [...document.querySelectorAll('h1,h2,h3,h4,h5')] // 将H标签构造成一棵树，就可以明确H标签之间的层级
+          if (headList.length == 0) {
+            return false
+          }
+          var root = {
+            children: []
+          }
+          var h = {
+            node: headList[0],
+            files: [{
+              name: headList[0].innerText,
+              relative: '#' + headList[0].id
+            }],
+            children: [],
+            parent: root
+          }
+
+          if (!this.currentHash) {
+            this.currentHash = '#' + headList[0].id || ''
+          }
+
+          root.children.push(h)
+          headList.reduce(function (pre, cur) {
+            var n = {
+              node: cur,
+              children: [],
+              files: []
+            }
+
+            while (h.node.localName[1] - n.node.localName[1] >= 0) {
+              h = h.parent
+              if (h === root) {
+                break
+              }
+            }
+            n.parent = h
+            n.files.push({ ...n, name: cur.innerText, relative: '#' + cur.id })
+            h.children.push(n)
+            h = n
+            return h
+          })
+
+          this.anchor = root.children || []
+
+        }
+      },
+    })
+  })()
+</script>
+
+<!-- 代码高亮的样式 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet" />
+
+
+</html>

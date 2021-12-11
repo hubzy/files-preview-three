@@ -253,7 +253,7 @@
     var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
     var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
     var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
-    var coverExt = ['png','gif'];
+    var coverExt = ['png', 'gif'];
     var beforeTime = [{
       time: 31536000000,
       format: 'YYYY年MM月DD日 更新',
@@ -532,6 +532,11 @@
             var nameArr = fileName.split('.');
             var ext = nameArr.pop();
             fileName = nameArr.join('.');
+
+            // // feature 当前目录下包含MD文件，自动进入MD视图
+            // if (ext === 'md') {
+            //   window.location.href += item[0]
+            // }
 
             if (imgExt.indexOf(ext) !== -1) {
               // imageObj[fileName] = {
