@@ -38,7 +38,8 @@
               <!-- <div v-for="item in 1000">1</div> -->
               <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
             </div>
-            <div class="fp-tree-footer">Files preview · <a target="_blank" href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
+            <div class="fp-tree-footer">Files preview · <a target="_blank"
+                href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
             </div>
           </div>
         </div>
@@ -68,35 +69,34 @@
 </body>
 
 <script>
-  let fileTree = '{{fileTree}}';
+  let fileTree = "{{fileTree}}";
 
   (function () {
-
-    let docConfig = window.localStorage.getItem('FPDocConfig') || '{}'
-    docConfig = JSON.parse(docConfig)
+    let docConfig = window.localStorage.getItem("FPDocConfig") || "{}";
+    docConfig = JSON.parse(docConfig);
 
     function debounce(func, wait, immediate) {
-      let timeout
-
+      let timeout;
       return function () {
-        let context = this
-        let args = arguments
+        let context = this;
+        let args = arguments;
+        if (timeout) clearTimeout(timeout);
 
-        if (timeout) clearTimeout(timeout)
         if (immediate) {
-          var callNow = !timeout
+          var callNow = !timeout;
           timeout = setTimeout(() => {
-            timeout = null
-          }, wait)
-          if (callNow) func.apply(context, args)
+            timeout = null;
+          }, wait);
+          if (callNow) func.apply(context, args);
         } else {
           timeout = setTimeout(function () {
-            func.apply(context, args)
-          }, wait)
+            func.apply(context, args);
+          }, wait);
         }
-      }
+      };
     }
-    Vue.component('tree-node', {
+
+    Vue.component("tree-node", {
       template: `
       <ul class="sidebar-links">
         <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
@@ -118,58 +118,62 @@
         treeData: {
           type: Array,
           default: function () {
-            return []
+            return [];
           }
         },
         activeFile: {
           type: String,
-          default: ''
+          default: ""
         }
       },
+
       data() {
         return {
           closeKeys: {}
-        }
+        };
       },
+
       methods: {
         toggleOpen(key) {
           if (key) {
-            let isClose = !!this.closeKeys[key]
+            let isClose = !!this.closeKeys[key];
+            let element = this.$refs["groupItem_" + key][0];
 
-            let element = this.$refs['groupItem_' + key][0]
             if (!isClose) {
-              element.style['max-height'] = element.clientHeight + 'px'
+              element.style["max-height"] = element.clientHeight + "px";
             } else {
               // 时长0.2s
               setTimeout(() => {
-                element.style['max-height'] = 'none'
-              }, 200)
+                element.style["max-height"] = "none";
+              }, 200);
             }
 
             setTimeout(() => {
-              this.$set(this.closeKeys, key, !isClose)
-            }, 1)
+              this.$set(this.closeKeys, key, !isClose);
+            }, 1);
           }
         },
+
         groupLinkStyle(path) {
-          let style = []
-          let urlArr = window.location.pathname.split('/')
-          // 移除最后一个文件名
-          urlArr.pop()
-          let url = urlArr.join('/') || '/'
-          let pathUrl = encodeURI(path)
+          let style = [];
+          let urlArr = window.location.pathname.split("/"); // 移除最后一个文件名
+
+          urlArr.pop();
+          let url = urlArr.join("/") || "/";
+          let pathUrl = encodeURI(path);
 
           if (url.indexOf(pathUrl) !== -1) {
-            style.push('focus')
-            style.push(url === pathUrl ? 'focus-last' : 'focus-broder')
+            style.push("focus");
+            style.push(url === pathUrl ? "focus-last" : "focus-broder");
           } else {
-            style.push('default')
+            style.push("default");
           }
-          return style
-        },
+
+          return style;
+        }
       }
-    })
-    Vue.component('tree-anchor-node', {
+    });
+    Vue.component("tree-anchor-node", {
       template: `
       <ul class="sidebar-anchor-links">
         <li class="sidebar-anchor-group" v-for="item in treeData">
@@ -189,18 +193,18 @@
         treeData: {
           type: Array,
           default: function () {
-            return []
+            return [];
           }
         },
         activeFile: {
           type: String,
-          default: ''
+          default: ""
         }
       }
-    })
-
+    });
     var app = new Vue({
-      el: '#app',
+      el: "#app",
+
       data() {
         return {
           fileTree: [fileTree],
@@ -210,116 +214,161 @@
           hideTree: window.innerWidth <= 700,
           prevWidth: window.innerWidth,
           focusTree: docConfig.focusTree || false
-        }
+        };
       },
-      mounted() {
-        let _ts = this
-        this.createMenu()
-        window.addEventListener("hashchange", this.changeHash, false)
-        window.addEventListener('resize', this.changeWindowSize, false)
 
-        this.highlightAll()
-        this.toggleFocus(this.focusTree)
+      mounted() {
+        let _ts = this;
+
+        this.createMenu();
+        window.addEventListener("hashchange", this.changeHash, false);
+        window.addEventListener("resize", this.changeWindowSize, false);
+        this.toggleFocus(this.focusTree);
+        this.highlightAll();
+        this.initViewer();
       },
+
       beforeDestroy() {
-        window.addEventListener('resize', this.changeWindowSize, false)
-        window.removeEventListener("hashchange", this.changeHash, false)
+        window.addEventListener("resize", this.changeWindowSize, false);
+        window.removeEventListener("hashchange", this.changeHash, false);
       },
+
       methods: {
         highlightAll() {
           if (window.hljs && window.hljs.highlightAll) {
-            window.hljs.highlightAll()
+            window.hljs.highlightAll();
           } else {
             setTimeout(() => {
-              this.highlightAll()
-            }, 50)
+              this.highlightAll();
+            }, 50);
+          }
+        },
+
+        initViewer() {
+          if (window.Viewer) {
+            let viewer = new window.Viewer(
+              document.querySelector(".fp-doc-body .content"),
+              {
+                inline: false,
+
+                viewed() {
+                  viewer.zoomTo(1);
+                }
+              }
+            );
+          } else {
+            setTimeout(() => {
+              this.initViewer();
+            }, 50);
           }
         },
 
         setConfig(config = {}) {
-          docConfig = Object.assign(docConfig, config)
-          window.localStorage.setItem('FPDocConfig', JSON.stringify(docConfig))
+          docConfig = Object.assign(docConfig, config);
+          window.localStorage.setItem("FPDocConfig", JSON.stringify(docConfig));
         },
 
         toggleFocus(isFocus) {
-          this.focusTree = isFocus
-          this.setConfig({ focusTree: isFocus })
-
+          this.focusTree = isFocus;
+          this.setConfig({
+            focusTree: isFocus
+          });
           this.$nextTick(() => {
-            let activeElemt = document.querySelector('.fp-doc-tree .sidebar-link.active')
-            let treeNodeElemt = document.querySelector('.fp-tree-node-wrap')
-            if (!activeElemt || !treeNodeElemt) { return false }
-            let scrollTop = activeElemt.getBoundingClientRect().top - (window.innerHeight / 2.5)
+            let activeElemt = document.querySelector(
+              ".fp-doc-tree .sidebar-link.active"
+            );
+            let treeNodeElemt = document.querySelector(".fp-tree-node-wrap");
+
+            if (!activeElemt || !treeNodeElemt) {
+              return false;
+            }
+
+            let scrollTop =
+              activeElemt.getBoundingClientRect().top - window.innerHeight / 2.5;
             treeNodeElemt.scrollTo({
               top: scrollTop,
-              behavior: 'smooth'
-            })
-          })
+              behavior: "smooth"
+            });
+          });
         },
 
         // 页面hash改变
         changeHash() {
-          this.currentHash = decodeURIComponent(window.location.hash)
+          this.currentHash = decodeURIComponent(window.location.hash);
         },
 
-        changeWindowSize: debounce(function () {
-          this.hideTree = window.innerWidth <= 700
-        }, 10, false),
+        changeWindowSize: debounce(
+          function () {
+            this.hideTree = window.innerWidth <= 700;
+          },
+          10,
+          false
+        ),
+
         createMenu() {
           // 首先获取所有H标签，若页面中有h4，h5，h6则可以添加到参数中
-          var headList = [...document.querySelectorAll('h1,h2,h3,h4,h5')] // 将H标签构造成一棵树，就可以明确H标签之间的层级
+          var headList = [...document.querySelectorAll("h1,h2,h3,h4,h5")]; // 将H标签构造成一棵树，就可以明确H标签之间的层级
+
           if (headList.length == 0) {
-            return false
+            return false;
           }
+
           var root = {
             children: []
-          }
+          };
           var h = {
             node: headList[0],
-            files: [{
-              name: headList[0].innerText,
-              relative: '#' + headList[0].id
-            }],
+            files: [
+              {
+                name: headList[0].innerText,
+                relative: "#" + headList[0].id
+              }
+            ],
             children: [],
             parent: root
-          }
+          };
 
           if (!this.currentHash) {
-            this.currentHash = '#' + headList[0].id || ''
+            this.currentHash = "#" + headList[0].id || "";
           }
 
-          root.children.push(h)
+          root.children.push(h);
           headList.reduce(function (pre, cur) {
             var n = {
               node: cur,
               children: [],
               files: []
-            }
+            };
 
             while (h.node.localName[1] - n.node.localName[1] >= 0) {
-              h = h.parent
+              h = h.parent;
+
               if (h === root) {
-                break
+                break;
               }
             }
-            n.parent = h
-            n.files.push({ ...n, name: cur.innerText, relative: '#' + cur.id })
-            h.children.push(n)
-            h = n
-            return h
-          })
 
-          this.anchor = root.children || []
-
+            n.parent = h;
+            n.files.push({ ...n, name: cur.innerText, relative: "#" + cur.id });
+            h.children.push(n);
+            h = n;
+            return h;
+          });
+          this.anchor = root.children || [];
         }
-      },
-    })
-  })()
+      }
+    });
+  })();
+
 </script>
 
 <!-- 代码高亮的样式 -->
 <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
 <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet" />
+
+<!-- 图片预览服务 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet">
 
 
 </html>

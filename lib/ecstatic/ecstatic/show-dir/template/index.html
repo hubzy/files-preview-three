@@ -110,9 +110,10 @@
 
         <ul class="images row row-6">
           <li class="col-item" v-for="(item,index) in images" :key="index">
-            <a :href="item.fileName" class="images-item">
+            <a href="javascript:void(0);" class="images-item">
               <div class="image-preview">
                 <div class="preview" :style="{backgroundImage:`url('`+current + item.fileName+`')`}">
+                  <img @click.ctrl="e => openFile(e,current + item.fileName)" :src="current + item.fileName" />
                 </div>
               </div>
 
@@ -295,6 +296,8 @@
 
           _this.handleScroll();
         });
+
+        this.initViewer()
       },
       beforeDestroy: function beforeDestroy() {
         window.removeEventListener("scroll", this.handleScroll);
@@ -310,6 +313,27 @@
         }
       },
       methods: {
+
+        openFile(event, url) {
+          event.preventDefault();
+          window.open(url, '_blank')
+        },
+
+        initViewer() {
+          if (window.Viewer) {
+            let viewer = new window.Viewer(document.querySelector('.type-image'), {
+              inline: false,
+              viewed() {
+                viewer.zoomTo(1);
+              },
+            });
+          } else {
+            setTimeout(() => {
+              this.initViewer()
+            }, 50)
+          }
+        },
+
         getUpdateTime: function getUpdateTime(time) {
           time = parseInt(time);
           var nowTime = new Date().getTime();
@@ -562,5 +586,10 @@
     });
   })();
 </script>
+
+<!-- 图片预览服务 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet">
+
 
 </html>
