@@ -1,6 +1,6 @@
 {
   "name": "files-preview",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "基于 http-server 增强对 Measure 导出的项目的管理",
   "main": "./lib/files-preview",
   "repository": {
