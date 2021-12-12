@@ -115,7 +115,7 @@
                 <div class="preview" :style="{backgroundImage:`url('`+current + item.fileName+`')`}">
                   <img @click.ctrl="e => openFile(e,current + item.fileName)" :src="current + item.fileName" />
                 </div>
-                <!-- <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation> -->
+                <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
               </div>
 
               <div class="file-name">
