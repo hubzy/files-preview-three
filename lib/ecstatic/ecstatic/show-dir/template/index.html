@@ -274,58 +274,6 @@
       useDiffTime: 'hours'
     }];
 
-    Vue.component('operation', {
-      template: `
-      <div ref="operation" :class="['operation-wrap',{open:open}]" @click.stop="open = !open" v-if="actionList.length">
-        <div class="operation">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-
-        <div :class="['operation-list-wrap',{open:open}]">
-          <div class="operation-list">
-            <div class="operation-item" v-for="(item,index) in actionList" :key="index" @click.stop="clickItem(item)">{{item.name}}</div>
-          </div>
-        </div>
-      </div>
-      `,
-      props: {
-        actionList: {
-          type: Array,
-          default: function () {
-            return []
-          }
-        },
-        value: {
-          type: Object,
-          default: function () {
-            return {}
-          }
-        }
-      },
-      data() {
-        return {
-          open: false
-        }
-      },
-      mounted() {
-        document.body.addEventListener('click', this.bodyClick, false)
-      },
-      destroyed() {
-        document.body.removeEventListener('click', this.bodyClick, false)
-      },
-      methods: {
-        bodyClick(event) {
-          this.open = false
-        },
-        clickItem(item) {
-          this.$emit('click-item', item, this.value)
-          this.open = false
-        }
-      }
-    })
-
     var app = new Vue({
       el: '#app',
       data: {
@@ -401,6 +349,7 @@
             window.VsToast.show({
               title: '复制成功',
               variant: 'success',
+              timeout: 3000
             });
 
             document.removeEventListener('copy', copy)
@@ -674,6 +623,69 @@
         }
       }
     });
+
+
+    Vue.component('operation', {
+      template: `
+      <div ref="operation" :class="['operation-wrap',{open:open}]" @click.stop="toggleOpen" v-if="actionList.length">
+        <div class="operation">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div :class="['operation-list-wrap',{open:open}]">
+          <div class="operation-list">
+            <div class="operation-item" v-for="(item,index) in actionList" :key="index" @click.stop="clickItem(item)">{{item.name}}</div>
+          </div>
+        </div>
+      </div>
+      `,
+      props: {
+        actionList: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        value: {
+          type: Object,
+          default: function () {
+            return {}
+          }
+        }
+      },
+      data() {
+        return {
+          open: false
+        }
+      },
+      mounted() {
+        let _this = this
+        document.body.addEventListener('click', _this.bodyClick, false)
+        app.$on('openOperation', function () {
+          _this.bodyClick()
+        })
+      },
+      destroyed() {
+        document.body.removeEventListener('click', this.bodyClick, false)
+      },
+      methods: {
+        bodyClick(event) {
+          this.open = false
+        },
+        toggleOpen() {
+          app.$emit('openOperation')
+          this.$nextTick(() => {
+            this.open = !this.open
+          })
+        },
+        clickItem(item) {
+          this.$emit('click-item', item, this.value)
+          this.open = false
+        }
+      }
+    })
   })();
 </script>
 
