@@ -3,10 +3,10 @@
 @gray-7: #4a5568;
 @gray-6: #718096;
 @gray-5: #a0aec0;
-@gray-4: #CBD5E0;
-@gray-3: #E2E8F0;
-@gray-2: #EDF2F7;
-@gray-1: #F7FAFC;
+@gray-4: #cbd5e0;
+@gray-3: #e2e8f0;
+@gray-2: #edf2f7;
+@gray-1: #f7fafc;
 @error: rgb(255, 42, 42);
 @success: #34de2b;
 @warning: rgb(255, 204, 0);
@@ -23,7 +23,6 @@
   width: 100%;
   height: 100%;
 }
-
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -82,7 +81,7 @@ ol,
 p,
 ul {
   line-height: 1.7;
-  color:@gray-7
+  color: @gray-7;
 }
 
 table {
@@ -159,7 +158,6 @@ p a code {
   padding: 0 20px;
   text-align: center;
   background-color: linear-gradient(rgba(249, 250, 252, 10), rgba(249, 250, 252, 1));
-
 }
 
 .sidebar-group,
@@ -266,6 +264,7 @@ p a code {
 
 .sidebar-anchor-group {
   margin: 0.75em 0;
+  list-style: none;
 
   ul {
     margin: 0;
@@ -279,15 +278,59 @@ p a code {
     list-style: none;
   }
 
-  a.sidebar-anchor-link:hover {
-    color:@main-color;
+  .sidebar-anchor-link:hover {
+    color: @main-color;
   }
 
-  a.sidebar-anchor-link.active {
-    font-weight: 600;
-    color: @main-color;
-    border-left-color: @main-color;
-    border-left: 1px solid;
+  .sidebar-anchor-link {
+    display: block;
+    position: relative;
+    &.active {
+      font-weight: 600;
+      color: @main-color;
+      // border-left-color: @main-color;
+      // border-left: 1px solid;
+      &::before {
+        position: absolute;
+        left: 0;
+        height: 23px;
+        width: 1px;
+        background-color: @main-color;
+        content: '';
+        height: 100%;
+      }
+
+      &.level_1 {
+        &::before {
+          left: -10px;
+        }
+      }
+      &.level_2 {
+        &::before {
+          left: -30px;
+        }
+      }
+      &.level_3 {
+        &::before {
+          left: -50px;
+        }
+      }
+      &.level_4 {
+        &::before {
+          left: -70px;
+        }
+      }
+      &.level_5 {
+        &::before {
+          left: -90px;
+        }
+      }
+      &.level_6 {
+        &::before {
+          left: -110px;
+        }
+      }
+    }
   }
 
   .sidebar-anchor-heading {
@@ -304,7 +347,6 @@ p a code {
 
   .sidebar-anchor-group-items {
     transition: height 0.1s ease-out;
-    overflow: hidden;
     // border-left: 1px solid #eaecef;
   }
 }
