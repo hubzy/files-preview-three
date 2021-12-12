@@ -122,3 +122,6 @@ npm install --global files-preview
 
 - 1.0.0
   - 添加 MD 文件预览支持
+- 1.1.0
+  - 添加图片预览
+  - 修改文档模式样式
