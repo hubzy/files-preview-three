@@ -38,9 +38,9 @@
               <!-- <div v-for="item in 1000">1</div> -->
               <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
             </div>
-            <div class="fp-tree-footer">Files preview · <a target="_blank"
+            <!-- <div class="fp-tree-footer">Files preview · <a target="_blank"
                 href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -50,7 +50,9 @@
               <div class="content">
                 {{contentHTML}}
               </div>
-              <!-- <footer id="footer">Files preview · <a href="https://gitee.com/Jioho/files-preview">Gitee 地址</a> · <a href="https://gitee.com/Jioho/files-preview">关于</a></footer> -->
+               <div class="fp-tree-footer">Files preview · <a target="_blank"
+                href="https://gitee.com/Jioho/files-preview">Gitee 地址</a>
+            </div>
             </div>
 
             <div class="fp-doc-anchor" v-if="anchor.length > 0">
@@ -180,7 +182,7 @@
           <p class="sidebar-anchor-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
           <ul class="sidebar-anchor-group-items" v-if="item.files && item.files.length > 0">
             <li v-for="file in item.files">
-              <a :href="file.relative" :class="['sidebar-link',{active:file.relative == activeFile}]">{{file.name}}</a>
+              <a :href="file.relative" :class="['sidebar-anchor-link',{active:file.relative == activeFile}]">{{file.name}}</a>
             </li>
             <li v-if="item.children && item.children.length > 0">
               <tree-anchor-node :treeData="item.children" :active-file="activeFile"></tree-anchor-node>

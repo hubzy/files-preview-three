@@ -1,12 +1,12 @@
 @main-color: #0092ff;
 @gray-8: #2d3748;
-@gray-7: #2d3748;
+@gray-7: #4a5568;
 @gray-6: #718096;
 @gray-5: #a0aec0;
-@gray-4: #2d3748;
-@gray-3: #718096;
-@gray-2: #2d3748;
-@gray-1: #2d3748;
+@gray-4: #CBD5E0;
+@gray-3: #E2E8F0;
+@gray-2: #EDF2F7;
+@gray-1: #F7FAFC;
 @error: rgb(255, 42, 42);
 @success: #34de2b;
 @warning: rgb(255, 204, 0);
@@ -23,6 +23,7 @@
   width: 100%;
   height: 100%;
 }
+
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -81,6 +82,7 @@ ol,
 p,
 ul {
   line-height: 1.7;
+  color:@gray-7
 }
 
 table {
@@ -116,7 +118,7 @@ ol {
 
 a,
 p a code {
-  color: @gray-6;
+  color: @main-color;
   text-decoration: none;
 }
 
@@ -155,8 +157,9 @@ p a code {
   line-height: 64px;
   font-size: 0.875rem;
   padding: 0 20px;
-  // background-image: linear-gradient(rgba(249,250,252,10), rgba(249,250,252,1));
+  text-align: center;
   background-color: linear-gradient(rgba(249, 250, 252, 10), rgba(249, 250, 252, 1));
+
 }
 
 .sidebar-group,
@@ -172,10 +175,11 @@ p a code {
   }
 }
 
-.sidebar-links {
+.sidebar-link {
   margin-left: -10px;
   margin: 0;
   padding: 0;
+  color: @gray-7;
   // border-left: 1px solid #e2e8f0;
 }
 
@@ -205,7 +209,7 @@ p a code {
     margin-top: 1rem;
     line-height: 2rem;
     margin-bottom: 0.5rem;
-    // position: relative;
+    position: relative;
     a {
       color: @gray-8;
       padding: 10px;
@@ -228,7 +232,7 @@ p a code {
       background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iOSIgdmlld0JveD0iMCAwIDE0IDkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+DQo8cGF0aCBkPSJNMSAxTDcuMTcxNDMgN0wxMyAxIiBzdHJva2U9IiNBMEFFQzAiIHN0cm9rZS13aWR0aD0iMiIvPg0KPC9zdmc+DQo=);
       background-repeat: no-repeat;
       background-size: contain;
-      top: 18px;
+      top: 50%;
       right: 0;
       margin-top: -6px;
       content: '';
@@ -252,15 +256,16 @@ p a code {
   }
 }
 
-.sidebar-anchor-links {
+.sidebar-anchor-link {
   max-width: 300px;
   margin: 0;
   padding: 0;
   list-style: none;
+  color: @gray-6;
 }
 
 .sidebar-anchor-group {
-  margin: 1em 0;
+  margin: 0.75em 0;
 
   ul {
     margin: 0;
@@ -275,14 +280,14 @@ p a code {
   }
 
   a.sidebar-anchor-link:hover {
-    color: #ff0000; //测试用颜色
+    color:@main-color;
   }
 
   a.sidebar-anchor-link.active {
     font-weight: 600;
-    color: #ff0000; //测试用颜色
+    color: @main-color;
     border-left-color: @main-color;
-    border-left: 2px solid;
+    border-left: 1px solid;
   }
 
   .sidebar-anchor-heading {
@@ -443,7 +448,7 @@ p a code {
     width: 18px;
     height: 2px;
     border-radius: 2px;
-    background-color: #000;
+    background-color: @black;
     transition: all 0.3s ease-in-out;
 
     & + .fp-menu-line {
@@ -455,7 +460,7 @@ p a code {
     border-radius: 50%;
     background-color: rgba(55, 113, 228, 0.1);
     .fp-menu-line {
-      background-color: #3771e4;
+      background-color: @main-color;
       width: 14px;
     }
 
