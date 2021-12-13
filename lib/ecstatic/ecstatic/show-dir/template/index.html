@@ -110,10 +110,12 @@
 
         <ul class="images row row-6">
           <li class="col-item" v-for="(item,index) in images" :key="index">
-            <a :href="item.fileName" class="images-item">
+            <a href="javascript:void(0);" class="images-item">
               <div class="image-preview">
                 <div class="preview" :style="{backgroundImage:`url('`+current + item.fileName+`')`}">
+                  <img @click.ctrl="e => openFile(e,current + item.fileName)" :src="current + item.fileName" />
                 </div>
+                <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
               </div>
 
               <div class="file-name">
@@ -271,6 +273,7 @@
       format: 'h小时前 更新',
       useDiffTime: 'hours'
     }];
+
     var app = new Vue({
       el: '#app',
       data: {
@@ -280,7 +283,15 @@
         path: [],
         otherFiles: [],
         blurHeder: false,
-        current: treeData.current
+        current: treeData.current,
+
+        imgAction: [{
+          name: '下载文件',
+          fn: 'downloadFile'
+        }, {
+          name: '复制链接',
+          fn: 'copyLink'
+        }]
       },
       created: function created() {
         this.initFileList();
@@ -295,6 +306,8 @@
 
           _this.handleScroll();
         });
+
+        this.initViewer()
       },
       beforeDestroy: function beforeDestroy() {
         window.removeEventListener("scroll", this.handleScroll);
@@ -310,6 +323,56 @@
         }
       },
       methods: {
+
+        openFile(event, url) {
+          event.preventDefault();
+          window.open(url, '_blank')
+        },
+
+        // 操作图片
+        imageAction(actionItem, itemInfo) {
+          let fn = actionItem.fn
+          if (this[fn]) {
+            this[fn](itemInfo)
+          }
+        },
+
+        downloadFile(itemInfo) {
+          window.download(window.location.href + itemInfo.fileName)
+        },
+
+        copyLink(itemInfo) {
+          var copy = function (e) {
+            e.preventDefault()
+            e.clipboardData.setData('text/plain', window.location.href + itemInfo.fileName)
+
+            window.VsToast.show({
+              title: '复制成功',
+              variant: 'success',
+              timeout: 3000
+            });
+
+            document.removeEventListener('copy', copy)
+          }
+          document.addEventListener('copy', copy)
+          document.execCommand("Copy");
+        },
+
+        initViewer() {
+          if (window.Viewer) {
+            let viewer = new window.Viewer(document.querySelector('.type-image'), {
+              inline: false,
+              viewed() {
+                viewer.zoomTo(1);
+              },
+            });
+          } else {
+            setTimeout(() => {
+              this.initViewer()
+            }, 50)
+          }
+        },
+
         getUpdateTime: function getUpdateTime(time) {
           time = parseInt(time);
           var nowTime = new Date().getTime();
@@ -533,10 +596,10 @@
             var ext = nameArr.pop();
             fileName = nameArr.join('.');
 
-            // feature 当前目录下包含MD文件，自动进入MD视图
-            if (ext === 'md') {
-              window.location.href += item[0]
-            }
+            // // feature 当前目录下包含MD文件，自动进入MD视图
+            // if (ext === 'md') {
+            //   window.location.href += item[0]
+            // }
 
             if (imgExt.indexOf(ext) !== -1) {
               // imageObj[fileName] = {
@@ -560,7 +623,80 @@
         }
       }
     });
+
+
+    Vue.component('operation', {
+      template: `
+      <div ref="operation" :class="['operation-wrap',{open:open}]" @click.stop="toggleOpen" v-if="actionList.length">
+        <div class="operation">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div :class="['operation-list-wrap',{open:open}]">
+          <div class="operation-list">
+            <div class="operation-item" v-for="(item,index) in actionList" :key="index" @click.stop="clickItem(item)">{{item.name}}</div>
+          </div>
+        </div>
+      </div>
+      `,
+      props: {
+        actionList: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        value: {
+          type: Object,
+          default: function () {
+            return {}
+          }
+        }
+      },
+      data() {
+        return {
+          open: false
+        }
+      },
+      mounted() {
+        let _this = this
+        document.body.addEventListener('click', _this.bodyClick, false)
+        app.$on('openOperation', function () {
+          _this.bodyClick()
+        })
+      },
+      destroyed() {
+        document.body.removeEventListener('click', this.bodyClick, false)
+      },
+      methods: {
+        bodyClick(event) {
+          this.open = false
+        },
+        toggleOpen() {
+          app.$emit('openOperation')
+          this.$nextTick(() => {
+            this.open = !this.open
+          })
+        },
+        clickItem(item) {
+          this.$emit('click-item', item, this.value)
+          this.open = false
+        }
+      }
+    })
   })();
 </script>
+
+<!-- 图片预览服务 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet">
+
+<!-- 下载服务 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+
+<!-- toast -->
+<script src="https://unpkg.com/@vuesimple/vs-toast@1.4.0/dist/vs-toast.min.js"></script>
 
 </html>

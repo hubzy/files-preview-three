@@ -34,7 +34,7 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 ## 全新的 GUI
 
 对 http-server 的界面进行调整，现在它有了一个全新的图形化界面。
-![（左）http-server（右）files-preview](https://images.gitee.com/uploads/images/2021/0816/000817_6b47ae35_8421994.png "Frame 11.png")
+![（左）http-server（右）files-preview](https://images.gitee.com/uploads/images/2021/0816/000817_6b47ae35_8421994.png 'Frame 11.png')
 
 ## 增加「项目」类型
 
@@ -92,12 +92,13 @@ npm install --global files-preview
 > 使用 mac 并且要全局更新的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`
 
 ## 本地开发简易指南
+
 1. 使用命令行或下载的方式从 Gitee 上拉取项目；
 2. 在项目文件夹下打开终端；
 3. 在终端内输入以下命令：`npm i`
 4. 在终端内输入以下命令：`npm run serve ./example`，如果运行正常的话，终端内将会显示两个地址；
 5. 打开浏览器，输入上一步显示的地址，你会看到以下的界面：
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0816/001818_0164e7a2_8421994.png "Frame 12.png")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0816/001818_0164e7a2_8421994.png 'Frame 12.png')
 6. 对项目中以下目录 ./lib/ecstatic/ecstatic/show-dir/template 进行开发修改后，刷新以上地址即可看到修改效果。
 
 # 它有什么优势？
@@ -116,3 +117,11 @@ npm install --global files-preview
 - 提交[Issue](https://gitee.com/Jioho/files-preview/issues)
 
 备注：Measure 插件已暂停更新，有其他的开发者为其进行了新版本的适配和功能更新，并更名为 [MeaXure](https://gitee.com/Jioho/sketch-meaxure)，以上提到的 Measure 可等同于 MeaXure 来理解。
+
+# 更新日志
+
+- 1.0.0
+  - 添加 MD 文件预览支持
+- 1.1.0
+  - 添加图片预览
+  - 修改文档模式样式
