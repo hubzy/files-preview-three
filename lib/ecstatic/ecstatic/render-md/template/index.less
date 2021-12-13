@@ -436,6 +436,7 @@ p a code {
     .content {
       margin: 0 80px;
       max-width: 920px;
+      color: #2d3748;
 
       * {
         max-width: 100%;
@@ -668,11 +669,15 @@ kbd {
 }
 
 blockquote {
-  font-size: 1.2rem;
   color: @gray-5;
   border-left: 0.25rem solid #e2e8f0;
   margin-left: 0;
   padding-left: 1rem;
+  p,
+  li,
+  ol {
+    color: @gray-5;
+  }
 }
 
 strong {
