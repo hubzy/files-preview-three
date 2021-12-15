@@ -36,6 +36,11 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 对 http-server 的界面进行调整，现在它有了一个全新的图形化界面。
 ![（左）http-server（右）files-preview](https://images.gitee.com/uploads/images/2021/0816/000817_6b47ae35_8421994.png 'Frame 11.png')
 
+## 增加「文档模式」
+当文件夹内包含 md 格式的文件时，打开该文件夹将会自动进入文档模式。
+![输入图片说明](Frame%2013.png)
+ 
+
 ## 增加「项目」类型
 
 文件夹新增「项目」类型，可通过在 assets 文件夹（使用 Measure 插件会自动生成一个，也能手动添加）中增加 cover.png 来使该文件夹成为「项目」。
