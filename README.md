@@ -38,7 +38,7 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 
 ## 增加「文档模式」
 当文件夹内包含 md 格式的文件时，打开该文件夹将会自动进入文档模式。
-![输入图片说明](Frame%2013.png)
+![输入图片说明](Frame%2013%20(1).png)
  
 
 ## 增加「项目」类型
