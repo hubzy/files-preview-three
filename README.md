@@ -60,6 +60,7 @@ npm install --global files-preview
 
 ## 使用
 
+### 终端
 在需要开启服务器的文件夹下打开终端，运行以下命令
 
 ```
@@ -75,8 +76,8 @@ files-preview [path] [options]
 
 现在可以访问 [http://localhost:8080](http://localhost:8080/) 或终端显示的地址来查看你的服务器。
 
-### 1.1.0 更新
-我们为 macOS 用户提供了一个自动操作来开启 Files-preview ，安装完成后，在选中文件夹时，点击右键「 服务 - 快速开启 FP 服务」就可以快速启动服务。
+### macOS 自动操作
+在 1.1 版本中，我们为 macOS 用户提供了一个自动操作来开启 Files-preview ，安装完成后，在选中文件夹时，点击右键「 服务 - 快速开启 FP 服务」就可以快速启动服务。
 
 快速操作下载地址：[自动操作 - 快速开启 FP 服务](https://gitee.com/Jioho/files-preview/raw/master/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%90%AF%20FP%20%E6%9C%8D%E5%8A%A1.zip)，解压后双击安装即可。
 ![输入图片说明](Pasted%20image%2020211215231046.png)
