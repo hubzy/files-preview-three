@@ -77,11 +77,7 @@
             </div>
 
             <div class="fp-doc-anchor" v-if="anchor.length > 0">
-              <ul class="sidebar-anchor-link" style="border-left: 1px solid #E2E8F0;">
-                <li>
-                  <tree-anchor-node :tree-data="anchor" :active-file="currentHash"></tree-anchor-node>
-                </li>
-              </ul>
+              <tree-anchor-node :tree-data="anchor" :active-file="currentHash"></tree-anchor-node>
             </div>
           </div>
         </div>
@@ -198,20 +194,13 @@
     });
     Vue.component("tree-anchor-node", {
       template: `
-      <ul class="sidebar-anchor-link">
+      <ul class="anchor-tree">
         <li class="sidebar-anchor-group" v-for="item in treeData">
-          <p class="sidebar-anchor-heading" v-if="item.name && item.name !== '/'"><span>{{item.name}}</span></p>
-          <ul class="sidebar-anchor-group-items" v-if="item.files && item.files.length > 0">
-            <li v-for="file in item.files">
-              <a :href="file.relative" :class="['sidebar-anchor-link','level_'+file.level,{active:file.relative == activeFile}]">{{file.name}}</a>
-            </li>
-            <li v-if="item.children && item.children.length > 0">
-              <tree-anchor-node :treeData="item.children" :active-file="activeFile"></tree-anchor-node>
-            </li>
-          </ul>
+          <a :href="item.relative" :class="['sidebar-anchor-link','level_'+item.level,{active:item.relative == activeFile}]">{{item.name}}</a>
         </li>
       </ul>
       `,
+
       props: {
         treeData: {
           type: Array,
@@ -329,58 +318,22 @@
         ),
 
         createMenu() {
+          var _ts = this
           // 首先获取所有H标签，若页面中有h4，h5，h6则可以添加到参数中
-          var headList = [...document.querySelectorAll("h1,h2,h3,h4,h5")]; // 将H标签构造成一棵树，就可以明确H标签之间的层级
+          var headList = document.querySelectorAll("h1,h2,h3,h4,h5"); // 将H标签构造成一棵树，就可以明确H标签之间的层级
 
-          if (headList.length == 0) {
-            return false;
-          }
+          headList = [...headList]
 
-          var root = {
-            children: []
-          };
-          var h = {
-            node: headList[0],
-            files: [
-              {
-                name: headList[0].innerText,
-                relative: "#" + headList[0].id,
-                level: headList[0].localName[1],
-              }
-            ],
-            children: [],
-            parent: root
-          };
-
-          if (!this.currentHash) {
-            this.currentHash = "#" + headList[0].id || "";
-          }
-
-          root.children.push(h);
-          headList.reduce(function (pre, cur) {
-            var n = {
-              node: cur,
-              children: [],
-              files: []
-            };
-
-            while (h.node.localName[1] - n.node.localName[1] >= 0) {
-              h = h.parent;
-
-              if (h === root) {
-                break;
-              }
+          this.anchor = headList.map(function (item) {
+            if (!_ts.currentHash) {
+              _ts.currentHash = "#" + headList[0].id || "";
             }
-
-            n.parent = h;
-
-            n.files.push({ ...n, name: cur.innerText, relative: "#" + cur.id, level: cur.localName[1] });
-            h.children.push(n);
-            h = n;
-            return h;
-          });
-          console.log(root.children)
-          this.anchor = root.children || [];
+            return {
+              name: item.innerText,
+              relative: "#" + item.id,
+              level: item.localName[1]
+            }
+          })
         }
       }
     });

@@ -38,7 +38,7 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 
 ## 增加「文档模式」
 当文件夹内包含 md 格式的文件时，打开该文件夹将会自动进入文档模式。
-![输入图片说明](Frame%2013%20(1).png)
+![](https://gitee.com/Jioho/img/raw/master/tinymce/20211218231040.png)
  
 
 ## 增加「项目」类型
@@ -85,7 +85,9 @@ files-preview [path] [options]
 在 1.1 版本中，我们为 macOS 用户提供了一个自动操作来开启 Files-preview ，安装完成后，在选中文件夹时，点击右键「 服务 - 快速开启 FP 服务」就可以快速启动服务。
 
 快速操作下载地址：[自动操作 - 快速开启 FP 服务](https://gitee.com/Jioho/files-preview/raw/master/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%90%AF%20FP%20%E6%9C%8D%E5%8A%A1.zip)，解压后双击安装即可。
-![输入图片说明](Pasted%20image%2020211215231046.png)
+
+![](https://gitee.com/Jioho/img/raw/master/tinymce/20211218231103.png)
+
 
 更多功能可查看 http-server 的说明文档，虽然没有一一进行过测试，但原版的所有功能应该都是支持的。
 
