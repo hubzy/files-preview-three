@@ -36,6 +36,11 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 对 http-server 的界面进行调整，现在它有了一个全新的图形化界面。
 ![（左）http-server（右）files-preview](https://images.gitee.com/uploads/images/2021/0816/000817_6b47ae35_8421994.png 'Frame 11.png')
 
+## 增加「文档模式」
+当文件夹内包含 md 格式的文件时，打开该文件夹将会自动进入文档模式。
+![输入图片说明](Frame%2013%20(1).png)
+ 
+
 ## 增加「项目」类型
 
 文件夹新增「项目」类型，可通过在 assets 文件夹（使用 Measure 插件会自动生成一个，也能手动添加）中增加 cover.png 来使该文件夹成为「项目」。
@@ -60,6 +65,7 @@ npm install --global files-preview
 
 ## 使用
 
+### 终端
 在需要开启服务器的文件夹下打开终端，运行以下命令
 
 ```
@@ -74,6 +80,12 @@ files-preview [path] [options]
 > 如果在当前目录下还有一个名为 `public` 的目录，那么根目录会默认指向到 public 文件夹中
 
 现在可以访问 [http://localhost:8080](http://localhost:8080/) 或终端显示的地址来查看你的服务器。
+
+### macOS 自动操作
+在 1.1 版本中，我们为 macOS 用户提供了一个自动操作来开启 Files-preview ，安装完成后，在选中文件夹时，点击右键「 服务 - 快速开启 FP 服务」就可以快速启动服务。
+
+快速操作下载地址：[自动操作 - 快速开启 FP 服务](https://gitee.com/Jioho/files-preview/raw/master/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%90%AF%20FP%20%E6%9C%8D%E5%8A%A1.zip)，解压后双击安装即可。
+![输入图片说明](Pasted%20image%2020211215231046.png)
 
 更多功能可查看 http-server 的说明文档，虽然没有一一进行过测试，但原版的所有功能应该都是支持的。
 
@@ -120,8 +132,9 @@ npm install --global files-preview
 
 # 更新日志
 
-- 1.0.0
-  - 添加 MD 文件预览支持
-- 1.1.0
-  - 添加图片预览
-  - 修改文档模式样式
+## 1.1.0
+- **新增文档模式**
+- 支持预览 gif、bmp、webp、tif、svga 格式文件
+- 项目封面支持 gif 格式
+- 修复了 CentOS 下的运行问题
+- 优化图片预览体验
