@@ -9,6 +9,11 @@
   <style src="./index.css"></style>
   <meta name="referrer" content="never">
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://hubzyy.gitee.io/link/three/three.min.js?v=2.0.3"></script>
+  <script src="https://hubzyy.gitee.io/link/three/OrbitControls.js?v=2.0.3"></script>
+  <script src="https://hubzyy.gitee.io/link/three/GLTFLoader.js?v=2.0.3"></script>
+  <script src="https://hubzyy.gitee.io/link/three/WebGL.js?v=2.0.3"></script>
+  <script src="https://hubzyy.gitee.io/link/three/stats.min.js?v=2.0.3"></script>
 </head>
 
 <body>
@@ -121,6 +126,26 @@
               <div class="file-name">
                 {{item.fileName}}
               </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
+        <div class="file-type-name">
+          三维模型
+        </div>
+
+        <ul class="images row">
+          <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
+            <a href="javascript:void(0);" class="images-item">
+            <div id="modelBorderContainer">
+              <div id="modelBorder"></div>
+              <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
+            </div>
+            <div class="file-name">
+              {{item.fileName}}
+            </div>
             </a>
           </li>
         </ul>
@@ -255,6 +280,7 @@
     var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
     var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
     var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
+    var modeExt = ['glb', 'gltf']
     var coverExt = ['png', 'gif'];
     var beforeTime = [{
       time: 31536000000,
@@ -308,6 +334,7 @@
         });
 
         this.initViewer()
+        this.addThreeJs();
       },
       beforeDestroy: function beforeDestroy() {
         window.removeEventListener("scroll", this.handleScroll);
@@ -323,6 +350,119 @@
         }
       },
       methods: {
+        addThreeJs() {
+          // console.log(this.modelGlb)
+          let GlbUrl = this.current + this.modelGlb[0].fileName;
+          if (this.modelGlb.length > 0) {
+            let script = document.createElement('script')
+            script.type = 'text/javascript'
+            script.text = `
+            var modelBorder = document.getElementById("modelBorder");
+            // 注意相机参数设置
+            var width = 225.24; //窗口宽度
+            var height = 234.5; //窗口高度
+            var k = width / height; //窗口宽高比
+            var s = 150; //三维场景显示范围控制系数，系数越大，显示的范围越大
+        if (WEBGL.isWebGLAvailable() === false) {
+            document.body.appendChild(WEBGL.getWebGLErrorMessage());
+        }
+        var container, stats, controls;
+        var camera, scene, renderer, light, bbox;
+        var rotating = true;
+        init('`+ GlbUrl + `');
+        animate();
+        pauseRotation();
+        function init(modelUrl) {
+            if (!modelUrl) {
+                return false;
+            }
+            scene = new THREE.Scene();
+            bbox = new THREE.Box3();
+            scene.background = new THREE.Color(0xfafafa);
+            light = new THREE.HemisphereLight(0x728099, 0x4d5461, 1);
+            light.position.set(0, 1, 0);
+            scene.add(light);
+            var loader = new THREE.GLTFLoader();
+            loader.load(modelUrl, function (gltf) {
+                gltf.scene.name = '`+ this.modelGlb[0].fileName + `';
+                this.setContent(gltf.scene);
+                scene.add(gltf.scene);
+            }, undefined, function (e) {
+                console.error(e);
+            });
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(width, height);
+            renderer.gammaOutput = true;
+            modelBorder.appendChild(renderer.domElement);
+            window.addEventListener('resize', onWindowResize, false);
+            camera = new THREE.PerspectiveCamera(45, k, 0.01, 1000);
+            controls = new THREE.OrbitControls(camera);
+            // to disable pan
+            controls.enablePan = false;
+            // to disable zoom
+            controls.enableZoom = false;
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+        function onWindowResize() {
+            camera.aspect = k;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        }
+        function animate() {
+            requestAnimationFrame(animate);
+            if (rotating) {
+                scene.rotation.y += -0.005;
+            } else {
+                scene.rotation.y = scene.rotation.y;
+            }
+            renderer.render(scene, camera);
+        }
+        function pauseRotation() {
+            modelBorder.addEventListener("mouseenter", function (event) {
+                rotating = false;
+            });
+            modelBorder.addEventListener("mouseleave", function (event) {
+                rotating = true;
+            });
+            modelBorder.addEventListener('touchmove', function (e) {
+                rotating = false;
+            }, false);
+            modelBorder.addEventListener('touchstart', function (e) {
+                rotating = false;
+            }, false);
+            modelBorder.addEventListener('touchend', function (e) {
+                rotating = true;
+            }, false);
+        }
+
+        function setContent(object) {
+            object.updateMatrixWorld();
+            const box = new THREE.Box3().setFromObject(object);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const boxSize = box.getSize();
+            const center = box.getCenter(new THREE.Vector3());
+
+            object.position.x += object.position.x - center.x;
+            object.position.y += object.position.y - center.y;
+            object.position.z += object.position.z - center.z;
+
+            this.camera.position.copy(center);
+            if (boxSize.x > boxSize.y) {
+                this.camera.position.z = boxSize.x * -2.85
+            } else {
+                this.camera.position.z = boxSize.y * -2.85
+            }
+            this.camera.lookAt(0, 0, 0);
+        }`
+            document.getElementsByTagName('head')[0].appendChild(script)
+
+
+          }
+
+
+        },
 
         openFile(event, url) {
           event.preventDefault();
@@ -590,6 +730,7 @@
           var imageObj = {};
           var images = [];
           var otherFiles = [];
+          var modelGlb = [];
           files.forEach(function (item) {
             var fileName = item[0];
             var nameArr = fileName.split('.');
@@ -610,6 +751,11 @@
                 fileName: item[0],
                 ...item[1]
               });
+            } else if (modeExt.indexOf(ext) !== -1) {
+              modelGlb.push({
+                fileName: item[0],
+                ...item[1]
+              });
             } else {
               if (item[0] != '.DS_Store') {
                 otherFiles.push({
@@ -621,6 +767,7 @@
           }); // this.imageObj = imageObj
 
           this.images = images;
+          this.modelGlb = modelGlb;
           this.otherFiles = otherFiles;
         }
       }

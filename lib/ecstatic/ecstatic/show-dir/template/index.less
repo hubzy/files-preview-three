@@ -270,6 +270,27 @@ a {
     display: block;
   }
 
+  #modelBorderContainer {
+    position: relative;
+
+    .operation-wrap {
+      opacity: 0;
+      z-index: -1;
+      transition: all 0.1s;
+
+      &.open {
+        opacity: 1;
+        z-index: 10;
+      }
+    }
+
+    &:hover {
+      .operation-wrap {
+        opacity: 1;
+        z-index: 10;
+      }
+    }
+  }
   .image-preview {
     background-color: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
@@ -365,7 +386,7 @@ a {
     }
     .operation-item {
       text-align: center;
-      color: rgba(0, 0, 0, 0.85);
+      color: rgba(0, 0, 0, 0.65);
       font-size: 16px;
       line-height: 2;
       border-radius: 6px;
