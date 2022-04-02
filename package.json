@@ -1,5 +1,5 @@
 {
-  "name": "files-preview",
+  "name": "files-preview-three",
   "version": "1.1.0",
   "description": "基于 http-server 增强对 Measure 导出的项目的管理",
   "main": "./lib/files-preview",
@@ -14,7 +14,7 @@
     "server"
   ],
   "scripts": {
-    "serve": "nodemon ./bin/files-preview",
+    "serve": "nodemon ./bin/files-preview ./example -s",
     "start": "node ./bin/files-preview",
     "pretest": "common bin/files-preview lib/ test",
     "test": "vows --spec --isolate"
