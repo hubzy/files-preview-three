@@ -139,13 +139,13 @@
         <ul class="images row">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
             <a href="javascript:void(0);" class="images-item">
-            <div id="modelBorderContainer">
-              <div id="modelBorder"></div>
-              <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
-            </div>
-            <div class="file-name">
-              {{item.fileName}}
-            </div>
+              <div id="modelBorderContainer">
+                <div id="modelBorder"></div>
+                <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
+              </div>
+              <div class="file-name">
+                {{item.fileName}}
+              </div>
             </a>
           </li>
         </ul>
@@ -351,9 +351,8 @@
       },
       methods: {
         addThreeJs() {
-          // console.log(this.modelGlb)
-          let GlbUrl = this.current + this.modelGlb[0].fileName;
           if (this.modelGlb.length > 0) {
+            let GlbUrl = this.current + this.modelGlb[0].fileName;
             let script = document.createElement('script')
             script.type = 'text/javascript'
             script.text = `
