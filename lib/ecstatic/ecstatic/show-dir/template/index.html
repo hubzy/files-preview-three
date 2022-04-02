@@ -611,10 +611,12 @@
                 ...item[1]
               });
             } else {
-              otherFiles.push({
-                fileName: item[0],
-                ...item[1]
-              });
+              if (item[0] != '.DS_Store') {
+                otherFiles.push({
+                  fileName: item[0],
+                  ...item[1]
+                });
+              }
             }
           }); // this.imageObj = imageObj
 
