@@ -99,9 +99,7 @@
                 </defs>
               </svg>
 
-              <div class="file-name">
-                {{item.name}}
-              </div>
+              <div class="file-name">{{item.name}} </div>
             </a>
           </li>
         </ul>
@@ -109,10 +107,7 @@
 
 
       <div class="file-type-wrap type-image" v-if="images.length > 0">
-        <div class="file-type-name">
-          图片
-        </div>
-
+        <div class="file-type-name">图片</div>
         <ul class="images row row-6">
           <li class="col-item" v-for="(item,index) in images" :key="index">
             <a href="javascript:void(0);" class="images-item">
@@ -122,40 +117,28 @@
                 </div>
                 <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
               </div>
-
-              <div class="file-name">
-                {{item.fileName}}
-              </div>
+              <div class="file-name">{{item.fileName}}</div>
             </a>
           </li>
         </ul>
       </div>
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
-        <div class="file-type-name">
-          三维模型
-        </div>
-
+        <div class="file-type-name">三维模型</div>
         <ul class="images row">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
-            <a href="javascript:void(0);" class="images-item">
-              <div id="modelBorderContainer">
-                <div id="modelBorder"></div>
-                <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
-              </div>
-              <div class="file-name">
-                {{item.fileName}}
-              </div>
-            </a>
+            <span class="images-item modelBorderContainer">
+              <modelscale :model="String(item.fileName)" :src="String(current+item.fileName)" :index="index"
+                :width=225.24 :height=234.5>
+              </modelscale>
+              <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
+            </span>
           </li>
         </ul>
       </div>
 
       <div class="file-type-wrap type-folder" v-if="otherFiles.length > 0">
-        <div class="file-type-name">
-          其他文件
-        </div>
-
+        <div class="file-type-name">其他文件</div>
         <ul class="folder row row-6">
           <li class="col-item" v-for="(item,index) in otherFiles" :key="index">
             <a :href="item.fileName" class="folder-item">
@@ -196,9 +179,7 @@
                 </defs>
               </svg>
 
-              <div class="file-name">
-                {{item.fileName}}
-              </div>
+              <div class="file-name">{{item.fileName}}</div>
             </a>
           </li>
         </ul>
@@ -299,7 +280,6 @@
       format: 'h小时前 更新',
       useDiffTime: 'hours'
     }];
-
     var app = new Vue({
       el: '#app',
       data: {
@@ -320,13 +300,13 @@
         }]
       },
       created: function created() {
+
         this.initFileList();
         this.initFloder();
         this.initNav();
       },
       mounted: function mounted() {
         var _this = this;
-
         this.$nextTick(function () {
           window.addEventListener("scroll", _this.handleScroll); // 监听（绑定）滚轮滚动事件
 
@@ -334,7 +314,6 @@
         });
 
         this.initViewer()
-        this.addThreeJs();
       },
       beforeDestroy: function beforeDestroy() {
         window.removeEventListener("scroll", this.handleScroll);
@@ -350,118 +329,6 @@
         }
       },
       methods: {
-        addThreeJs() {
-          if (this.modelGlb.length > 0) {
-            let GlbUrl = this.current + this.modelGlb[0].fileName;
-            let script = document.createElement('script')
-            script.type = 'text/javascript'
-            script.text = `
-            var modelBorder = document.getElementById("modelBorder");
-            // 注意相机参数设置
-            var width = 225.24; //窗口宽度
-            var height = 234.5; //窗口高度
-            var k = width / height; //窗口宽高比
-            var s = 150; //三维场景显示范围控制系数，系数越大，显示的范围越大
-        if (WEBGL.isWebGLAvailable() === false) {
-            document.body.appendChild(WEBGL.getWebGLErrorMessage());
-        }
-        var container, stats, controls;
-        var camera, scene, renderer, light, bbox;
-        var rotating = true;
-        init('`+ GlbUrl + `');
-        animate();
-        pauseRotation();
-        function init(modelUrl) {
-            if (!modelUrl) {
-                return false;
-            }
-            scene = new THREE.Scene();
-            bbox = new THREE.Box3();
-            scene.background = new THREE.Color(0xfafafa);
-            light = new THREE.HemisphereLight(0x728099, 0x4d5461, 1);
-            light.position.set(0, 1, 0);
-            scene.add(light);
-            var loader = new THREE.GLTFLoader();
-            loader.load(modelUrl, function (gltf) {
-                gltf.scene.name = '`+ this.modelGlb[0].fileName + `';
-                this.setContent(gltf.scene);
-                scene.add(gltf.scene);
-            }, undefined, function (e) {
-                console.error(e);
-            });
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(width, height);
-            renderer.gammaOutput = true;
-            modelBorder.appendChild(renderer.domElement);
-            window.addEventListener('resize', onWindowResize, false);
-            camera = new THREE.PerspectiveCamera(45, k, 0.01, 1000);
-            controls = new THREE.OrbitControls(camera);
-            // to disable pan
-            controls.enablePan = false;
-            // to disable zoom
-            controls.enableZoom = false;
-            controls.target.set(0, 0, 0);
-            controls.update();
-        }
-        function onWindowResize() {
-            camera.aspect = k;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        }
-        function animate() {
-            requestAnimationFrame(animate);
-            if (rotating) {
-                scene.rotation.y += -0.005;
-            } else {
-                scene.rotation.y = scene.rotation.y;
-            }
-            renderer.render(scene, camera);
-        }
-        function pauseRotation() {
-            modelBorder.addEventListener("mouseenter", function (event) {
-                rotating = false;
-            });
-            modelBorder.addEventListener("mouseleave", function (event) {
-                rotating = true;
-            });
-            modelBorder.addEventListener('touchmove', function (e) {
-                rotating = false;
-            }, false);
-            modelBorder.addEventListener('touchstart', function (e) {
-                rotating = false;
-            }, false);
-            modelBorder.addEventListener('touchend', function (e) {
-                rotating = true;
-            }, false);
-        }
-
-        function setContent(object) {
-            object.updateMatrixWorld();
-            const box = new THREE.Box3().setFromObject(object);
-            const size = box.getSize(new THREE.Vector3()).length();
-            const boxSize = box.getSize();
-            const center = box.getCenter(new THREE.Vector3());
-
-            object.position.x += object.position.x - center.x;
-            object.position.y += object.position.y - center.y;
-            object.position.z += object.position.z - center.z;
-
-            this.camera.position.copy(center);
-            if (boxSize.x > boxSize.y) {
-                this.camera.position.z = boxSize.x * -2.85
-            } else {
-                this.camera.position.z = boxSize.y * -2.85
-            }
-            this.camera.lookAt(0, 0, 0);
-        }`
-            document.getElementsByTagName('head')[0].appendChild(script)
-
-
-          }
-
-
-        },
 
         openFile(event, url) {
           event.preventDefault();
@@ -764,7 +631,6 @@
               }
             }
           }); // this.imageObj = imageObj
-
           this.images = images;
           this.modelGlb = modelGlb;
           this.otherFiles = otherFiles;
@@ -832,6 +698,167 @@
           this.$emit('click-item', item, this.value)
           this.open = false
         }
+      }
+    })
+
+    Vue.component('modelscale', {
+      template: `
+              <div>
+              <div id="modelBorder" class="modelBorder"></div>
+              
+              <div class="file-name">
+                {{model}}
+              </div>
+              </div>
+      `,
+      props: {
+        model: String,
+        src: String,
+        width: Number,
+        height: Number,
+        index: Number,
+      },
+      data: function () {
+        return {
+          scene: null,
+          camera: null,
+          renderer: null,
+          index: null,
+          group: null,
+          rotating: true
+
+        }
+      },
+      mounted() {
+
+
+      },
+      destroyed() {
+
+      },
+      methods: {
+
+
+        init() {
+          console.log(typeof this.src)
+          console.log(this.src)
+          console.log(typeof this.model)
+          console.log(this.model)
+          this.scene = new THREE.Scene();
+          this.scene.background = new THREE.Color(0xfafafa);
+
+          this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+          this.camera.position.set(0, 0, 100);
+
+          this.renderer = new THREE.WebGLRenderer({ antialias: true });
+          this.renderer.setSize(this.width, this.height);
+          this.renderer.setPixelRatio(window.devicePixelRatio);
+          this.renderer.shadowMapEnabled = true;
+          this.renderer.gammaOutput = true;
+
+          document.getElementsByClassName("modelBorder")[this.index].appendChild(this.renderer.domElement);
+
+          let orbitcontrols = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+          // to disable pan
+          orbitcontrols.enablePan = false;
+          // to disable zoom
+          orbitcontrols.enableZoom = false;
+          orbitcontrols.target.set(0, 0, 0);
+          orbitcontrols.update();
+
+          //坐标系
+          // let axes = new THREE.AxisHelper(100);
+          // this.scene.add(axes);
+
+          let light = new THREE.HemisphereLight(0xffffff, 0x4d5461, 1);//添加太阳光
+          light.position.set(0, 1, 0);
+          this.scene.add(light);
+
+          let ambientLight = new THREE.AmbientLight(0x121B79, 1);//添加环境光
+          this.scene.add(ambientLight);
+
+        },
+
+        loadModel() {
+          let self = this; //这一点很重要。。
+          let loader = new THREE.GLTFLoader();
+
+          loader.load(this.src, function (gltf) {
+            gltf.scene.name = self.model;
+            self.setContent(gltf.scene);
+
+            const loadscene = gltf.scene;
+            loadscene.traverse(function (object) {
+              if (object.isMesh) {
+                object.castShadow = true;
+              }
+            });
+
+            let group = new THREE.Group();
+            group.add(loadscene);
+            self.scene.add(group);
+
+          })
+        },
+        //自动到合适大小
+        setContent(object) {
+          object.updateMatrixWorld();
+          const box = new THREE.Box3().setFromObject(object);
+          const size = box.getSize(new THREE.Vector3()).length();
+          const boxSize = box.getSize();
+          const center = box.getCenter(new THREE.Vector3());
+
+          object.position.x += object.position.x - center.x;
+          object.position.y += object.position.y - center.y;
+          object.position.z += object.position.z - center.z;
+
+          this.camera.position.copy(center);
+          if (boxSize.x > boxSize.y) {
+            this.camera.position.z = boxSize.x * -2.85
+          } else {
+            this.camera.position.z = boxSize.y * -2.85
+          }
+          this.camera.lookAt(0, 0, 0);
+        },
+        animate() {
+          this.pauseRotation()
+          requestAnimationFrame(this.animate);
+          //  this.scene.rotation.x -= 0.002;
+          //  this.scene.rotation.y -= 0.005;
+          //  this.scene.rotation.z += 0.02;
+          if (this.rotating) {
+            this.scene.rotation.y += -0.005;
+          } else {
+            this.scene.rotation.y = this.scene.rotation.y;
+          }
+
+          this.renderer.render(this.scene, this.camera);
+        },
+        pauseRotation() {
+          let modelBorder = document.getElementsByClassName("modelBorder")[this.index]
+          modelBorder.addEventListener("mouseenter", function (event) {
+            this.rotating = false;
+          });
+          modelBorder.addEventListener("mouseleave", function (event) {
+            this.rotating = true;
+          });
+          modelBorder.addEventListener('touchmove', function (e) {
+            this.rotating = false;
+          }, false);
+          modelBorder.addEventListener('touchstart', function (e) {
+            this.rotating = false;
+          }, false);
+          modelBorder.addEventListener('touchend', function (e) {
+            this.rotating = true;
+          }, false);
+        }
+      },
+      mounted() {
+        window.ob = this;
+        this.init();
+
+        this.loadModel();
+        this.animate();
       }
     })
   })();
