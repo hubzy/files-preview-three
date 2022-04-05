@@ -128,7 +128,7 @@ npm install --global files-preview
 
 # 反馈及联系
 
-- 提交[Issue](https://gitee.com/Jioho/files-preview/issues)
+- 提交[Issue](https://gitee.com/hubzyy/files-preview-three/issues)
 
 备注：Measure 插件已暂停更新，有其他的开发者为其进行了新版本的适配和功能更新，并更名为 [MeaXure](https://gitee.com/Jioho/sketch-meaxure)，以上提到的 Measure 可等同于 MeaXure 来理解。
 

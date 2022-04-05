@@ -5,7 +5,7 @@
   "main": "./lib/files-preview",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/Jioho/files-preview"
+    "url": "https://gitee.com/hubzyy/files-preview-three"
   },
   "keywords": [
     "cli",
