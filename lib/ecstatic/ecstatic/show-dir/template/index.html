@@ -509,7 +509,7 @@
             this.blurHeder = false;
           }
         },
-        hasCover: function hasCover(name, coverPng) {
+        hasCover: function hasCover(coverPng) {
           var _this3 = this;
           return new Promise(function (resolve, reject) {
             _this3.getCover("".concat(_this3.current).concat(coverPng)).then(resolve).catch(function (res) {
@@ -561,7 +561,7 @@
             let coverPng = _item[2];
 
             if (name !== '..') {
-              _this4.hasCover(coverPng, coverPng).then(function (cover) {
+              _this4.hasCover(coverPng).then(function (cover) {
                 
                 if (cover) {
                   projectList.push({
