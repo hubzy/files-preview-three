@@ -128,7 +128,7 @@
         <ul class="images row">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
             <span class="images-item modelBorderContainer">
-              <modelscale :model="String(item.fileName)" :src="String(current+item.fileName)" :index="index"
+              <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)"
                 :width=225.24 :height=234.5>
               </modelscale>
               <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
@@ -288,7 +288,7 @@
         imageObj: [],
         path: [],
         otherFiles: [],
-        blurHeder: false,
+        blurHeder: true,
         current: treeData.current,
 
         imgAction: [{
@@ -590,7 +590,7 @@
           var imageObj = {};
           var images = [];
           var otherFiles = [];
-          var modelGlb = [];
+          var modelGlb = new Array;
           files.forEach(function (item) {
             var fileName = item[0];
             var nameArr = fileName.split('.');
@@ -697,16 +697,13 @@
     Vue.component('modelscale', {
       template: `
               <div>
-              <div id="modelBorder" class="modelBorder"></div>
-              
-              <div class="file-name">
-                {{model}}
-              </div>
+                <div id="modelBorder" class="modelBorder"></div>
+                <div class="file-name">{{model}}</div>
               </div>
       `,
       props: {
-        model: String,
-        src: String,
+        model: Array,
+        src: Array,
         width: Number,
         height: Number,
         index: Number,
