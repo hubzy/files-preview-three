@@ -563,10 +563,10 @@
           var projectList = []; // 普通文件夹
 
           var folderList = [];
-          dirs.forEach(function (item) {
-            var _item = _slicedToArray(item, 2),
-              name = _item[0],
-              dirData = _item[1];
+          for(const item of dirs){
+            let _item = _slicedToArray(item, 2);
+            let  name = _item[0];
+            let  dirData = _item[1];
 
             if (name !== '..') {
               _this4.hasCover(name).then(function (cover) {
@@ -587,7 +587,7 @@
 
               var imgInfo = false;
             }
-          });
+          };
           this.project = projectList || [];
           this.folder = folderList || [];
         },
