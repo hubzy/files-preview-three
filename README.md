@@ -2,6 +2,8 @@
 
 files-preview 是一个基于 [http-server](https://github.com/http-party/http-server) 的优化项目，在保留原有功能的同时添加了一些新功能。
 
+
+
 # 为什么而做？
 
 目前设计和开发协作上，主要有以下几种模式：
@@ -9,25 +11,11 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 1. 使用在线协作平台，如蓝湖、摹客、CoDesign 和 Zeplin 等；
 2. 导出离线标注文件，例如 Sketch 的 Measure 和 Figma 的 Heron Handoff ；
 3. 使用 Figma 或类似的新设计工具（最近国内上线了不少）；
+3. 文件预览、模型预览、设计稿预览
 
 本项目是对第 2 个场景的一个扩展。
 
-## Measure 对项目管理的缺失
 
-使用 Measure 只能对单文件导出标注文档，在涉及多文件及多个版本的文件管理上一直没有一个较好的方式来管理。
-在 Measure 论坛上也有人曾经提出过类似的疑问。
-
-## Measure Plus 的小尝试
-
-我曾经和另一位朋友尝试做了一个叫 Measure Plus 的小工具来对原插件进行改善，大致的样子如下：
-
-![](https://gitee.com/Jioho/img/raw/master/knowledge/20210724194101.jpg)
-
-在使用过程中，大量文件的管理和目录的更新上并没有想象中便捷，在没有更好的想法的情况下就暂时搁置了。
-
-## 基于具体场景对 http-server 进行改进
-
-前一段时间，把 http-server 结合 Measure 使用后，觉得这是一个不错的方式，于是产生了在设计交付这个具体场景上来对 http-server 进行优化的想法。
 
 # 新增功能
 
@@ -36,18 +24,30 @@ files-preview 是一个基于 [http-server](https://github.com/http-party/http-s
 对 http-server 的界面进行调整，现在它有了一个全新的图形化界面。
 ![（左）http-server（右）files-preview](https://images.gitee.com/uploads/images/2021/0816/000817_6b47ae35_8421994.png 'Frame 11.png')
 
+
+## 增加「三维模型预览」
+
+支持三维模型 '.glb', .'gltf' 文件的预览及模型下载，方便浏览和查找所需的模型文件。
+
+
+
+
 ## 增加「文档模式」
 当文件夹内包含 md 格式的文件时，打开该文件夹将会自动进入文档模式。
 ![](https://gitee.com/Jioho/img/raw/master/tinymce/20211218231040.png)
- 
+
 
 ## 增加「项目」类型
 
 文件夹新增「项目」类型，可通过在 assets 文件夹（使用 Measure 插件会自动生成一个，也能手动添加）中增加 cover.png 来使该文件夹成为「项目」。
 
+
+
 ## 图片及 svg 预览
 
 支持图片以及 svg 文件的预览，方便浏览和查找所需的图片文件。
+
+
 
 # 使用方法
 
@@ -95,25 +95,23 @@ files-preview [path] [options]
 
 ## 更新
 
-通过 `npm` 进行更新，打开终端后输入以下命令：
+下载源代码或使用`git`clone 拉取代码
 
+```bash
+git clone https://gitee.com/hubzyy/files-preview-three.git
+cd files-preview-three/
+npm install
+//默认启动文件夹 ./example
+npm run server
+//可自定义文件夹
+nodemon ./bin/files-preview 绝对文件夹路径
 ```
-npm install --global files-preview
-```
+
 
 这样能够全局安装/更新 files-preview，你可以在任何地方使用命令行运行该工具。
 
 > 使用 mac 并且要全局更新的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`
 
-## 本地开发简易指南
-
-1. 使用命令行或下载的方式从 Gitee 上拉取项目；
-2. 在项目文件夹下打开终端；
-3. 在终端内输入以下命令：`npm i`
-4. 在终端内输入以下命令：`npm run serve ./example`，如果运行正常的话，终端内将会显示两个地址；
-5. 打开浏览器，输入上一步显示的地址，你会看到以下的界面：
-   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0816/001818_0164e7a2_8421994.png 'Frame 12.png')
-6. 对项目中以下目录 ./lib/ecstatic/ecstatic/show-dir/template 进行开发修改后，刷新以上地址即可看到修改效果。
 
 # 它有什么优势？
 
@@ -130,7 +128,7 @@ npm install --global files-preview
 
 - 提交[Issue](https://gitee.com/hubzyy/files-preview-three/issues)
 
-备注：Measure 插件已暂停更新，有其他的开发者为其进行了新版本的适配和功能更新，并更名为 [MeaXure](https://gitee.com/Jioho/sketch-meaxure)，以上提到的 Measure 可等同于 MeaXure 来理解。
+备注：MeaXure ，进行了新版本的适配和功能更新 [MeaXure](https://gitee.com/hubzyy/sketch-meaxure)。
 
 # 更新日志
 
