@@ -125,13 +125,13 @@
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
         <div class="file-type-name">三维模型</div>
-        <ul class="images row">
-          <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
-            <span class="images-item modelBorderContainer">
-              <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=225.24
-                :height=234.5>
+        <ul class="images row row-4">
+          <li class="col-item" v-for="(item,index) in modelGlb" :key="index" >
+            <span class="modelBorderContainer">
+              <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=282
+                :height=240>
               </modelscale>
-              <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
+              <operation style="right:35px" :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
             </span>
           </li>
         </ul>
@@ -695,7 +695,7 @@
 
     Vue.component('modelscale', {
       template: `
-              <div class="modelLoind">
+              <div>
                 <div id="modelBorder" class="modelBorder"></div>
                 <div class="file-name">{{(loadedData == '100' ) ? model : '加载中' +loadedData+'%'}}</div>
               </div>
@@ -787,7 +787,7 @@
             }, function (xhr) {
               self.loadedData = Math.floor(xhr.loaded/xhr.total*100);
               if(self.loadedData == '100'){
-                let ld = document.getElementsByClassName('modelLoind')[self.index];
+                let ld = document.getElementsByClassName('modelBorder')[self.index];
                 ld.style.backgroundImage = 'none';
               }
             }
