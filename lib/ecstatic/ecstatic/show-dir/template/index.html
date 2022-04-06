@@ -128,8 +128,8 @@
         <ul class="images row">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
             <span class="images-item modelBorderContainer">
-              <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)"
-                :width=225.24 :height=234.5>
+              <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=225.24
+                :height=234.5>
               </modelscale>
               <operation :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
             </span>
@@ -554,7 +554,7 @@
           var projectList = []; // 普通文件夹
 
           var folderList = [];
-          for(const item of dirs){
+          for (const item of dirs) {
             let _item = _slicedToArray(item, 2);
             let name = _item[0];
             let dirData = _item[1];
@@ -562,7 +562,7 @@
 
             if (name !== '..') {
               _this4.hasCover(coverPng).then(function (cover) {
-                
+
                 if (cover) {
                   projectList.push({
                     ...dirData,
@@ -625,7 +625,7 @@
           this.images = images;
           this.modelGlb = modelGlb;
           this.otherFiles = otherFiles;
-          
+
         }
       }
     });
@@ -695,9 +695,9 @@
 
     Vue.component('modelscale', {
       template: `
-              <div>
+              <div class="modelLoind">
                 <div id="modelBorder" class="modelBorder"></div>
-                <div class="file-name">{{model}}</div>
+                <div class="file-name">{{(loadedData == '100' ) ? model : '加载中' +loadedData+'%'}}</div>
               </div>
       `,
       props: {
@@ -714,7 +714,8 @@
           renderer: null,
           index: null,
           group: null,
-          rotating: true
+          rotating: true,
+          loadedData:0,
 
         }
       },
@@ -730,12 +731,12 @@
 
         init() {
           this.scene = new THREE.Scene();
-          this.scene.background = new THREE.Color(0xfafafa);
+          // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
 
           this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
           this.camera.position.set(0, 0, 100);
 
-          this.renderer = new THREE.WebGLRenderer({ antialias: true });
+          this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           this.renderer.setSize(this.width, this.height);
           this.renderer.setPixelRatio(window.devicePixelRatio);
           this.renderer.shadowMapEnabled = true;
@@ -783,7 +784,14 @@
             group.add(loadscene);
             self.scene.add(group);
 
-          })
+            }, function (xhr) {
+              self.loadedData = Math.floor(xhr.loaded/xhr.total*100);
+              if(self.loadedData == '100'){
+                let ld = document.getElementsByClassName('modelLoind')[self.index];
+                ld.style.backgroundImage = 'none';
+              }
+            }
+          )
         },
         //自动到合适大小
         setContent(object) {
@@ -808,9 +816,6 @@
         animate() {
           this.pauseRotation()
           requestAnimationFrame(this.animate);
-          //  this.scene.rotation.x -= 0.002;
-          //  this.scene.rotation.y -= 0.005;
-          //  this.scene.rotation.z += 0.02;
           if (this.rotating) {
             this.scene.rotation.y += -0.005;
           } else {
@@ -836,15 +841,14 @@
           modelBorder.addEventListener('touchend', function (e) {
             this.rotating = true;
           }, false);
+          },
+        },
+        mounted() {
+          window.ob = this;
+          this.init();
+          this.loadModel();
+          this.animate();
         }
-      },
-      mounted() {
-        window.ob = this;
-        this.init();
-
-        this.loadModel();
-        this.animate();
-      }
     })
   })();
 </script>
