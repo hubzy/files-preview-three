@@ -814,7 +814,7 @@
           this.camera.lookAt(0, 0, 0);
         },
         animate() {
-          this.pauseRotation()
+          
           requestAnimationFrame(this.animate);
           if (this.rotating) {
             this.scene.rotation.y += -0.005;
@@ -825,27 +825,29 @@
           this.renderer.render(this.scene, this.camera);
         },
         pauseRotation() {
-          let modelBorder = document.getElementsByClassName("modelBorder")[this.index]
+          let self = this; //这一点很重要。。
+          let modelBorder = document.getElementsByClassName("modelBorder")[self.index];
           modelBorder.addEventListener("mouseenter", function (event) {
-            this.rotating = false;
+            self.rotating = false;
           });
           modelBorder.addEventListener("mouseleave", function (event) {
-            this.rotating = true;
+            self.rotating = true;
           });
           modelBorder.addEventListener('touchmove', function (e) {
-            this.rotating = false;
+            self.rotating = false;
           }, false);
           modelBorder.addEventListener('touchstart', function (e) {
-            this.rotating = false;
+            self.rotating = false;
           }, false);
           modelBorder.addEventListener('touchend', function (e) {
-            this.rotating = true;
+            self.rotating = true;
           }, false);
           },
         },
         mounted() {
           window.ob = this;
           this.init();
+          this.pauseRotation()
           this.loadModel();
           this.animate();
         }
