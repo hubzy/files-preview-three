@@ -126,12 +126,13 @@
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
-          <li class="col-item" v-for="(item,index) in modelGlb" :key="index" >
+          <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
             <span class="modelBorderContainer">
               <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=282
                 :height=240>
               </modelscale>
-              <operation style="right:35px" :action-list="imgAction" :value="item" @click-item="imageAction"></operation>
+              <operation style="right:35px" :action-list="imgAction" :value="item" @click-item="imageAction">
+              </operation>
             </span>
           </li>
         </ul>
@@ -715,7 +716,7 @@
           index: null,
           group: null,
           rotating: true,
-          loadedData:0,
+          loadedData: 0,
 
         }
       },
@@ -752,10 +753,6 @@
           orbitcontrols.target.set(0, 0, 0);
           orbitcontrols.update();
 
-          //坐标系
-          // let axes = new THREE.AxisHelper(100);
-          // this.scene.add(axes);
-
           let light = new THREE.HemisphereLight(0xffffff, 0x4d5461, 1);//添加太阳光
           light.position.set(0, 1, 0);
           this.scene.add(light);
@@ -784,13 +781,13 @@
             group.add(loadscene);
             self.scene.add(group);
 
-            }, function (xhr) {
-              self.loadedData = Math.floor(xhr.loaded/xhr.total*100);
-              if(self.loadedData == '100'){
-                let ld = document.getElementsByClassName('modelBorder')[self.index];
-                ld.style.backgroundImage = 'none';
-              }
+          }, function (xhr) {
+            self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+            if (self.loadedData == '100') {
+              let ld = document.getElementsByClassName('modelBorder')[self.index];
+              ld.style.backgroundImage = 'none';
             }
+          }
           )
         },
         //自动到合适大小
@@ -814,7 +811,7 @@
           this.camera.lookAt(0, 0, 0);
         },
         animate() {
-          
+
           requestAnimationFrame(this.animate);
           if (this.rotating) {
             this.scene.rotation.y += -0.005;
@@ -842,15 +839,15 @@
           modelBorder.addEventListener('touchend', function (e) {
             self.rotating = true;
           }, false);
-          },
         },
-        mounted() {
-          window.ob = this;
-          this.init();
-          this.pauseRotation()
-          this.loadModel();
-          this.animate();
-        }
+      },
+      mounted() {
+        window.ob = this;
+        this.init();
+        this.pauseRotation()
+        this.loadModel();
+        this.animate();
+      }
     })
   })();
 </script>
