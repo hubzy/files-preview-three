@@ -731,34 +731,46 @@
 
 
         init() {
-          this.scene = new THREE.Scene();
+          let self = this; //这一点很重要。
+          self.scene = new THREE.Scene();
           // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
 
-          this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
-          this.camera.position.set(0, 0, 100);
+          //camera
+          var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+          self.camera = camera
+          self.camera.position.set(0, 0, 100);
+          self.scene.add(camera)
 
-          this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-          this.renderer.setSize(this.width, this.height);
-          this.renderer.setPixelRatio(window.devicePixelRatio);
-          this.renderer.shadowMapEnabled = true;
-          this.renderer.gammaOutput = true;
+          //rederer
+          self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          self.renderer.setSize(this.width, this.height);
+          self.renderer.setPixelRatio(window.devicePixelRatio);
+          self.renderer.shadowMap.enabled = true;
+          self.renderer.gammaOutput = true;
 
-          document.getElementsByClassName("modelBorder")[this.index].appendChild(this.renderer.domElement);
+          document.getElementsByClassName("modelBorder")[self.index].appendChild(self.renderer.domElement);
 
-          let orbitcontrols = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+          //orbitcontrols
+          let orbitcontrols = new THREE.OrbitControls(self.camera, self.renderer.domElement);
           // to disable pan
           orbitcontrols.enablePan = false;
           // to disable zoom
-          orbitcontrols.enableZoom = false;
+          // orbitcontrols.enableZoom = false;
           orbitcontrols.target.set(0, 0, 0);
           orbitcontrols.update();
 
-          let light = new THREE.HemisphereLight(0xffffff, 0x4d5461, 1);//添加太阳光
+          //灯光
+          let light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);//添加太阳光
           light.position.set(0, 1, 0);
-          this.scene.add(light);
+          // self.scene.add(light);
 
-          let ambientLight = new THREE.AmbientLight(0x121B79, 1);//添加环境光
-          this.scene.add(ambientLight);
+          let ambientLight = new THREE.AmbientLight(0xffffff, 1);//添加环境光
+          ambientLight.position.set(0, 1, 0);
+          // self.scene.add(ambientLight);
+
+          // point light
+          const PointLight = new THREE.PointLight(0xffffff, 1);
+          self.camera.add(PointLight);
 
         },
 
@@ -792,6 +804,7 @@
         },
         //自动到合适大小
         setContent(object) {
+          let self = this; //这一点很重要。
           object.updateMatrixWorld();
           const box = new THREE.Box3().setFromObject(object);
           const size = box.getSize(new THREE.Vector3()).length();
@@ -809,17 +822,16 @@
             this.camera.position.z = boxSize.y * -2.85
           }
           this.camera.lookAt(0, 0, 0);
-        },
-        animate() {
-
-          requestAnimationFrame(this.animate);
-          if (this.rotating) {
-            this.scene.rotation.y += -0.005;
+          function animate() {
+            requestAnimationFrame(animate);
+            if (self.rotating) {
+              object.rotateY(0.005);
           } else {
-            this.scene.rotation.y = this.scene.rotation.y;
+            object.rotateY(0);
+            }
+            self.renderer.render(self.scene, self.camera);
           }
-
-          this.renderer.render(this.scene, this.camera);
+          animate();
         },
         pauseRotation() {
           let self = this; //这一点很重要。。
@@ -846,7 +858,6 @@
         this.init();
         this.pauseRotation()
         this.loadModel();
-        this.animate();
       }
     })
   })();
