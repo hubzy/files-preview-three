@@ -298,6 +298,7 @@ a {
     .modelBorder{
       margin-bottom: 12px;
       background-color: rgba(0,0,0,0.02);
+      // background-color: #15192D;
       border-radius: 8px;
       background-size: 64px 64px;
       background-repeat: no-repeat;
@@ -405,11 +406,12 @@ a {
     transform: scale(0.65);
     transition: all 0.2s;
     transform-origin: left top;
-
+    display: none;
     &.open {
       opacity: 1;
       z-index: 11;
       transform: scale(1);
+      display: block;
     }
 
     .operation-list {
