@@ -733,21 +733,26 @@
         init() {
           let self = this; //这一点很重要。
           self.scene = new THREE.Scene();
+          //去除canvas背景
           // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
 
           //camera
           var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
           self.camera = camera
-          self.camera.position.set(0, 0, 100);
+          self.camera.position.set(0, 0, 1);
           self.scene.add(camera)
 
-          //rederer
+          //renderer
           self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           self.renderer.setSize(this.width, this.height);
+          self.renderer.outputEncoding = THREE.sRGBEncoding;
+          self.renderer.textureEncoding = THREE.sRGBEncoding;
           self.renderer.setPixelRatio(window.devicePixelRatio);
           self.renderer.shadowMap.enabled = true;
           self.renderer.gammaOutput = true;
+          self.renderer.gammaFactor = 1;
 
+          //插入div
           document.getElementsByClassName("modelBorder")[self.index].appendChild(self.renderer.domElement);
 
           //orbitcontrols
@@ -755,22 +760,58 @@
           // to disable pan
           orbitcontrols.enablePan = false;
           // to disable zoom
-          // orbitcontrols.enableZoom = false;
+          orbitcontrols.enableZoom = false;
           orbitcontrols.target.set(0, 0, 0);
           orbitcontrols.update();
 
-          //灯光
-          let light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);//添加太阳光
-          light.position.set(0, 1, 0);
-          // self.scene.add(light);
 
-          let ambientLight = new THREE.AmbientLight(0xffffff, 1);//添加环境光
+
+          // HemisphereLight light    添加太阳光
+          let HemisphereLight = new THREE.HemisphereLight(0xffffff, 1);
+          HemisphereLight.position.set(0, 1, 0);
+          self.scene.add(HemisphereLight);
+
+          // ambient light    添加环境光
+          let ambientLight = new THREE.AmbientLight(0xffffff, 1);
           ambientLight.position.set(0, 1, 0);
-          // self.scene.add(ambientLight);
+          self.scene.add(ambientLight);
 
-          // point light
-          const PointLight = new THREE.PointLight(0xffffff, 1);
+
+          // point light  点光源
+          let PointLight = new THREE.PointLight(0xffffff, 1);
+          PointLight.position.set(0, 1, 0);
           self.camera.add(PointLight);
+
+          let axesHelper = new THREE.AxesHelper(150);
+          // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
+          self.scene.add(axesHelper);
+
+          //平行光All
+          //左灯光
+          let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1)
+          directionalLightLeft.position.set(1, 0, 0);
+          self.scene.add(directionalLightLeft);
+          //右灯光
+          let directionalLightRight = new THREE.DirectionalLight(0xffffff, 1)
+          directionalLightRight.position.set(-1, 0, 0);
+          self.scene.add(directionalLightRight);
+          //前灯光
+          let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1)
+          directionalLightFront.position.set(0, 0, -1);
+          self.scene.add(directionalLightFront);
+          //后灯光
+          let directionalLightBack = new THREE.DirectionalLight(0xffffff, 1)
+          directionalLightBack.position.set(0, 0, 1);
+          self.scene.add(directionalLightBack);
+          //上灯光
+          let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
+          directionalLightUp.position.set(0, 1, 0);
+          self.scene.add(directionalLightUp);
+          //下灯光
+          let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
+          directionalLightDw.position.set(0, -1, 0);
+          self.scene.add(directionalLightDw);
+
 
         },
 
@@ -794,6 +835,8 @@
             self.scene.add(group);
 
           }, function (xhr) {
+            
+            //模型加载状态
             self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
             if (self.loadedData == '100') {
               let ld = document.getElementsByClassName('modelBorder')[self.index];
@@ -802,7 +845,8 @@
           }
           )
         },
-        //自动到合适大小
+
+        //自动到合适大小需要用到Box3
         setContent(object) {
           let self = this; //这一点很重要。
           object.updateMatrixWorld();
@@ -822,17 +866,21 @@
             this.camera.position.z = boxSize.y * -2.85
           }
           this.camera.lookAt(0, 0, 0);
+
+          //模型自转动画
           function animate() {
             requestAnimationFrame(animate);
             if (self.rotating) {
               object.rotateY(0.005);
-          } else {
-            object.rotateY(0);
+            } else {
+              object.rotateY(0);
             }
             self.renderer.render(self.scene, self.camera);
           }
           animate();
         },
+
+        //移入div停止旋转，移出继续转
         pauseRotation() {
           let self = this; //这一点很重要。。
           let modelBorder = document.getElementsByClassName("modelBorder")[self.index];
