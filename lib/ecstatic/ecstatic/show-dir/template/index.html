@@ -127,7 +127,8 @@
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
-            <span class="modelBorderContainer">
+            <span class="modelBorderContainer"
+              v-on:click="modePopup(item.fileName,current+item.fileName,modelGlb.length)">
               <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=282
                 :height=240>
               </modelscale>
@@ -137,6 +138,14 @@
           </li>
         </ul>
       </div>
+      <!-- 模型弹窗 -->
+      <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
+      style="z-index: 2015;" v-if="modePopupData">
+      <div class="viewer-canvas">
+        <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex" :width=1200 :height=800></modelscale>
+      </div>
+      <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
+    </div>
 
       <div class="file-type-wrap type-folder" v-if="otherFiles.length > 0">
         <div class="file-type-name">其他文件</div>
@@ -290,7 +299,10 @@
         otherFiles: [],
         blurHeder: true,
         current: treeData.current,
-
+        modePopupData:false,
+        modePopupDataModel:null,
+        modePopupDataSrc:null,
+        modePopupDataIndex:null,
         imgAction: [{
           name: '下载文件',
           fn: 'downloadFile'
@@ -333,6 +345,16 @@
         openFile(event, url) {
           event.preventDefault();
           window.open(url, '_blank')
+        },
+        modePopup(mode, src, index) {
+          this.modePopupData = true;
+          this.modePopupDataModel = mode;
+          this.modePopupDataSrc = src;
+          this.modePopupDataIndex = index;
+          
+        },
+        closeModePopup(){
+          this.modePopupData = false;
         },
 
         // 操作图片
