@@ -499,9 +499,8 @@ p a code {
 
   .fp-doc-main-wrap {
     transform: translateZ(0px);
-    overflow-y: auto;
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow: hidden;
     flex-shrink: 1;
     flex-grow: 1;
     flex-basis: 0%;
@@ -518,6 +517,8 @@ p a code {
     justify-content: center;
     min-height: 0px;
     min-width: 0px;
+    overflow-y: auto;
+    margin-right: 4px;
     .content {
       margin: 0 80px;
       max-width: 920px;
