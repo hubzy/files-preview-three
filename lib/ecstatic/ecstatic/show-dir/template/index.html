@@ -142,7 +142,7 @@
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
       style="z-index: 2015;" v-if="modePopupData">
       <div class="viewer-canvas">
-        <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex" :width=1200 :height=800></modelscale>
+        <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex" :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
       </div>
       <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
     </div>
@@ -303,6 +303,8 @@
         modePopupDataModel:null,
         modePopupDataSrc:null,
         modePopupDataIndex:null,
+        modePopupDataWidth:`${document.documentElement.clientWidth}`,
+        modePopupDataHeight:`${document.documentElement.clientHeight}`,
         imgAction: [{
           name: '下载文件',
           fn: 'downloadFile'
