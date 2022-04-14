@@ -353,10 +353,11 @@
           this.modePopupDataModel = mode;
           this.modePopupDataSrc = src;
           this.modePopupDataIndex = index;
-          
+          document.getElementsByTagName('body')[0].style.overflow = 'hidden';
         },
         closeModePopup(){
           this.modePopupData = false;
+          document.getElementsByTagName('body')[0].style.overflow = '';
         },
 
         // 操作图片
