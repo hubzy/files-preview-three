@@ -6,16 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Files-Preview</title>
-  <style src="./index.css"></style>
+  <script src="./vue@v2.6.14.js"></script>
+  <link rel="stylesheet" href="./template.css">
   <meta name="referrer" content="never">
-  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-  <script src="https://hubzyy.gitee.io/link/three/three.min.js?v=2.0.3"></script>
-  <script src="https://hubzyy.gitee.io/link/three/OrbitControls.js?v=2.0.3"></script>
-  <script src="https://hubzyy.gitee.io/link/three/GLTFLoader.js?v=2.0.3"></script>
-  <script src="https://hubzyy.gitee.io/link/three/WebGL.js?v=2.0.3"></script>
-  <script src="https://hubzyy.gitee.io/link/three/stats.min.js?v=2.0.3"></script>
 </head>
-
 <body>
   <div id="app">
     <header :class="['header-wrap',{blurHeder:blurHeder}]">
@@ -24,7 +18,7 @@
       </div>
     </header>
     <div class="hero"
-      style="background-image: url('https://source.boringavatars.com/marble/440/?square&color=2f54eb,f5222d,ffc53d,#13c2c2,1890ff')">
+      style="background-image: url('https://www.dmoe.cc/random.php')">
     </div>
     <main class="content" ref="content">
 
@@ -124,6 +118,11 @@
       </div>
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
+        <script src="https://hubzyy.gitee.io/link/three/three.min.js?v=2.0.3"></script>
+        <script src="https://hubzyy.gitee.io/link/three/OrbitControls.js?v=2.0.3"></script>
+        <script src="https://hubzyy.gitee.io/link/three/GLTFLoader.js?v=2.0.3"></script>
+        <script src="https://hubzyy.gitee.io/link/three/WebGL.js?v=2.0.3"></script>
+        <script src="https://hubzyy.gitee.io/link/three/stats.min.js?v=2.0.3"></script>
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
@@ -140,12 +139,13 @@
       </div>
       <!-- 模型弹窗 -->
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
-      style="z-index: 2015;" v-if="modePopupData">
-      <div class="viewer-canvas">
-        <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex" :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
+        style="z-index: 2015;" v-if="modePopupData">
+        <div class="viewer-canvas">
+          <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
+            :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
+        </div>
+        <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
       </div>
-      <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
-    </div>
 
       <div class="file-type-wrap type-folder" v-if="otherFiles.length > 0">
         <div class="file-type-name">其他文件</div>
@@ -199,751 +199,752 @@
     <footer id="footer">Files preview · <a href="https://gitee.com/hubzyy/files-preview-three">Gitee 地址</a> · <a
         href="https://gitee.com/hubzyy/files-preview-three">关于</a></footer>
   </div>
-</body>
+  <script>
+    "use strict";
 
-<script>
-  "use strict";
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-  }
-
-  function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
+    function _slicedToArray(arr, i) {
+      return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
     }
 
-    return arr2;
-  }
+    function _nonIterableRest() {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
 
-  function _iterableToArrayLimit(arr, i) {
-    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+    function _unsupportedIterableToArray(o, minLen) {
+      if (!o) return;
+      if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+      var n = Object.prototype.toString.call(o).slice(8, -1);
+      if (n === "Object" && o.constructor) n = o.constructor.name;
+      if (n === "Map" || n === "Set") return Array.from(o);
+      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+    }
 
-    if (_i == null) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
+    function _arrayLikeToArray(arr, len) {
+      if (len == null || len > arr.length) len = arr.length;
 
-    var _s, _e;
-
-    try {
-      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
+      for (var i = 0, arr2 = new Array(len); i < len; i++) {
+        arr2[i] = arr[i];
       }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
+
+      return arr2;
+    }
+
+    function _iterableToArrayLimit(arr, i) {
+      var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+      if (_i == null) return;
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+
+      var _s, _e;
+
       try {
-        if (!_n && _i["return"] != null) _i["return"]();
+        for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
       } finally {
-        if (_d) throw _e;
+        try {
+          if (!_n && _i["return"] != null) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
       }
+
+      return _arr;
     }
 
-    return _arr;
-  }
+    function _arrayWithHoles(arr) {
+      if (Array.isArray(arr)) return arr;
+    }
 
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
+    var treeData = '{{treeData}}';
 
-  var treeData = '{{treeData}}';
+    (function () {
+      var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
+      var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
+      var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
+      var modeExt = ['glb', 'gltf']
+      var beforeTime = [{
+        time: 31536000000,
+        format: 'YYYY年MM月DD日 更新',
+        useDiffTime: false
+      }, {
+        time: 259200000,
+        format: 'MM月DD日 更新',
+        useDiffTime: false
+      }, {
+        time: 86400000,
+        format: 'D天前 更新',
+        useDiffTime: 'day'
+      }, {
+        time: 0,
+        format: 'h小时前 更新',
+        useDiffTime: 'hours'
+      }];
+      var app = new Vue({
+        el: '#app',
+        data: {
+          project: [],
+          folder: [],
+          imageObj: [],
+          path: [],
+          otherFiles: [],
+          blurHeder: true,
+          current: treeData.current,
+          modePopupData: false,
+          modePopupDataModel: null,
+          modePopupDataSrc: null,
+          modePopupDataIndex: null,
+          modePopupDataWidth: `${document.documentElement.clientWidth}`,
+          modePopupDataHeight: `${document.documentElement.clientHeight}`,
+          imgAction: [{
+            name: '下载文件',
+            fn: 'downloadFile'
+          }, {
+            name: '复制链接',
+            fn: 'copyLink'
+          }]
+        },
+        created: function created() {
 
-  (function () {
-    var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
-    var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
-    var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
-    var modeExt = ['glb', 'gltf']
-    var beforeTime = [{
-      time: 31536000000,
-      format: 'YYYY年MM月DD日 更新',
-      useDiffTime: false
-    }, {
-      time: 259200000,
-      format: 'MM月DD日 更新',
-      useDiffTime: false
-    }, {
-      time: 86400000,
-      format: 'D天前 更新',
-      useDiffTime: 'day'
-    }, {
-      time: 0,
-      format: 'h小时前 更新',
-      useDiffTime: 'hours'
-    }];
-    var app = new Vue({
-      el: '#app',
-      data: {
-        project: [],
-        folder: [],
-        imageObj: [],
-        path: [],
-        otherFiles: [],
-        blurHeder: true,
-        current: treeData.current,
-        modePopupData:false,
-        modePopupDataModel:null,
-        modePopupDataSrc:null,
-        modePopupDataIndex:null,
-        modePopupDataWidth:`${document.documentElement.clientWidth}`,
-        modePopupDataHeight:`${document.documentElement.clientHeight}`,
-        imgAction: [{
-          name: '下载文件',
-          fn: 'downloadFile'
-        }, {
-          name: '复制链接',
-          fn: 'copyLink'
-        }]
-      },
-      created: function created() {
+          this.initFileList();
+          this.initFloder();
+          this.initNav();
+        },
+        mounted: function mounted() {
+          var _this = this;
+          this.$nextTick(function () {
+            window.addEventListener("scroll", _this.handleScroll); // 监听（绑定）滚轮滚动事件
 
-        this.initFileList();
-        this.initFloder();
-        this.initNav();
-      },
-      mounted: function mounted() {
-        var _this = this;
-        this.$nextTick(function () {
-          window.addEventListener("scroll", _this.handleScroll); // 监听（绑定）滚轮滚动事件
-
-          _this.handleScroll();
-        });
-
-        this.initViewer()
-      },
-      beforeDestroy: function beforeDestroy() {
-        window.removeEventListener("scroll", this.handleScroll);
-      },
-      computed: {
-        getProjectList: function getProjectList() {
-          var _list = this.project || [];
-
-          _list = _list.sort(function (item, item2) {
-            return item2.mtimeMs - item.mtimeMs;
+            _this.handleScroll();
           });
-          return _list;
-        }
-      },
-      methods: {
 
-        openFile(event, url) {
-          event.preventDefault();
-          window.open(url, '_blank')
+          this.initViewer()
         },
-        modePopup(mode, src, index) {
-          this.modePopupData = true;
-          this.modePopupDataModel = mode;
-          this.modePopupDataSrc = src;
-          this.modePopupDataIndex = index;
-          document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+        beforeDestroy: function beforeDestroy() {
+          window.removeEventListener("scroll", this.handleScroll);
         },
-        closeModePopup(){
-          this.modePopupData = false;
-          document.getElementsByTagName('body')[0].style.overflow = '';
-        },
+        computed: {
+          getProjectList: function getProjectList() {
+            var _list = this.project || [];
 
-        // 操作图片
-        imageAction(actionItem, itemInfo) {
-          let fn = actionItem.fn
-          if (this[fn]) {
-            this[fn](itemInfo)
-          }
-        },
-
-        downloadFile(itemInfo) {
-          window.download(window.location.href + itemInfo.fileName)
-        },
-
-        copyLink(itemInfo) {
-          var copy = function (e) {
-            e.preventDefault()
-            e.clipboardData.setData('text/plain', window.location.href + itemInfo.fileName)
-
-            window.VsToast.show({
-              title: '复制成功',
-              variant: 'success',
-              timeout: 3000
+            _list = _list.sort(function (item, item2) {
+              return item2.mtimeMs - item.mtimeMs;
             });
-
-            document.removeEventListener('copy', copy)
-          }
-          document.addEventListener('copy', copy)
-          document.execCommand("Copy");
-        },
-
-        initViewer() {
-          if (window.Viewer) {
-            let viewer = new window.Viewer(document.querySelector('.type-image'), {
-              inline: false,
-              viewed() {
-                viewer.zoomTo(1);
-              },
-            });
-          } else {
-            setTimeout(() => {
-              this.initViewer()
-            }, 50)
+            return _list;
           }
         },
+        methods: {
 
-        getUpdateTime: function getUpdateTime(time) {
-          time = parseInt(time);
-          var nowTime = new Date().getTime();
-          var diffTime = nowTime - time;
-          var formatStr = 'YYYY年MM月DD日 更新';
-          var useDiffTime = false;
-          beforeTime.some(function (item) {
-            if (diffTime >= item.time) {
-              formatStr = item.format;
-              useDiffTime = item.useDiffTime;
-              return true;
+          openFile(event, url) {
+            event.preventDefault();
+            window.open(url, '_blank')
+          },
+          modePopup(mode, src, index) {
+            this.modePopupData = true;
+            this.modePopupDataModel = mode;
+            this.modePopupDataSrc = src;
+            this.modePopupDataIndex = index;
+            document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+          },
+          closeModePopup() {
+            this.modePopupData = false;
+            document.getElementsByTagName('body')[0].style.overflow = '';
+          },
+
+          // 操作图片
+          imageAction(actionItem, itemInfo) {
+            let fn = actionItem.fn
+            if (this[fn]) {
+              this[fn](itemInfo)
             }
+          },
 
-            return false;
-          });
+          downloadFile(itemInfo) {
+            window.download(window.location.href + itemInfo.fileName)
+          },
 
-          if (!useDiffTime) {
-            return this.formateTime(time, formatStr);
-          } else {
-            return this.calcTime(diffTime, useDiffTime);
-          }
-        },
-        // 计算相差的时间
-        // TODO 支持 format 格式
-        calcTime: function calcTime(time) {
-          var diffType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'hours'; // 转换时间对象
-          // var timeObj = this.timeToDateObj(time)
+          copyLink(itemInfo) {
+            var copy = function (e) {
+              e.preventDefault()
+              e.clipboardData.setData('text/plain', window.location.href + itemInfo.fileName)
 
-          switch (diffType) {
-            case 'day':
-              return parseInt(time / 86400000) + '天前 更新';
-
-            case 'hours':
-              return parseInt(time / 3600000) + '小时前 更新';
-          }
-        },
-
-        /**
-         * 格式化时间戳
-         * @param  {Number}    time           需要转换的时间戳。默认当前时间
-         * @param  {String}    format         时间格式 默认 yyyy-mm-dd HH:ii:ss
-         * @return {String}    timeStr        格式化后的字符串
-         */
-        formateTime: function formateTime() {
-          var _this2 = this;
-
-          var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
-          var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "yyyy-mm-dd hh:ii:ss";
-          time = parseInt(time); // 转换时间对象
-
-          var timeObj = this.timeToDateObj(time); // 正则
-
-          format = format.toLocaleLowerCase().match(new RegExp(dateType + "|.", "g")) || []; // 匹配格式
-
-          format.forEach(function (v, i) {
-            if (/yyyy|y/.test(v)) {
-              //年
-              format[i] = _this2.digit(timeObj.year, v.length);
-            } else if (/mm|m/.test(v)) {
-              //月
-              format[i] = _this2.digit(timeObj.month, v.length);
-            } else if (/dd|d/.test(v)) {
-              //日
-              format[i] = _this2.digit(timeObj.day, v.length);
-            } else if (/hh|h/.test(v)) {
-              //时
-              format[i] = _this2.digit(timeObj.hours, v.length);
-            } else if (/ii|i/.test(v)) {
-              //分
-              format[i] = _this2.digit(timeObj.minutes, v.length);
-            } else if (/ss|s/.test(v)) {
-              //秒
-              format[i] = _this2.digit(timeObj.seconds, v.length);
-            }
-          });
-          return format.join("");
-        },
-
-        /**
-        * 数字前置补零
-        * @param  {Number}  num     传入的数字
-        * @param  {Number}  length  需要的长度。默认2位
-        * @return {Number}  num     转换好的数字
-        */
-        digit: function digit(num) {
-          var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-          var str = "";
-          num = String(num);
-          length = length || 2;
-
-          for (var i = num.length; i < length; i++) {
-            str += "0";
-          }
-
-          return num < Math.pow(10, length) ? str + (num | 0) : num;
-        },
-
-        /**
-         * 时间戳转换为对象 (new Date()) => (timeObject)
-         * @param  {Number}   time   传入原时间
-         * @return {Object}   object 转换后的时间戳，和时间对象
-         */
-        timeToDateObj: function timeToDateObj() {
-          var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
-          var date = new Date();
-          date.setTime(time);
-          return {
-            time: time,
-            day: date.getDate(),
-            month: date.getMonth() + 1,
-            year: date.getFullYear(),
-            week: weeks_ch[date.getDay()],
-            hours: date.getHours(),
-            minutes: date.getMinutes(),
-            seconds: date.getSeconds(),
-            monthStr: this.digit(date.getMonth() + 1),
-            dayStr: this.digit(date.getDate()),
-            hoursStr: this.digit(date.getHours()),
-            minutesStr: this.digit(date.getMinutes()),
-            secondsStr: this.digit(date.getSeconds())
-          };
-        },
-        handleScroll: function handleScroll() {
-          var scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
-
-          if (scrollHeight >= 100) {
-            this.blurHeder = true;
-          } else {
-            this.blurHeder = false;
-          }
-        },
-        hasCover: function hasCover(coverPng) {
-          var _this3 = this;
-          return new Promise(function (resolve, reject) {
-            _this3.getCover("".concat(_this3.current).concat(coverPng)).then(resolve).catch(function (res) {
-              resolve(false);
-            });
-          });
-        },
-        getCover: function getCover(path) {
-          return new Promise(function (resolve, reject) {
-            if (!path) {
-              reject();
-            }
-
-            var img = new Image();
-
-            img.onload = function () {
-              resolve(path);
-            };
-
-            img.onerror = reject;
-            img.src = path;
-          });
-        },
-        initNav: function initNav() {
-          var routes = treeData.current.split('/');
-          var path = '';
-          var paths = [];
-          routes.forEach(function (item, index) {
-            (item || index == 0) && paths.push({
-              text: item || 'Home',
-              path: path += item + '/'
-            });
-          });
-          this.currentName = paths[paths.length - 1].text;
-          this.path = paths;
-        },
-        initFloder: function initFloder() {
-          var _this4 = this;
-
-          var dirs = treeData.dirs; // 项目目录
-
-          var projectList = []; // 普通文件夹
-
-          var folderList = [];
-          for (const item of dirs) {
-            let _item = _slicedToArray(item, 2);
-            let name = _item[0];
-            let dirData = _item[1];
-            let coverPng = _item[2];
-
-            if (name !== '..') {
-              _this4.hasCover(coverPng).then(function (cover) {
-
-                if (cover) {
-                  projectList.push({
-                    ...dirData,
-                    name: name,
-                    cover: cover
-                  });
-                } else {
-                  folderList.push({
-                    ...dirData,
-                    name: name
-                  });
-                }
-              }); // let imgInfo = this.imageObj[name]
-
-
-              var imgInfo = false;
-            }
-          };
-          this.project = projectList || [];
-          this.folder = folderList || [];
-        },
-        initFileList: function initFileList() {
-          var files = treeData.renderFiles;
-          var imageObj = {};
-          var images = [];
-          var otherFiles = [];
-          var modelGlb = new Array;
-          files.forEach(function (item) {
-            var fileName = item[0];
-            var nameArr = fileName.split('.');
-            var ext = nameArr.pop();
-            fileName = nameArr.join('.');
-
-            // // feature 当前目录下包含MD文件，自动进入MD视图
-            // if (ext === 'md') {
-            //   window.location.href += item[0]
-            // }
-
-            if (imgExt.indexOf(ext) !== -1) {
-              // imageObj[fileName] = {
-              //   fileName: item[0],
-              //   ...item[1]
-              // }
-              images.push({
-                fileName: item[0],
-                ...item[1]
+              window.VsToast.show({
+                title: '复制成功',
+                variant: 'success',
+                timeout: 3000
               });
-            } else if (modeExt.indexOf(ext) !== -1) {
-              modelGlb.push({
-                fileName: item[0],
-                ...item[1]
+
+              document.removeEventListener('copy', copy)
+            }
+            document.addEventListener('copy', copy)
+            document.execCommand("Copy");
+          },
+
+          initViewer() {
+            if (window.Viewer) {
+              let viewer = new window.Viewer(document.querySelector('.type-image'), {
+                inline: false,
+                viewed() {
+                  // viewer.zoomTo(1);
+                },
               });
             } else {
-              otherFiles.push({
-                fileName: item[0],
-                ...item[1]
-              });
+              setTimeout(() => {
+                this.initViewer()
+              }, 50)
             }
-          }); // this.imageObj = imageObj
-          this.images = images;
-          this.modelGlb = modelGlb;
-          this.otherFiles = otherFiles;
+          },
 
-        }
-      }
-    });
+          getUpdateTime: function getUpdateTime(time) {
+            time = parseInt(time);
+            var nowTime = new Date().getTime();
+            var diffTime = nowTime - time;
+            var formatStr = 'YYYY年MM月DD日 更新';
+            var useDiffTime = false;
+            beforeTime.some(function (item) {
+              if (diffTime >= item.time) {
+                formatStr = item.format;
+                useDiffTime = item.useDiffTime;
+                return true;
+              }
 
+              return false;
+            });
 
-    Vue.component('operation', {
-      template: `
-      <div ref="operation" :class="['operation-wrap',{open:open}]" @click.stop="toggleOpen" v-if="actionList.length">
-        <div class="operation">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
+            if (!useDiffTime) {
+              return this.formateTime(time, formatStr);
+            } else {
+              return this.calcTime(diffTime, useDiffTime);
+            }
+          },
+          // 计算相差的时间
+          // TODO 支持 format 格式
+          calcTime: function calcTime(time) {
+            var diffType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'hours'; // 转换时间对象
+            // var timeObj = this.timeToDateObj(time)
 
-        <div :class="['operation-list-wrap',{open:open}]">
-          <div class="operation-list">
-            <div class="operation-item" v-for="(item,index) in actionList" :key="index" @click.stop="clickItem(item)">{{item.name}}</div>
-          </div>
-        </div>
-      </div>
-      `,
-      props: {
-        actionList: {
-          type: Array,
-          default: function () {
-            return []
-          }
-        },
-        value: {
-          type: Object,
-          default: function () {
-            return {}
-          }
-        }
-      },
-      data() {
-        return {
-          open: false
-        }
-      },
-      mounted() {
-        let _this = this
-        document.body.addEventListener('click', _this.bodyClick, false)
-        app.$on('openOperation', function () {
-          _this.bodyClick()
-        })
-      },
-      destroyed() {
-        document.body.removeEventListener('click', this.bodyClick, false)
-      },
-      methods: {
-        bodyClick(event) {
-          this.open = false
-        },
-        toggleOpen() {
-          app.$emit('openOperation')
-          this.$nextTick(() => {
-            this.open = !this.open
-          })
-        },
-        clickItem(item) {
-          this.$emit('click-item', item, this.value)
-          this.open = false
-        }
-      }
-    })
+            switch (diffType) {
+              case 'day':
+                return parseInt(time / 86400000) + '天前 更新';
 
-    Vue.component('modelscale', {
-      template: `
-              <div>
-                <div id="modelBorder" class="modelBorder"></div>
-                <div class="file-name">{{(loadedData == '100' ) ? model : '加载中' +loadedData+'%'}}</div>
-              </div>
-      `,
-      props: {
-        model: Array,
-        src: Array,
-        width: Number,
-        height: Number,
-        index: Number,
-      },
-      data: function () {
-        return {
-          scene: null,
-          camera: null,
-          renderer: null,
-          index: null,
-          group: null,
-          rotating: true,
-          loadedData: 0,
+              case 'hours':
+                return parseInt(time / 3600000) + '小时前 更新';
+            }
+          },
 
-        }
-      },
-      mounted() {
+          /**
+           * 格式化时间戳
+           * @param  {Number}    time           需要转换的时间戳。默认当前时间
+           * @param  {String}    format         时间格式 默认 yyyy-mm-dd HH:ii:ss
+           * @return {String}    timeStr        格式化后的字符串
+           */
+          formateTime: function formateTime() {
+            var _this2 = this;
 
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
+            var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "yyyy-mm-dd hh:ii:ss";
+            time = parseInt(time); // 转换时间对象
 
-      },
-      destroyed() {
+            var timeObj = this.timeToDateObj(time); // 正则
 
-      },
-      methods: {
+            format = format.toLocaleLowerCase().match(new RegExp(dateType + "|.", "g")) || []; // 匹配格式
 
-
-        init() {
-          let self = this; //这一点很重要。
-          self.scene = new THREE.Scene();
-          //去除canvas背景
-          // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
-
-          //camera
-          var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
-          self.camera = camera
-          self.camera.position.set(0, 0, 1);
-          self.scene.add(camera)
-
-          //renderer
-          self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-          self.renderer.setSize(this.width, this.height);
-          self.renderer.outputEncoding = THREE.sRGBEncoding;
-          self.renderer.textureEncoding = THREE.sRGBEncoding;
-          self.renderer.setPixelRatio(window.devicePixelRatio);
-          self.renderer.shadowMap.enabled = true;
-          self.renderer.gammaOutput = true;
-          self.renderer.gammaFactor = 1;
-
-          //插入div
-          document.getElementsByClassName("modelBorder")[self.index].appendChild(self.renderer.domElement);
-
-          //orbitcontrols
-          let orbitcontrols = new THREE.OrbitControls(self.camera, self.renderer.domElement);
-          // to disable pan
-          orbitcontrols.enablePan = false;
-          // to disable zoom
-          orbitcontrols.enableZoom = true;
-          orbitcontrols.target.set(0, 0, 0);
-          orbitcontrols.update();
-
-
-
-          // HemisphereLight light    添加太阳光
-          let HemisphereLight = new THREE.HemisphereLight(0xffffff, 1);
-          HemisphereLight.position.set(0, 100, 0);
-          self.scene.add(HemisphereLight);
-
-          // ambient light    添加环境光
-          let ambientLight = new THREE.AmbientLight(0xffffff, 1);
-          ambientLight.position.set(0, 100, 0);
-          self.scene.add(ambientLight);
-
-
-          // point light  点光源
-          let PointLight = new THREE.PointLight(0xffffff, 1);
-          PointLight.position.set(-100, 1, -100);
-          self.camera.add(PointLight);
-
-          let axesHelper = new THREE.AxesHelper(150);
-          // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
-          self.scene.add(axesHelper);
-
-          //平行光All
-          //左灯光
-          let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
-          directionalLightLeft.position.set(100, 10, -100);
-          self.scene.add(directionalLightLeft);
-          //右灯光
-          let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
-          directionalLightRight.position.set(-100, 10, 100);
-          self.scene.add(directionalLightRight);
-          //前灯光
-          let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
-          directionalLightFront.position.set(0, 10, -100);
-          self.scene.add(directionalLightFront);
-          //后灯光
-          let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
-          directionalLightBack.position.set(0, 0, 100);
-          self.scene.add(directionalLightBack);
-          //上灯光
-          let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
-          directionalLightUp.position.set(0, 100, 0);
-          self.scene.add(directionalLightUp);
-          //下灯光
-          let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
-          directionalLightDw.position.set(0, -100, 0);
-          self.scene.add(directionalLightDw);
-
-
-        },
-
-        loadModel() {
-          let self = this; //这一点很重要。。
-          let loader = new THREE.GLTFLoader();
-
-          loader.load(this.src, function (gltf) {
-            gltf.scene.name = self.model;
-            self.setContent(gltf.scene);
-
-            const loadscene = gltf.scene;
-            loadscene.traverse(function (object) {
-              if (object.isMesh) {
-                object.castShadow = true;
+            format.forEach(function (v, i) {
+              if (/yyyy|y/.test(v)) {
+                //年
+                format[i] = _this2.digit(timeObj.year, v.length);
+              } else if (/mm|m/.test(v)) {
+                //月
+                format[i] = _this2.digit(timeObj.month, v.length);
+              } else if (/dd|d/.test(v)) {
+                //日
+                format[i] = _this2.digit(timeObj.day, v.length);
+              } else if (/hh|h/.test(v)) {
+                //时
+                format[i] = _this2.digit(timeObj.hours, v.length);
+              } else if (/ii|i/.test(v)) {
+                //分
+                format[i] = _this2.digit(timeObj.minutes, v.length);
+              } else if (/ss|s/.test(v)) {
+                //秒
+                format[i] = _this2.digit(timeObj.seconds, v.length);
               }
             });
+            return format.join("");
+          },
 
-            let group = new THREE.Group();
-            group.add(loadscene);
-            self.scene.add(group);
+          /**
+          * 数字前置补零
+          * @param  {Number}  num     传入的数字
+          * @param  {Number}  length  需要的长度。默认2位
+          * @return {Number}  num     转换好的数字
+          */
+          digit: function digit(num) {
+            var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+            var str = "";
+            num = String(num);
+            length = length || 2;
 
-          }, function (xhr) {
-            
-            //模型加载状态
-            self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-            if (self.loadedData == '100') {
-              let ld = document.getElementsByClassName('modelBorder')[self.index];
-              ld.style.backgroundImage = 'none';
+            for (var i = num.length; i < length; i++) {
+              str += "0";
             }
-          }
-          )
-        },
 
-        //自动到合适大小需要用到Box3
-        setContent(object) {
-          let self = this; //这一点很重要。
-          object.updateMatrixWorld();
-          const box = new THREE.Box3().setFromObject(object);
-          const size = box.getSize(new THREE.Vector3()).length();
-          const boxSize = box.getSize();
-          const center = box.getCenter(new THREE.Vector3());
+            return num < Math.pow(10, length) ? str + (num | 0) : num;
+          },
 
-          object.position.x += object.position.x - center.x;
-          object.position.y += object.position.y - center.y;
-          object.position.z += object.position.z - center.z;
+          /**
+           * 时间戳转换为对象 (new Date()) => (timeObject)
+           * @param  {Number}   time   传入原时间
+           * @return {Object}   object 转换后的时间戳，和时间对象
+           */
+          timeToDateObj: function timeToDateObj() {
+            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date().getTime();
+            var date = new Date();
+            date.setTime(time);
+            return {
+              time: time,
+              day: date.getDate(),
+              month: date.getMonth() + 1,
+              year: date.getFullYear(),
+              week: weeks_ch[date.getDay()],
+              hours: date.getHours(),
+              minutes: date.getMinutes(),
+              seconds: date.getSeconds(),
+              monthStr: this.digit(date.getMonth() + 1),
+              dayStr: this.digit(date.getDate()),
+              hoursStr: this.digit(date.getHours()),
+              minutesStr: this.digit(date.getMinutes()),
+              secondsStr: this.digit(date.getSeconds())
+            };
+          },
+          handleScroll: function handleScroll() {
+            var scrollHeight = document.documentElement.scrollTop || document.body.scrollTop; //滚动高度
 
-          this.camera.position.copy(center);
-          if (boxSize.x > boxSize.y) {
-            this.camera.position.z = boxSize.x * -2.85
-          } else {
-            this.camera.position.z = boxSize.y * -2.85
-          }
-          this.camera.lookAt(0, 0, 0);
-
-          //模型自转动画
-          function animate() {
-            requestAnimationFrame(animate);
-            if (self.rotating) {
-              object.rotateY(0.005);
+            if (scrollHeight >= 100) {
+              this.blurHeder = true;
             } else {
-              object.rotateY(0);
+              this.blurHeder = false;
             }
-            self.renderer.render(self.scene, self.camera);
-          }
-          animate();
-        },
+          },
+          hasCover: function hasCover(coverPng) {
+            var _this3 = this;
+            return new Promise(function (resolve, reject) {
+              _this3.getCover("".concat(_this3.current).concat(coverPng)).then(resolve).catch(function (res) {
+                resolve(false);
+              });
+            });
+          },
+          getCover: function getCover(path) {
+            return new Promise(function (resolve, reject) {
+              if (!path) {
+                reject();
+              }
 
-        //移入div停止旋转，移出继续转
-        pauseRotation() {
-          let self = this; //这一点很重要。。
-          let modelBorder = document.getElementsByClassName("modelBorder")[self.index];
-          modelBorder.addEventListener("mouseenter", function (event) {
-            self.rotating = false;
-          });
-          modelBorder.addEventListener("mouseleave", function (event) {
-            self.rotating = true;
-          });
-          modelBorder.addEventListener('touchmove', function (e) {
-            self.rotating = false;
-          }, false);
-          modelBorder.addEventListener('touchstart', function (e) {
-            self.rotating = false;
-          }, false);
-          modelBorder.addEventListener('touchend', function (e) {
-            self.rotating = true;
-          }, false);
+              var img = new Image();
+
+              img.onload = function () {
+                resolve(path);
+              };
+
+              img.onerror = reject;
+              img.src = path;
+            });
+          },
+          initNav: function initNav() {
+            var routes = treeData.current.split('/');
+            var path = '';
+            var paths = [];
+            routes.forEach(function (item, index) {
+              (item || index == 0) && paths.push({
+                text: item || 'Home',
+                path: path += item + '/'
+              });
+            });
+            this.currentName = paths[paths.length - 1].text;
+            this.path = paths;
+          },
+          initFloder: function initFloder() {
+            var _this4 = this;
+
+            var dirs = treeData.dirs; // 项目目录
+
+            var projectList = []; // 普通文件夹
+
+            var folderList = [];
+            for (const item of dirs) {
+              let _item = _slicedToArray(item, 2);
+              let name = _item[0];
+              let dirData = _item[1];
+              let coverPng = _item[2];
+
+              if (name !== '..') {
+                _this4.hasCover(coverPng).then(function (cover) {
+
+                  if (cover) {
+                    projectList.push({
+                      ...dirData,
+                      name: name,
+                      cover: cover
+                    });
+                  } else {
+                    folderList.push({
+                      ...dirData,
+                      name: name
+                    });
+                  }
+                }); // let imgInfo = this.imageObj[name]
+
+
+                var imgInfo = false;
+              }
+            };
+            this.project = projectList || [];
+            this.folder = folderList || [];
+          },
+          initFileList: function initFileList() {
+            var files = treeData.renderFiles;
+            var imageObj = {};
+            var images = [];
+            var otherFiles = [];
+            var modelGlb = new Array;
+            files.forEach(function (item) {
+              var fileName = item[0];
+              var nameArr = fileName.split('.');
+              var ext = nameArr.pop();
+              fileName = nameArr.join('.');
+
+              // // feature 当前目录下包含MD文件，自动进入MD视图
+              // if (ext === 'md') {
+              //   window.location.href += item[0]
+              // }
+
+              if (imgExt.indexOf(ext) !== -1) {
+                // imageObj[fileName] = {
+                //   fileName: item[0],
+                //   ...item[1]
+                // }
+                images.push({
+                  fileName: item[0],
+                  ...item[1]
+                });
+              } else if (modeExt.indexOf(ext) !== -1) {
+                modelGlb.push({
+                  fileName: item[0],
+                  ...item[1]
+                });
+              } else {
+                otherFiles.push({
+                  fileName: item[0],
+                  ...item[1]
+                });
+              }
+            }); // this.imageObj = imageObj
+            this.images = images;
+            this.modelGlb = modelGlb;
+            this.otherFiles = otherFiles;
+
+          }
+        }
+      });
+
+
+      Vue.component('operation', {
+        template: `
+    <div ref="operation" :class="['operation-wrap',{open:open}]" @click.stop="toggleOpen" v-if="actionList.length">
+      <div class="operation">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div :class="['operation-list-wrap',{open:open}]">
+        <div class="operation-list">
+          <div class="operation-item" v-for="(item,index) in actionList" :key="index" @click.stop="clickItem(item)">{{item.name}}</div>
+        </div>
+      </div>
+    </div>
+    `,
+        props: {
+          actionList: {
+            type: Array,
+            default: function () {
+              return []
+            }
+          },
+          value: {
+            type: Object,
+            default: function () {
+              return {}
+            }
+          }
         },
-      },
-      mounted() {
-        window.ob = this;
-        this.init();
-        this.pauseRotation()
-        this.loadModel();
-      }
-    })
-  })();
-</script>
+        data() {
+          return {
+            open: false
+          }
+        },
+        mounted() {
+          let _this = this
+          document.body.addEventListener('click', _this.bodyClick, false)
+          app.$on('openOperation', function () {
+            _this.bodyClick()
+          })
+        },
+        destroyed() {
+          document.body.removeEventListener('click', this.bodyClick, false)
+        },
+        methods: {
+          bodyClick(event) {
+            this.open = false
+          },
+          toggleOpen() {
+            app.$emit('openOperation')
+            this.$nextTick(() => {
+              this.open = !this.open
+            })
+          },
+          clickItem(item) {
+            this.$emit('click-item', item, this.value)
+            this.open = false
+          }
+        }
+      })
+
+      Vue.component('modelscale', {
+        template: `
+            <div>
+              <div id="modelBorder" class="modelBorder"></div>
+              <div class="file-name">{{(loadedData == '100' ) ? model : '加载中' +loadedData+'%'}}</div>
+            </div>
+    `,
+        props: {
+          model: Array,
+          src: Array,
+          width: Number,
+          height: Number,
+          index: Number,
+        },
+        data: function () {
+          return {
+            scene: null,
+            camera: null,
+            renderer: null,
+            index: null,
+            group: null,
+            rotating: true,
+            loadedData: 0,
+
+          }
+        },
+        mounted() {
+
+
+        },
+        destroyed() {
+
+        },
+        methods: {
+
+
+          init() {
+            let self = this; //这一点很重要。
+            self.scene = new THREE.Scene();
+            //去除canvas背景
+            // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
+
+            //camera
+            var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+            self.camera = camera
+            self.camera.position.set(0, 0, 1);
+            self.scene.add(camera)
+
+            //renderer
+            self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            self.renderer.setSize(this.width, this.height);
+            self.renderer.outputEncoding = THREE.sRGBEncoding;
+            self.renderer.textureEncoding = THREE.sRGBEncoding;
+            self.renderer.setPixelRatio(window.devicePixelRatio);
+            self.renderer.shadowMap.enabled = true;
+            self.renderer.gammaOutput = true;
+            self.renderer.gammaFactor = 1;
+
+            //插入div
+            document.getElementsByClassName("modelBorder")[self.index].appendChild(self.renderer.domElement);
+
+            //orbitcontrols
+            let orbitcontrols = new THREE.OrbitControls(self.camera, self.renderer.domElement);
+            // to disable pan
+            orbitcontrols.enablePan = false;
+            // to disable zoom
+            orbitcontrols.enableZoom = true;
+            orbitcontrols.target.set(0, 0, 0);
+            orbitcontrols.update();
+
+
+
+            // HemisphereLight light    添加太阳光
+            let HemisphereLight = new THREE.HemisphereLight(0xffffff, 1);
+            HemisphereLight.position.set(0, 100, 0);
+            self.scene.add(HemisphereLight);
+
+            // ambient light    添加环境光
+            let ambientLight = new THREE.AmbientLight(0xffffff, 1);
+            ambientLight.position.set(0, 100, 0);
+            self.scene.add(ambientLight);
+
+
+            // point light  点光源
+            let PointLight = new THREE.PointLight(0xffffff, 1);
+            PointLight.position.set(-100, 1, -100);
+            self.camera.add(PointLight);
+
+            let axesHelper = new THREE.AxesHelper(150);
+            // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
+            self.scene.add(axesHelper);
+
+            //平行光All
+            //左灯光
+            let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
+            directionalLightLeft.position.set(100, 10, -100);
+            self.scene.add(directionalLightLeft);
+            //右灯光
+            let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
+            directionalLightRight.position.set(-100, 10, 100);
+            self.scene.add(directionalLightRight);
+            //前灯光
+            let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
+            directionalLightFront.position.set(0, 10, -100);
+            self.scene.add(directionalLightFront);
+            //后灯光
+            let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
+            directionalLightBack.position.set(0, 0, 100);
+            self.scene.add(directionalLightBack);
+            //上灯光
+            let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
+            directionalLightUp.position.set(0, 100, 0);
+            self.scene.add(directionalLightUp);
+            //下灯光
+            let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
+            directionalLightDw.position.set(0, -100, 0);
+            self.scene.add(directionalLightDw);
+
+
+          },
+
+          loadModel() {
+            let self = this; //这一点很重要。。
+            let loader = new THREE.GLTFLoader();
+
+            loader.load(this.src, function (gltf) {
+              gltf.scene.name = self.model;
+              self.setContent(gltf.scene);
+
+              const loadscene = gltf.scene;
+              loadscene.traverse(function (object) {
+                if (object.isMesh) {
+                  object.castShadow = true;
+                }
+              });
+
+              let group = new THREE.Group();
+              group.add(loadscene);
+              self.scene.add(group);
+
+            }, function (xhr) {
+
+              //模型加载状态
+              self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+              if (self.loadedData == '100') {
+                let ld = document.getElementsByClassName('modelBorder')[self.index];
+                ld.style.backgroundImage = 'none';
+              }
+            }
+            )
+          },
+
+          //自动到合适大小需要用到Box3
+          setContent(object) {
+            let self = this; //这一点很重要。
+            object.updateMatrixWorld();
+            const box = new THREE.Box3().setFromObject(object);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const boxSize = box.getSize();
+            const center = box.getCenter(new THREE.Vector3());
+
+            object.position.x += object.position.x - center.x;
+            object.position.y += object.position.y - center.y;
+            object.position.z += object.position.z - center.z;
+
+            this.camera.position.copy(center);
+            if (boxSize.x > boxSize.y) {
+              this.camera.position.z = boxSize.x * -2.85
+            } else {
+              this.camera.position.z = boxSize.y * -2.85
+            }
+            this.camera.lookAt(0, 0, 0);
+
+            //模型自转动画
+            function animate() {
+              requestAnimationFrame(animate);
+              if (self.rotating) {
+                object.rotateY(0.005);
+              } else {
+                object.rotateY(0);
+              }
+              self.renderer.render(self.scene, self.camera);
+            }
+            animate();
+          },
+
+          //移入div停止旋转，移出继续转
+          pauseRotation() {
+            let self = this; //这一点很重要。。
+            let modelBorder = document.getElementsByClassName("modelBorder")[self.index];
+            modelBorder.addEventListener("mouseenter", function (event) {
+              self.rotating = false;
+            });
+            modelBorder.addEventListener("mouseleave", function (event) {
+              self.rotating = true;
+            });
+            modelBorder.addEventListener('touchmove', function (e) {
+              self.rotating = false;
+            }, false);
+            modelBorder.addEventListener('touchstart', function (e) {
+              self.rotating = false;
+            }, false);
+            modelBorder.addEventListener('touchend', function (e) {
+              self.rotating = true;
+            }, false);
+          },
+        },
+        mounted() {
+          window.ob = this;
+          this.init();
+          this.pauseRotation()
+          this.loadModel();
+        }
+      })
+    })();
+  </script>
+</body>
+
+
 
 <!-- 图片预览服务 -->
-<script src="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.js"></script>
-<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet">
+<script src="./viewer.min@1.10.1.js"  async="async"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet"  async="async">
 
 <!-- 下载服务 -->
-<script src="https://cdn.bootcdn.net/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+<script src="./download.min@v4.21.js"></script>
 
 <!-- toast -->
-<script src="https://unpkg.com/@vuesimple/vs-toast@1.4.0/dist/vs-toast.min.js"></script>
+<script src="./vs-toast.min@1.4.0.js"  async="async"></script>
 
 </html>
