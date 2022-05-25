@@ -42,7 +42,7 @@
             <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
             <div class="project-info">
               <div class="file-name">{{item.name}}</div>
-              <div class="update-time">{{getUpdateTime(item.mtimeMs)}}</div>
+              <div class="update-time">{{getUpdateTime(item.dirData.mtimeMs)}}</div>
             </div>
           </a>
         </li>
@@ -566,13 +566,13 @@
               _this4.hasCover(name).then(function (cover) {
                 if (cover) {
                   projectList.push({
-                    ...dirData,
+                    dirData: dirData,
                     name: name,
                     cover: cover
                   });
                 } else {
                   folderList.push({
-                    ...dirData,
+                    dirData: dirData,
                     name: name
                   });
                 }
@@ -608,12 +608,12 @@
               // }
               images.push({
                 fileName: item[0],
-                ...item[1]
+                dirData: item[1]
               });
             } else {
               otherFiles.push({
                 fileName: item[0],
-                ...item[1]
+                dirData: item[1]
               });
             }
           }); // this.imageObj = imageObj
