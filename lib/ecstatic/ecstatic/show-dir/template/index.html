@@ -803,40 +803,40 @@
             self.scene.add(ambientLight);
 
 
-            // point light  点光源
-            let PointLight = new THREE.PointLight(0xffffff, 1);
-            PointLight.position.set(-100, 1, -100);
-            self.camera.add(PointLight);
+            // // point light  点光源
+            // let PointLight = new THREE.PointLight(0xffffff, 1);
+            // PointLight.position.set(-100, 1, -100);
+            // self.camera.add(PointLight);
 
-            let axesHelper = new THREE.AxesHelper(150);
-            // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
-            self.scene.add(axesHelper);
+            // let axesHelper = new THREE.AxesHelper(150);
+            // // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
+            // self.scene.add(axesHelper);
 
-            //平行光All
-            //左灯光
-            let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightLeft.position.set(100, 10, -100);
-            self.scene.add(directionalLightLeft);
-            //右灯光
-            let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightRight.position.set(-100, 10, 100);
-            self.scene.add(directionalLightRight);
-            //前灯光
-            let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightFront.position.set(0, 10, -100);
-            self.scene.add(directionalLightFront);
-            //后灯光
-            let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightBack.position.set(0, 0, 100);
-            self.scene.add(directionalLightBack);
-            //上灯光
-            let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
-            directionalLightUp.position.set(0, 100, 0);
-            self.scene.add(directionalLightUp);
-            //下灯光
-            let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
-            directionalLightDw.position.set(0, -100, 0);
-            self.scene.add(directionalLightDw);
+            // //平行光All
+            // //左灯光
+            // let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
+            // directionalLightLeft.position.set(100, 10, -100);
+            // self.scene.add(directionalLightLeft);
+            // //右灯光
+            // let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
+            // directionalLightRight.position.set(-100, 10, 100);
+            // self.scene.add(directionalLightRight);
+            // //前灯光
+            // let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
+            // directionalLightFront.position.set(0, 10, -100);
+            // self.scene.add(directionalLightFront);
+            // //后灯光
+            // let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
+            // directionalLightBack.position.set(0, 0, 100);
+            // self.scene.add(directionalLightBack);
+            // //上灯光
+            // let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
+            // directionalLightUp.position.set(0, 100, 0);
+            // self.scene.add(directionalLightUp);
+            // //下灯光
+            // let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
+            // directionalLightDw.position.set(0, -100, 0);
+            // self.scene.add(directionalLightDw);
 
 
           },
