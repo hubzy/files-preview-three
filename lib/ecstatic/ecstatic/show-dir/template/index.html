@@ -255,7 +255,7 @@
     var weeks_ch = ["日", "一", "二", "三", "四", "五", "六"];
     var dateType = "yyyy|y|mm|m|dd|d|hh|h|ii|i|ss|s";
     var imgExt = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'tif', 'svga'];
-    var coverExt = ['png', 'gif'];
+
     var beforeTime = [{
       time: 31536000000,
       format: 'YYYY年MM月DD日 更新',
@@ -504,38 +504,7 @@
             this.blurHeder = false;
           }
         },
-        hasCover: function hasCover(name) {
-          var _this3 = this;
-
-          return new Promise(function (resolve, reject) {
-            var errorNum = 0;
-            coverExt.forEach(function (item) {
-              _this3.getCover("".concat(_this3.current).concat(name, "/assets/cover.").concat(item)).then(resolve).catch(function (res) {
-                errorNum += 1;
-
-                if (errorNum == coverExt.length) {
-                  resolve(false);
-                }
-              });
-            });
-          });
-        },
-        getCover: function getCover(path) {
-          return new Promise(function (resolve, reject) {
-            if (!path) {
-              reject();
-            }
-
-            var img = new Image();
-
-            img.onload = function () {
-              resolve(path);
-            };
-
-            img.onerror = reject;
-            img.src = path;
-          });
-        },
+        
         initNav: function initNav() {
           var routes = treeData.current.split('/');
           var path = '';
@@ -557,13 +526,13 @@
           var projectList = []; // 普通文件夹
 
           var folderList = [];
+
           dirs.forEach(function (item) {
             var _item = _slicedToArray(item, 2),
               name = _item[0],
-              dirData = _item[1];
-
+              dirData = _item[1],
+              cover = _item[2];
             if (name !== '..') {
-              _this4.hasCover(name).then(function (cover) {
                 if (cover) {
                   projectList.push({
                     dirData: dirData,
@@ -576,8 +545,6 @@
                     name: name
                   });
                 }
-              }); // let imgInfo = this.imageObj[name]
-
 
               var imgInfo = false;
             }
