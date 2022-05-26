@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./template.css">
   <meta name="referrer" content="never">
 </head>
+
 <body>
   <div id="app">
     <header :class="['header-wrap',{blurHeder:blurHeder}]">
@@ -17,8 +18,7 @@
         <div class="logo">FILES PREVIEW</div>
       </div>
     </header>
-    <div class="hero"
-      style="background-image: url('https://www.dmoe.cc/random.php')">
+    <div class="hero" style="background-image: url('https://www.dmoe.cc/random.php')">
     </div>
     <main class="content" ref="content">
 
@@ -41,7 +41,7 @@
             <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
             <div class="project-info">
               <div class="file-name">{{item.name}}</div>
-              <div class="update-time">{{getUpdateTime(item.mtimeMs)}}</div>
+              <div class="update-time">{{getUpdateTime(item.dirData.mtimeMs)}}</div>
             </div>
           </a>
         </li>
@@ -153,40 +153,43 @@
           <li class="col-item" v-for="(item,index) in otherFiles" :key="index">
             <a :href="item.fileName" class="folder-item">
               <!-- <i class="folder-icon"></i> -->
-              <svg width="140" height="160" viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_dd)">
-                  <path
-                    d="M38 118H102C106.418 118 110 114.418 110 110V41.3137C110 39.192 109.157 37.1571 107.657 35.6569L92.3431 20.3431C90.8429 18.8429 88.808 18 86.6863 18H38C33.5817 18 30 21.5817 30 26V110C30 114.418 33.5817 118 38 118Z"
-                    fill="#0190FB" />
-                  <path
-                    d="M102 117H38C34.134 117 31 113.866 31 110V26C31 22.134 34.134 19 38 19H86.6863C88.5428 19 90.3233 19.7375 91.636 21.0502L106.95 36.364C108.262 37.6767 109 39.4572 109 41.3137V110C109 113.866 105.866 117 102 117Z"
-                    stroke="black" stroke-opacity="0.05" stroke-width="2" />
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M73.4142 67.1925C72.6332 66.4114 72.6332 65.1451 73.4142 64.364L78.364 59.4143C79.145 58.6332 80.4113 58.6332 81.1924 59.4143L86.1421 64.364C86.9232 65.1451 86.9232 66.4114 86.1421 67.1925L81.1924 72.1422C80.4113 72.9232 79.145 72.9232 78.364 72.1422L73.4142 67.1925ZM59 60C57.8954 60 57 60.8955 57 62V70C57 71.1046 57.8954 72 59 72H67C68.1046 72 69 71.1046 69 70V62C69 60.8955 68.1046 60 67 60H59ZM59 77.5564C57.8954 77.5564 57 78.4519 57 79.5564V87.5564C57 88.661 57.8954 89.5564 59 89.5564H67C68.1046 89.5564 69 88.661 69 87.5564V79.5564C69 78.4519 68.1046 77.5564 67 77.5564H59ZM75 77.5564C73.8954 77.5564 73 78.4519 73 79.5564V87.5564C73 88.661 73.8954 89.5564 75 89.5564H83C84.1046 89.5564 85 88.661 85 87.5564V79.5564C85 78.4519 84.1046 77.5564 83 77.5564H75Z"
-                    fill="#9BD5FF" />
+              <svg v-if="item.fileName.split('.').pop()=='zip' && 'rar' " width="80px" height="100px"
+                viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="zip">
+                    <path
+                      d="M8,100 L72,100 C76.418,100 80,96.418 80,92 L80,23.3137 C80,21.192 79.157,19.1571 77.657,17.6569 L62.3431,2.3431 C60.8429,0.8429 58.808,0 56.6863,0 L8,0 C3.5817,0 0,3.5817 0,8 L0,92 C0,96.418 3.5817,100 8,100 Z"
+                      fill="#FFC146" fill-rule="nonzero"></path>
+                    <path
+                      d="M72,99 L8,99 C4.134,99 1,95.866 1,92 L1,8 C1,4.134 4.134,1 8,1 L56.6863,1 C58.5428,1 60.3233,1.7375 61.636,3.0502 L76.95,18.364 C78.262,19.6767 79,21.4572 79,23.3137 L79,92 C79,95.866 75.866,99 72,99 Z"
+                      stroke-opacity="0.05" stroke="#000000" stroke-width="2"></path>
+                    <path
+                      d="M62,22 L75.586,22 C76.477,22 76.923,20.9229 76.293,20.2929 L59.7071,3.7071 C59.0771,3.0771 58,3.5233 58,4.4142 L58,18 C58,20.2091 59.7909,22 62,22 Z"
+                      fill-opacity="0.65" fill="#FFFFFF" fill-rule="nonzero"></path>
+                    <path
+                      d="M14.3068411,23.4607809 L21.7553863,23.4607809 C22.5739764,23.4607809 23.23843,22.7982827 23.23843,21.9821016 L23.23843,14.5554762 C23.23843,13.7382566 22.5739764,13.0767968 21.7553863,13.0767968 L14.3068411,13.0767968 C13.488251,13.0767968 12.8237974,13.739295 12.8237974,14.5554762 L12.8237974,21.9821016 C12.8237974,22.7982827 13.488251,23.4607809 14.3068411,23.4607809 Z M32.1700189,23.4607809 L24.7214737,23.4607809 C23.9028836,23.4607809 23.23843,24.1232791 23.23843,24.9394603 L23.23843,32.3660857 C23.23843,33.1833052 23.9028836,33.844765 24.7214737,33.844765 L32.1700189,33.844765 C32.988609,33.844765 33.6530626,33.1822668 33.6530626,32.3660857 L33.6530626,24.9394603 C33.6530626,24.1232791 32.988609,23.4607809 32.1700189,23.4607809 Z M14.3068411,44.2287491 L21.7553863,44.2287491 C22.5739764,44.2287491 23.23843,43.5662509 23.23843,42.7500698 L23.23843,35.3234444 C23.23843,34.5062248 22.5739764,33.844765 21.7553863,33.844765 L14.3068411,33.844765 C13.488251,33.844765 12.8237974,34.5072632 12.8237974,35.3234444 L12.8237974,42.7500698 C12.8237974,43.5662509 13.488251,44.2287491 14.3068411,44.2287491 Z M32.1700189,44.2287491 L24.7214737,44.2287491 C23.9028836,44.2287491 23.23843,44.8912473 23.23843,45.7074285 L23.23843,53.1340539 C23.23843,53.9512734 23.9028836,54.6127332 24.7214737,54.6127332 L32.1700189,54.6127332 C32.988609,54.6127332 33.6530626,53.950235 33.6530626,53.1340539 L33.6530626,45.7074285 C33.6530626,44.8912473 32.988609,44.2287491 32.1700189,44.2287491 Z M30.012107,60.3457308 L16.0429604,60.3457308 C14.2651826,60.3457308 12.8237974,61.7828742 12.8237974,63.5554203 L12.8237974,79.7004388 C12.8237974,81.4729849 14.2651826,82.9101283 16.0429604,82.9101283 L30.012107,82.9101283 C31.7898848,82.9101283 33.2312699,81.4729849 33.2312699,79.7004388 L33.2312699,63.5554203 C33.2312699,61.7828742 31.7898848,60.3457308 30.012107,60.3457308 Z M29.4986656,77.4367303 C29.4986656,78.8614129 28.3405585,80.0161119 26.9116709,80.0161119 L19.142355,80.0161119 C17.7134674,80.0161119 16.5553603,78.8614129 16.5553603,77.4367303 L16.5553603,74.5956722 C16.5553603,73.1709896 17.7134674,72.0162906 19.142355,72.0162906 L26.9116709,72.0162906 C28.3405585,72.0162906 29.4986656,73.1709896 29.4986656,74.5956722 L29.4986656,77.4367303 Z"
+                      fill-opacity="0.65" fill="#FFFFFF" fill-rule="nonzero"></path>
+                  </g>
                 </g>
-                <path
-                  d="M92 40H105.586C106.477 40 106.923 38.9229 106.293 38.2929L89.7071 21.7071C89.0771 21.0771 88 21.5233 88 22.4142V36C88 38.2091 89.7909 40 92 40Z"
-                  fill="#67BCFD" />
-                <defs>
-                  <filter id="filter0_dd" x="0" y="0" width="140" height="160" filterUnits="userSpaceOnUse"
-                    color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                      result="hardAlpha" />
-                    <feOffset dy="12" />
-                    <feGaussianBlur stdDeviation="15" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                      result="hardAlpha" />
-                    <feOffset dy="6" />
-                    <feGaussianBlur stdDeviation="5" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
-                    <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow" result="shape" />
-                  </filter>
-                </defs>
+              </svg>
+
+              <svg v-else width="80px" height="100px" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="file">
+                    <path
+                      d="M8,100 L72,100 C76.418,100 80,96.418 80,92 L80,23.3137 C80,21.192 79.157,19.1571 77.657,17.6569 L62.3431,2.3431 C60.8429,0.8429 58.808,0 56.6863,0 L8,0 C3.5817,0 0,3.5817 0,8 L0,92 C0,96.418 3.5817,100 8,100 Z"
+                      fill="#0190FB" fill-rule="nonzero"></path>
+                    <path
+                      d="M72,99 L8,99 C4.134,99 1,95.866 1,92 L1,8 C1,4.134 4.134,1 8,1 L56.6863,1 C58.5428,1 60.3233,1.7375 61.636,3.0502 L76.95,18.364 C78.262,19.6767 79,21.4572 79,23.3137 L79,92 C79,95.866 75.866,99 72,99 Z"
+                      stroke-opacity="0.05" stroke="#000000" stroke-width="2"></path>
+                    <path
+                      d="M41.4142,49.1925 C40.6332,48.4114 40.6332,47.1451 41.4142,46.364 L46.364,41.4143 C47.145,40.6332 48.4113,40.6332 49.1924,41.4143 L54.1421,46.364 C54.9232,47.1451 54.9232,48.4114 54.1421,49.1925 L49.1924,54.1422 C48.4113,54.9232 47.145,54.9232 46.364,54.1422 L41.4142,49.1925 Z M27,42 C25.8954,42 25,42.8955 25,44 L25,52 C25,53.1046 25.8954,54 27,54 L35,54 C36.1046,54 37,53.1046 37,52 L37,44 C37,42.8955 36.1046,42 35,42 L27,42 Z M27,59.5564 C25.8954,59.5564 25,60.4519 25,61.5564 L25,69.5564 C25,70.661 25.8954,71.5564 27,71.5564 L35,71.5564 C36.1046,71.5564 37,70.661 37,69.5564 L37,61.5564 C37,60.4519 36.1046,59.5564 35,59.5564 L27,59.5564 Z M43,59.5564 C41.8954,59.5564 41,60.4519 41,61.5564 L41,69.5564 C41,70.661 41.8954,71.5564 43,71.5564 L51,71.5564 C52.1046,71.5564 53,70.661 53,69.5564 L53,61.5564 C53,60.4519 52.1046,59.5564 51,59.5564 L43,59.5564 Z"
+                      fill="#9BD5FF"></path>
+                    <path
+                      d="M62,22 L75.586,22 C76.477,22 76.923,20.9229 76.293,20.2929 L59.7071,3.7071 C59.0771,3.0771 58,3.5233 58,4.4142 L58,18 C58,20.2091 59.7909,22 62,22 Z"
+                      fill="#67BCFD" fill-rule="nonzero"></path>
+                  </g>
+                </g>
               </svg>
 
               <div class="file-name">{{item.fileName}}</div>
@@ -589,13 +592,13 @@
 
                   if (cover) {
                     projectList.push({
-                      ...dirData,
+                      dirData: dirData,
                       name: name,
                       cover: cover
                     });
                   } else {
                     folderList.push({
-                      ...dirData,
+                      dirData: dirData,
                       name: name
                     });
                   }
@@ -632,17 +635,17 @@
                 // }
                 images.push({
                   fileName: item[0],
-                  ...item[1]
+                  dirData: item[1]
                 });
               } else if (modeExt.indexOf(ext) !== -1) {
                 modelGlb.push({
                   fileName: item[0],
-                  ...item[1]
+                  dirData: item[1]
                 });
               } else {
                 otherFiles.push({
                   fileName: item[0],
-                  ...item[1]
+                  dirData: item[1]
                 });
               }
             }); // this.imageObj = imageObj
@@ -800,40 +803,40 @@
             self.scene.add(ambientLight);
 
 
-            // point light  点光源
-            let PointLight = new THREE.PointLight(0xffffff, 1);
-            PointLight.position.set(-100, 1, -100);
-            self.camera.add(PointLight);
+            // // point light  点光源
+            // let PointLight = new THREE.PointLight(0xffffff, 1);
+            // PointLight.position.set(-100, 1, -100);
+            // self.camera.add(PointLight);
 
-            let axesHelper = new THREE.AxesHelper(150);
-            // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
-            self.scene.add(axesHelper);
+            // let axesHelper = new THREE.AxesHelper(150);
+            // // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
+            // self.scene.add(axesHelper);
 
-            //平行光All
-            //左灯光
-            let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightLeft.position.set(100, 10, -100);
-            self.scene.add(directionalLightLeft);
-            //右灯光
-            let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightRight.position.set(-100, 10, 100);
-            self.scene.add(directionalLightRight);
-            //前灯光
-            let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightFront.position.set(0, 10, -100);
-            self.scene.add(directionalLightFront);
-            //后灯光
-            let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightBack.position.set(0, 0, 100);
-            self.scene.add(directionalLightBack);
-            //上灯光
-            let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
-            directionalLightUp.position.set(0, 100, 0);
-            self.scene.add(directionalLightUp);
-            //下灯光
-            let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
-            directionalLightDw.position.set(0, -100, 0);
-            self.scene.add(directionalLightDw);
+            // //平行光All
+            // //左灯光
+            // let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
+            // directionalLightLeft.position.set(100, 10, -100);
+            // self.scene.add(directionalLightLeft);
+            // //右灯光
+            // let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
+            // directionalLightRight.position.set(-100, 10, 100);
+            // self.scene.add(directionalLightRight);
+            // //前灯光
+            // let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
+            // directionalLightFront.position.set(0, 10, -100);
+            // self.scene.add(directionalLightFront);
+            // //后灯光
+            // let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
+            // directionalLightBack.position.set(0, 0, 100);
+            // self.scene.add(directionalLightBack);
+            // //上灯光
+            // let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
+            // directionalLightUp.position.set(0, 100, 0);
+            // self.scene.add(directionalLightUp);
+            // //下灯光
+            // let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
+            // directionalLightDw.position.set(0, -100, 0);
+            // self.scene.add(directionalLightDw);
 
 
           },
@@ -938,13 +941,13 @@
 
 
 <!-- 图片预览服务 -->
-<script src="./viewer.min@1.10.1.js"  async="async"></script>
-<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet"  async="async">
+<script src="./viewer.min@1.10.1.js" async="async"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet" async="async">
 
 <!-- 下载服务 -->
 <script src="./download.min@v4.21.js"></script>
 
 <!-- toast -->
-<script src="./vs-toast.min@1.4.0.js"  async="async"></script>
+<script src="./vs-toast.min@1.4.0.js" async="async"></script>
 
 </html>
