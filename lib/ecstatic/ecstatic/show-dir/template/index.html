@@ -536,30 +536,7 @@
               this.blurHeder = false;
             }
           },
-          hasCover: function hasCover(coverPng) {
-            var _this3 = this;
-            return new Promise(function (resolve, reject) {
-              _this3.getCover("".concat(_this3.current).concat(coverPng)).then(resolve).catch(function (res) {
-                resolve(false);
-              });
-            });
-          },
-          getCover: function getCover(path) {
-            return new Promise(function (resolve, reject) {
-              if (!path) {
-                reject();
-              }
 
-              var img = new Image();
-
-              img.onload = function () {
-                resolve(path);
-              };
-
-              img.onerror = reject;
-              img.src = path;
-            });
-          },
           initNav: function initNav() {
             var routes = treeData.current.split('/');
             var path = '';
@@ -585,11 +562,9 @@
               let _item = _slicedToArray(item, 2);
               let name = _item[0];
               let dirData = _item[1];
-              let coverPng = _item[2];
+              let cover = _item[2];
 
               if (name !== '..') {
-                _this4.hasCover(coverPng).then(function (cover) {
-
                   if (cover) {
                     projectList.push({
                       dirData: dirData,
@@ -602,8 +577,6 @@
                       name: name
                     });
                   }
-                }); // let imgInfo = this.imageObj[name]
-
 
                 var imgInfo = false;
               }
