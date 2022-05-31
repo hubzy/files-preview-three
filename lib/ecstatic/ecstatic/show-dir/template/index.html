@@ -58,7 +58,7 @@
           <li class="col-item" v-for="(item,index) in folder" :key="index">
             <a :href="item.name+'/'" class="folder-item">
               <!-- <i class="folder-icon"></i> -->
-              <svg width="188" height="159" viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="100%"  viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d)">
                   <path
                     d="M38.661 116.318H150C154.418 116.318 158 112.736 158 108.318V33.7879C158 29.3696 154.418 25.7879 150 25.7879H95.1835C92.705 25.7879 90.4202 24.4478 89.2105 22.2846C88.0009 20.1214 85.7161 18.7813 83.2376 18.7813H38.661C34.2427 18.7813 30.661 22.363 30.661 26.7813V108.318C30.661 112.736 34.2428 116.318 38.661 116.318Z"
@@ -560,7 +560,7 @@
             var projectList = []; // 普通文件夹
 
             var folderList = [];
-            console.log(dirs)
+            // console.log(dirs)
             for (const item of dirs) {
               let _item = _slicedToArray(item, 2);
               let name = _item[0];
