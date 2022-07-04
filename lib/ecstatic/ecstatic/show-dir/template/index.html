@@ -857,7 +857,6 @@
             let self = this; //这一点很重要。
             object.updateMatrixWorld();
             const box = new THREE.Box3().setFromObject(object);
-            const size = box.getSize(new THREE.Vector3()).length();
             const boxSize = box.getSize();
             const center = box.getCenter(new THREE.Vector3());
 
