@@ -119,11 +119,11 @@
       </div>
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
-        <script src="./three.min.js"></script>
-        <script src="./OrbitControls.js"></script>
-        <script src="./GLTFLoader.js"></script>
-        <script src="./RGBELoader.js"></script>
-        <script src="./DRACOLoader.js"></script>
+        <script src="/three.min.js"></script>
+        <script src="/OrbitControls.js"></script>
+        <script src="/GLTFLoader.js"></script>
+        <script src="/WebGL.js"></script>
+        <script src="/stats.min.js"></script>
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
@@ -141,7 +141,7 @@
       </div>
       <!-- 模型弹窗  background-color: #10121E;-->
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
-        style="z-index: 2015;" v-if="modePopupData">
+        style="z-index: 2015; background-color: #10121E;" v-if="modePopupData">
         <div class="viewer-canvas">
           <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
             :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
@@ -206,6 +206,7 @@
         href="https://gitee.com/hubzyy/files-preview-three">关于</a></footer>
   </div>
   <script>
+    "use strict";
 
     function _slicedToArray(arr, i) {
       return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
@@ -800,7 +801,7 @@
 
             new THREE.RGBELoader()
               // .setPath('pisaHDR/')
-              .load('http://10.40.96.71:3000/assets/environment/venice_sunset_1k.hdr', function (texture) {
+              .load('./venice_sunset_1k.hdr', function (texture) {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // scene.background = texture;
