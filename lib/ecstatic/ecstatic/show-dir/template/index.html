@@ -58,7 +58,7 @@
           <li class="col-item" v-for="(item,index) in folder" :key="index">
             <a :href="item.name+'/'" class="folder-item">
               <!-- <i class="folder-icon"></i> -->
-              <svg width="100%"  viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="100%" viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d)">
                   <path
                     d="M38.661 116.318H150C154.418 116.318 158 112.736 158 108.318V33.7879C158 29.3696 154.418 25.7879 150 25.7879H95.1835C92.705 25.7879 90.4202 24.4478 89.2105 22.2846C88.0009 20.1214 85.7161 18.7813 83.2376 18.7813H38.661C34.2427 18.7813 30.661 22.363 30.661 26.7813V108.318C30.661 112.736 34.2428 116.318 38.661 116.318Z"
@@ -119,11 +119,11 @@
       </div>
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
-        <script src="https://hubzyy.gitee.io/link/three/three.min.js?v=2.0.3"></script>
-        <script src="https://hubzyy.gitee.io/link/three/OrbitControls.js?v=2.0.3"></script>
-        <script src="https://hubzyy.gitee.io/link/three/GLTFLoader.js?v=2.0.3"></script>
-        <script src="https://hubzyy.gitee.io/link/three/WebGL.js?v=2.0.3"></script>
-        <script src="https://hubzyy.gitee.io/link/three/stats.min.js?v=2.0.3"></script>
+        <script src="./three.min.js"></script>
+        <script src="./OrbitControls.js"></script>
+        <script src="./GLTFLoader.js"></script>
+        <script src="./RGBELoader.js"></script>
+        <script src="./DRACOLoader.js"></script>
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
@@ -205,7 +205,6 @@
         href="https://gitee.com/hubzyy/files-preview-three">关于</a></footer>
   </div>
   <script>
-    "use strict";
 
     function _slicedToArray(arr, i) {
       return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
@@ -572,18 +571,18 @@
               let cover = _item[2];
 
               if (name !== '..') {
-                  if (cover) {
-                    projectList.push({
-                      dirData: dirData,
-                      name: name,
-                      cover: cover
-                    });
-                  } else {
-                    folderList.push({
-                      dirData: dirData,
-                      name: name
-                    });
-                  }
+                if (cover) {
+                  projectList.push({
+                    dirData: dirData,
+                    name: name,
+                    cover: cover
+                  });
+                } else {
+                  folderList.push({
+                    dirData: dirData,
+                    name: name
+                  });
+                }
 
                 var imgInfo = false;
               }
@@ -728,142 +727,83 @@
         },
         mounted() {
 
-
-        },
-        destroyed() {
-
         },
         methods: {
 
-
           init() {
             let self = this; //这一点很重要。
-            self.scene = new THREE.Scene();
-            //去除canvas背景
-            // this.scene.background = new THREE.Color(1.0,1.0,1.0,0);
 
-            //camera
+            self.clock = new THREE.Clock();
+
+
             var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
             self.camera = camera
-            self.camera.position.set(0, 0, 1);
-            self.scene.add(camera)
+            self.camera.position.set(0, 0, 100);
 
-            //renderer
+            self.scene = new THREE.Scene();
             self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            self.renderer.setSize(this.width, this.height);
-            self.renderer.outputEncoding = THREE.sRGBEncoding;
-            self.renderer.textureEncoding = THREE.sRGBEncoding;
             self.renderer.setPixelRatio(window.devicePixelRatio);
-            self.renderer.shadowMap.enabled = true;
-            self.renderer.gammaOutput = true;
-            self.renderer.gammaFactor = 1;
+            self.renderer.setSize(this.width, this.height);
+            self.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            self.renderer.toneMappingExposure = 1;
+            self.renderer.outputEncoding = THREE.sRGBEncoding;
+            self.renderer.shadowMapEnabled = true;
 
             //插入div
             document.getElementsByClassName("modelBorder")[self.index].appendChild(self.renderer.domElement);
 
-            //orbitcontrols
-            let orbitcontrols = new THREE.OrbitControls(self.camera, self.renderer.domElement);
-            // to disable pan
-            orbitcontrols.enablePan = false;
-            // to disable zoom
-            orbitcontrols.enableZoom = true;
-            orbitcontrols.target.set(0, 0, 0);
-            orbitcontrols.update();
+            // container.appendChild(renderer.domElement);
+            let controls = new THREE.OrbitControls(camera, self.renderer.domElement);
+            // controls.enableDamping = true;
+            // controls.minDistance = 0.5;
+            // controls.maxDistance = 1;
+            // controls.target.set(0, 1, 0);
+            // controls.update();
+            window.addEventListener('resize', this.onWindowResize);
 
 
+            new THREE.RGBELoader()
+              // .setPath('pisaHDR/')
+              .load('./venice_sunset_1k.hdr', function (texture) {
 
-            // HemisphereLight light    添加太阳光
-            let HemisphereLight = new THREE.HemisphereLight(0xffffff, 1);
-            HemisphereLight.position.set(0, 100, 0);
-            self.scene.add(HemisphereLight);
+                texture.mapping = THREE.EquirectangularReflectionMapping;
+                // scene.background = texture;
+                self.scene.environment = texture;
+                // model
+                new THREE.GLTFLoader()
+                  // .setPath( 'models/gltf/' )
+                  .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
+                  .load(self.src, function (gltf) {
+                    // console.log(self.src)
+                    let loadscene = gltf.scene;
+                    loadscene.scale.set(1, 1, 1);
+                    // mixer = new THREE.AnimationMixer( gltf.scene );
+                    // mixer.clipAction( gltf.animations[ 0 ] ).play();
+                    self.setContent(loadscene)
+                  }, function (xhr) {
 
-            // ambient light    添加环境光
-            let ambientLight = new THREE.AmbientLight(0xffffff, 1);
-            ambientLight.position.set(0, 100, 0);
-            self.scene.add(ambientLight);
-
-
-            // point light  点光源
-            let PointLight = new THREE.PointLight(0xffffff, 1);
-            PointLight.position.set(-100, 1, -100);
-            self.camera.add(PointLight);
-
-            let axesHelper = new THREE.AxesHelper(150);
-            // 和网格模型Mesh一样，AxesHelper你也可以理解为一个模型对象，需要插入到场景中
-            self.scene.add(axesHelper);
-
-            //平行光All
-            //左灯光
-            let directionalLightLeft = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightLeft.position.set(100, 10, -100);
-            self.scene.add(directionalLightLeft);
-            //右灯光
-            let directionalLightRight = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightRight.position.set(-100, 10, 100);
-            self.scene.add(directionalLightRight);
-            //前灯光
-            let directionalLightFront = new THREE.DirectionalLight(0xffffff, 1.2)
-            directionalLightFront.position.set(0, 10, -100);
-            self.scene.add(directionalLightFront);
-            //后灯光
-            let directionalLightBack = new THREE.DirectionalLight(0xffffff, 0.5)
-            directionalLightBack.position.set(0, 0, 100);
-            self.scene.add(directionalLightBack);
-            //上灯光
-            let directionalLightUp = new THREE.DirectionalLight(0xffffff, 1.5)
-            directionalLightUp.position.set(0, 100, 0);
-            self.scene.add(directionalLightUp);
-            //下灯光
-            let directionalLightDw = new THREE.DirectionalLight(0xffffff, 1)
-            directionalLightDw.position.set(0, -100, 0);
-            self.scene.add(directionalLightDw);
-
-
-          },
-
-          loadModel() {
-            let self = this; //这一点很重要。。
-            let loader = new THREE.GLTFLoader();
-
-            loader.load(this.src, function (gltf) {
-              gltf.scene.name = self.model;
-              self.setContent(gltf.scene);
-
-              const loadscene = gltf.scene;
-              loadscene.traverse(function (object) {
-                if (object.isMesh) {
-                  object.castShadow = true;
-                }
+                    //模型加载状态
+                    self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+                    if (self.loadedData == '100') {
+                      let ld = document.getElementsByClassName('modelBorder')[self.index];
+                      ld.style.backgroundImage = 'none';
+                    }
+                  });
               });
 
-              let group = new THREE.Group();
-              group.add(loadscene);
-              self.scene.add(group);
-
-            }, function (xhr) {
-
-              //模型加载状态
-              self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-              if (self.loadedData == '100') {
-                let ld = document.getElementsByClassName('modelBorder')[self.index];
-                ld.style.backgroundImage = 'none';
-              }
-            }
-            )
           },
 
-          //自动到合适大小需要用到Box3
-          setContent(object) {
-            let self = this; //这一点很重要。
-            object.updateMatrixWorld();
-            const box = new THREE.Box3().setFromObject(object);
-            const boxSize = box.getSize();
-            const center = box.getCenter(new THREE.Vector3());
-
-            object.position.x += object.position.x - center.x;
-            object.position.y += object.position.y - center.y;
-            object.position.z += object.position.z - center.z;
-
+          setContent(model) {
+            let self = this; //这一点很重要。。
+            let group = new THREE.Group();
+            group.add(model);
+            group.updateMatrixWorld();
+            let bbox = new THREE.Box3().setFromObject(group);
+            const boxSize = bbox.getSize(new THREE.Vector3());
+            const center = bbox.getCenter(new THREE.Vector3());
+            group.position.x += group.position.x - center.x;
+            group.position.y += group.position.y - center.y;
+            group.position.z += group.position.z - center.z;
             this.camera.position.copy(center);
             if (boxSize.x > boxSize.y) {
               this.camera.position.z = boxSize.x * -2.85
@@ -872,45 +812,42 @@
             }
             this.camera.lookAt(0, 0, 0);
 
-            //模型自转动画
-            function animate() {
-              requestAnimationFrame(animate);
-              if (self.rotating) {
-                object.rotateY(0.005);
-              } else {
-                object.rotateY(0);
-              }
-              self.renderer.render(self.scene, self.camera);
-            }
-            animate();
+            //外框架
+            let boxhelper = new THREE.BoxHelper(group, 0xbe1915); //外面红色框
+            // self.scene.add(boxhelper);
+            //坐标线
+            let axesHelper = new THREE.AxesHelper(100);
+            // self.scene.add(axesHelper);
+
+            self.scene.add(group);
+
           },
 
-          //移入div停止旋转，移出继续转
-          pauseRotation() {
+          onWindowResize() {
             let self = this; //这一点很重要。。
-            let modelBorder = document.getElementsByClassName("modelBorder")[self.index];
-            modelBorder.addEventListener("mouseenter", function (event) {
-              self.rotating = false;
-            });
-            modelBorder.addEventListener("mouseleave", function (event) {
-              self.rotating = true;
-            });
-            modelBorder.addEventListener('touchmove', function (e) {
-              self.rotating = false;
-            }, false);
-            modelBorder.addEventListener('touchstart', function (e) {
-              self.rotating = false;
-            }, false);
-            modelBorder.addEventListener('touchend', function (e) {
-              self.rotating = true;
-            }, false);
+            self.camera.aspect = this.width / this.height;
+            self.camera.updateProjectionMatrix();
+            self.renderer.setSize(this.width, this.height);
+
           },
+
+          //
+
+          animate() {
+            let self = this; //这一点很重要。
+
+            requestAnimationFrame(this.animate);
+
+            // if (mixer) mixer.update(clock.getDelta());
+            // this.controls.update(); // required if damping enabled
+
+            self.renderer.render(self.scene, self.camera);
+          }
         },
         mounted() {
           window.ob = this;
           this.init();
-          this.pauseRotation()
-          this.loadModel();
+          this.animate();
         }
       })
     })();
