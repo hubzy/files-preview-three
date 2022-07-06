@@ -139,9 +139,9 @@
           </li>
         </ul>
       </div>
-      <!-- 模型弹窗  background-color: #10121E;-->
+      <!-- 模型弹窗  -->
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
-        style="z-index: 2015;" v-if="modePopupData">
+        style="z-index: 2015; background-color: #10121E;" v-if="modePopupData">
         <div class="viewer-canvas">
           <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
             :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
@@ -772,14 +772,14 @@
             self.clock = new THREE.Clock();
 
 
-            var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+            var camera = new THREE.PerspectiveCamera(45, self.width / self.height, 0.1, 1000);
             self.camera = camera
             self.camera.position.set(0, 0, 100);
 
             self.scene = new THREE.Scene();
             self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             self.renderer.setPixelRatio(window.devicePixelRatio);
-            self.renderer.setSize(this.width, this.height);
+            self.renderer.setSize(self.width, self.height);
             self.renderer.toneMapping = THREE.ACESFilmicToneMapping;
             self.renderer.toneMappingExposure = 1;
             self.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -803,7 +803,7 @@
               .load('http://10.40.96.71:3000/assets/environment/venice_sunset_1k.hdr', function (texture) {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
-                // scene.background = texture;
+                // self.scene.background = texture;
                 self.scene.environment = texture;
                 // model
                 new THREE.GLTFLoader()
@@ -842,11 +842,11 @@
             group.position.z += group.position.z - center.z;
             this.camera.position.copy(center);
             if (boxSize.x > boxSize.y) {
-              this.camera.position.z = boxSize.x * -2.85
+              self.camera.position.z = boxSize.x * -2.85
             } else {
-              this.camera.position.z = boxSize.y * -2.85
+              self.camera.position.z = boxSize.y * -2.85
             }
-            this.camera.lookAt(0, 0, 0);
+            self.camera.lookAt(0, 0, 0);
 
             //外框架
             let boxhelper = new THREE.BoxHelper(group, 0xbe1915); //外面红色框
@@ -861,9 +861,9 @@
 
           onWindowResize() {
             let self = this; //这一点很重要。。
-            self.camera.aspect = this.width / this.height;
+            self.camera.aspect = self.width / self.height;
             self.camera.updateProjectionMatrix();
-            self.renderer.setSize(this.width, this.height);
+            self.renderer.setSize(self.width, self.height);
 
           },
 
@@ -872,7 +872,7 @@
           animate() {
             let self = this; //这一点很重要。
 
-            requestAnimationFrame(this.animate);
+            requestAnimationFrame(self.animate);
 
             // if (mixer) mixer.update(clock.getDelta());
             // this.controls.update(); // required if damping enabled
