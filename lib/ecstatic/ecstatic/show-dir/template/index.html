@@ -142,7 +142,7 @@
       </div>
       <!-- 模型弹窗  -->
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
-        style="z-index: 2015; background-color: #10121E;" v-if="modePopupData">
+        style="z-index: 2015; background-color: rgba(16, 18, 30, 0.85);" v-if="modePopupData">
         <div class="viewer-canvas">
           <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
             :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
@@ -307,8 +307,8 @@
           modePopupDataModel: null,
           modePopupDataSrc: null,
           modePopupDataIndex: null,
-          modePopupDataWidth: `${document.documentElement.clientWidth}`,
-          modePopupDataHeight: `${document.documentElement.clientHeight}`,
+          modePopupDataWidth: null,
+          modePopupDataHeight: null,
           imgAction: [{
             name: '下载文件',
             fn: 'downloadFile'
@@ -380,6 +380,8 @@
               this.modePopupDataModel = mode;
               this.modePopupDataSrc = src;
               this.modePopupDataIndex = index;
+              this.modePopupDataWidth = `${document.documentElement.clientWidth}`;
+              this.modePopupDataHeight = `${document.documentElement.clientHeight}`;
               document.getElementsByTagName('body')[0].style.overflow = 'hidden';
             }
             clearInterval(this.timer);
@@ -768,7 +770,7 @@
         methods: {
 
           init() {
-            let self = this; //这一点很重要。
+            let self = this; 
 
             self.clock = new THREE.Clock();
 
@@ -796,7 +798,6 @@
             // controls.maxDistance = 1;
             // controls.target.set(0, 1, 0);
             // controls.update();
-            window.addEventListener('resize', this.onWindowResize);
 
 
             new THREE.RGBELoader()
@@ -806,32 +807,33 @@
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // self.scene.background = texture;
                 self.scene.environment = texture;
-                // model
-                new THREE.GLTFLoader()
-                  // .setPath( 'models/gltf/' )
-                  .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
-                  .load(self.src, function (gltf) {
-                    // console.log(self.src)
-                    let loadscene = gltf.scene;
-                    loadscene.scale.set(1, 1, 1);
-                    // mixer = new THREE.AnimationMixer( gltf.scene );
-                    // mixer.clipAction( gltf.animations[ 0 ] ).play();
-                    self.setContent(loadscene)
-                  }, function (xhr) {
 
-                    //模型加载状态
-                    self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-                    if (self.loadedData == '100') {
-                      let ld = document.getElementsByClassName('modelBorder')[self.index];
-                      ld.style.backgroundImage = 'none';
-                    }
-                  });
               });
+            // model
+            new THREE.GLTFLoader()
+              // .setPath( 'models/gltf/' )
+              .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
+              .load(self.src, function (gltf) {
+                // console.log(self.src)
+                let loadscene = gltf.scene;
+                loadscene.scale.set(1, 1, 1);
+                // mixer = new THREE.AnimationMixer( gltf.scene );
+                // mixer.clipAction( gltf.animations[ 0 ] ).play();
+                self.setContent(loadscene)
+              }, function (xhr) {
+                //模型加载状态
+                self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+                if (self.loadedData == '100') {
+                  let ld = document.getElementsByClassName('modelBorder')[self.index];
+                  ld.style.backgroundImage = 'none';
+                }
+              });
+
 
           },
 
           setContent(model) {
-            let self = this; //这一点很重要。。
+            let self = this; 
             let group = new THREE.Group();
             group.add(model);
             group.updateMatrixWorld();
@@ -860,27 +862,18 @@
 
           },
 
-          onWindowResize() {
-            let self = this; //这一点很重要。。
-            self.camera.aspect = self.width / self.height;
-            self.camera.updateProjectionMatrix();
-            self.renderer.setSize(self.width, self.height);
+          animate() {
+            let self = this; 
+            requestAnimationFrame(self.animate);
+            self.render()
 
           },
-
-          //
-
-          animate() {
-            let self = this; //这一点很重要。
-
-            requestAnimationFrame(self.animate);
-
-            // if (mixer) mixer.update(clock.getDelta());
-            // this.controls.update(); // required if damping enabled
-
+          render() {
+            let self = this; 
             self.renderer.render(self.scene, self.camera);
           }
         },
+
         mounted() {
           window.ob = this;
           this.init();
