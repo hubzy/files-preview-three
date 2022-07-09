@@ -142,10 +142,10 @@
       </div>
       <!-- 模型弹窗 -->
       <div class="viewer-container viewer-backdrop viewer-fixed viewer-fade viewer-transition viewer-in"
-        style="z-index: 2015;" v-if="modePopupData">
+        style="background-color: rgba(0,0,0,.85); z-index: 2015;" v-if="modePopupData">
         <div class="viewer-canvas">
           <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
-            :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
+            :width="modePopupDataWidth" :height="modePopupDataHeight" ></modelscale>
         </div>
         <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
       </div>
@@ -307,8 +307,8 @@
           modePopupDataModel: null,
           modePopupDataSrc: null,
           modePopupDataIndex: null,
-          modePopupDataWidth: `${document.documentElement.clientWidth}`,
-          modePopupDataHeight: `${document.documentElement.clientHeight}`,
+          modePopupDataWidth: null,
+          modePopupDataHeight: null,
           imgAction: [{
             name: '下载文件',
             fn: 'downloadFile'
@@ -370,6 +370,8 @@
               this.modePopupDataModel = mode;
               this.modePopupDataSrc = src;
               this.modePopupDataIndex = index;
+              this.modePopupDataWidth =  `${document.documentElement.clientWidth}`;
+              this.modePopupDataHeight= `${document.documentElement.clientHeight}`;
               document.getElementsByTagName('body')[0].style.overflow = 'hidden';
             }
             clearInterval(this.timer);
@@ -749,14 +751,14 @@
             self.clock = new THREE.Clock();
 
 
-            var camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+            var camera = new THREE.PerspectiveCamera(45, self.width / self.height, 0.1, 1000);
             self.camera = camera
             self.camera.position.set(0, 0, 100);
 
             self.scene = new THREE.Scene();
             self.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             self.renderer.setPixelRatio(window.devicePixelRatio);
-            self.renderer.setSize(this.width, this.height);
+            self.renderer.setSize(self.width, self.height);
             self.renderer.toneMapping = THREE.ACESFilmicToneMapping;
             self.renderer.toneMappingExposure = 1;
             self.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -772,7 +774,6 @@
             // controls.maxDistance = 1;
             // controls.target.set(0, 1, 0);
             // controls.update();
-            window.addEventListener('resize', this.onWindowResize);
 
 
             new THREE.RGBELoader()
@@ -782,26 +783,26 @@
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // scene.background = texture;
                 self.scene.environment = texture;
-                // model
-                new THREE.GLTFLoader()
-                  // .setPath( 'models/gltf/' )
-                  .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
-                  .load(self.src, function (gltf) {
-                    // console.log(self.src)
-                    let loadscene = gltf.scene;
-                    loadscene.scale.set(1, 1, 1);
-                    // mixer = new THREE.AnimationMixer( gltf.scene );
-                    // mixer.clipAction( gltf.animations[ 0 ] ).play();
-                    self.setContent(loadscene)
-                  }, function (xhr) {
+            });
+            // model
+            new THREE.GLTFLoader()
+              // .setPath( 'models/gltf/' )
+              .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
+              .load(self.src, function (gltf) {
+                // console.log(self.src)
+                let loadscene = gltf.scene;
+                loadscene.scale.set(1, 1, 1);
+                // mixer = new THREE.AnimationMixer( gltf.scene );
+                // mixer.clipAction( gltf.animations[ 0 ] ).play();
+                self.setContent(loadscene)
+              }, function (xhr) {
 
-                    //模型加载状态
-                    self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-                    if (self.loadedData == '100') {
-                      let ld = document.getElementsByClassName('modelBorder')[self.index];
-                      ld.style.backgroundImage = 'none';
-                    }
-                  });
+                //模型加载状态
+                self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+                if (self.loadedData == '100') {
+                  let ld = document.getElementsByClassName('modelBorder')[self.index];
+                  ld.style.backgroundImage = 'none';
+                }
               });
 
           },
@@ -836,24 +837,20 @@
 
           },
 
-          onWindowResize() {
-            let self = this; //这一点很重要。。
-            self.camera.aspect = this.width / this.height;
-            self.camera.updateProjectionMatrix();
-            self.renderer.setSize(this.width, this.height);
-
-          },
 
           //
 
           animate() {
             let self = this; //这一点很重要。
 
-            requestAnimationFrame(this.animate);
+            requestAnimationFrame(self.animate);
+            self.render();
 
-            // if (mixer) mixer.update(clock.getDelta());
-            // this.controls.update(); // required if damping enabled
+          },
+          render() {
+            let self = this; //这一点很重要。
 
+            // self.scene.background = self.hdrCubeMap
             self.renderer.render(self.scene, self.camera);
           }
         },
