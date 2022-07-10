@@ -410,7 +410,7 @@
           },
           //模型调试
           modelDev(itemInfo) {
-            window.open('http://10.40.96.71:3000/#model=' + window.location.href + itemInfo.fileName)
+            window.open(window.location.origin+'/glTF-Viewer/#model=' + window.location.href + itemInfo.fileName)
           },
 
           copyLink(itemInfo) {
@@ -802,7 +802,7 @@
 
             new THREE.RGBELoader()
               // .setPath('pisaHDR/')
-              .load('http://10.40.96.71:3000/assets/environment/venice_sunset_1k.hdr', function (texture) {
+              .load(window.location.origin+'/glTF-Viewer/assets/environment/venice_sunset_1k.hdr', function (texture) {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // self.scene.background = texture;
