@@ -18,7 +18,8 @@
     "dev": "nodemon ./bin/files-preview ./example -s",
     "start": "node ./bin/files-preview",
     "pretest": "common bin/files-preview lib/ test",
-    "test": "vows --spec --isolate"
+    "test": "vows --spec --isolate",
+    "push": "cp -r lib /usr/local/lib/node_modules/files-preview/"
   },
   "files": [
     "lib",
