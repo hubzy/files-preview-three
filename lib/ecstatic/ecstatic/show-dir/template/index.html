@@ -129,11 +129,11 @@
       </div>
 
       <div class="file-type-wrap type-image" v-if="modelGlb.length > 0">
-        <script src="./three.min.js"></script>
-        <script src="./OrbitControls.js"></script>
-        <script src="./GLTFLoader.js"></script>
-        <script src="./RGBELoader.js"></script>
-        <script src="./DRACOLoader.js"></script>
+        <script src="/three.min.js"></script>
+        <script src="/OrbitControls.js"></script>
+        <script src="/GLTFLoader.js"></script>
+        <script src="/RGBELoader.js"></script>
+        <script src="/DRACOLoader.js"></script>
         <div class="file-type-name">三维模型</div>
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
@@ -340,7 +340,8 @@
 
             _this.handleScroll();
           });
-          _this.images.length > 0 ? _this.initViewer() : ''
+          _this.images.length > 0 ? _this.initViewer() : '';
+          document.body.style.opacity = '1';
         },
         beforeDestroy: function beforeDestroy() {
           window.removeEventListener("scroll", this.handleScroll);
@@ -873,6 +874,4 @@
     })();
   </script>
 </body>
-
-
 </html>
