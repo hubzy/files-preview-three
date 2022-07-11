@@ -136,9 +136,9 @@
         <ul class="images row row-4">
           <li class="col-item" v-for="(item,index) in modelGlb" :key="index">
             <span class="modelBorderContainer">
-              <span @mousedown="moveStart" @mouseup="moveStop(item.fileName,current+item.fileName,modelGlb.length)">
+              <span @mousedown="moveStart" @mouseup="moveStop(item.fileName,'./'+item.fileName,modelGlb.length)">
                 <div class="update-time">{{getUpdateTime(item.dirData.mtimeMs)}}</div>
-                <modelscale :model="item.fileName" :src="current+item.fileName" :index="Number(index)" :width=282
+                <modelscale :model="item.fileName" :src="'./'+item.fileName" :index="Number(index)" :width=282
                   :height=240>
                 </modelscale>
               </span>
@@ -769,10 +769,11 @@
         },
         mounted() {
 
+         
 
         },
         destroyed() {
-
+          
         },
         methods: {
 
