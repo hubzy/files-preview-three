@@ -348,7 +348,10 @@
 
             _this.handleScroll();
           });
-          _this.images.length > 0 ? _this.initViewer() : ''
+          _this.images.length > 0 ? _this.initViewer() : '';
+
+          document.body.style.opacity = '1';
+
         },
         beforeDestroy: function beforeDestroy() {
           window.removeEventListener("scroll", this.handleScroll);
