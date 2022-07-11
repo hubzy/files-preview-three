@@ -410,7 +410,7 @@
           },
           //模型调试
           modelDev(itemInfo) {
-            window.open(window.location.origin+'/glTF-Viewer/#model=' + window.location.href + itemInfo.fileName)
+            window.open(window.location.origin + '/glTF-Viewer/#model=' + window.location.href + itemInfo.fileName)
           },
 
           copyLink(itemInfo) {
@@ -770,7 +770,7 @@
         methods: {
 
           init() {
-            let self = this; 
+            let self = this;
 
             self.clock = new THREE.Clock();
 
@@ -802,38 +802,41 @@
 
             new THREE.RGBELoader()
               // .setPath('pisaHDR/')
-              .load(window.location.origin+'/glTF-Viewer/assets/environment/venice_sunset_1k.hdr', function (texture) {
+              .load(window.location.origin + '/glTF-Viewer/assets/environment/venice_sunset_1k.hdr', function (texture) {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // self.scene.background = texture;
                 self.scene.environment = texture;
 
+                //new加载模型放在材质内可以方便按顺序加载，hdr加载完之后再显示模型，否侧会先显示黑模型再显示hdr灯光
+                // model  
+                new THREE.GLTFLoader()
+                  // .setPath( 'models/gltf/' )
+                  .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
+                  .load(self.src, function (gltf) {
+                    // console.log(self.src)
+                    let loadscene = gltf.scene;
+                    loadscene.scale.set(1, 1, 1);
+                    // mixer = new THREE.AnimationMixer( gltf.scene );
+                    // mixer.clipAction( gltf.animations[ 0 ] ).play();
+                    self.setContent(loadscene)
+                  }, function (xhr) {
+                    //模型加载状态
+                    self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+                    if (self.loadedData == '100') {
+                      let ld = document.getElementsByClassName('modelBorder')[self.index];
+                      ld.style.backgroundImage = 'none';
+                    }
+                  });
+
               });
-            // model
-            new THREE.GLTFLoader()
-              // .setPath( 'models/gltf/' )
-              .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
-              .load(self.src, function (gltf) {
-                // console.log(self.src)
-                let loadscene = gltf.scene;
-                loadscene.scale.set(1, 1, 1);
-                // mixer = new THREE.AnimationMixer( gltf.scene );
-                // mixer.clipAction( gltf.animations[ 0 ] ).play();
-                self.setContent(loadscene)
-              }, function (xhr) {
-                //模型加载状态
-                self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-                if (self.loadedData == '100') {
-                  let ld = document.getElementsByClassName('modelBorder')[self.index];
-                  ld.style.backgroundImage = 'none';
-                }
-              });
+
 
 
           },
 
           setContent(model) {
-            let self = this; 
+            let self = this;
             let group = new THREE.Group();
             group.add(model);
             group.updateMatrixWorld();
@@ -863,13 +866,13 @@
           },
 
           animate() {
-            let self = this; 
+            let self = this;
             requestAnimationFrame(self.animate);
             self.render()
 
           },
           render() {
-            let self = this; 
+            let self = this;
             self.renderer.render(self.scene, self.camera);
           }
         },
