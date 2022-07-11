@@ -145,7 +145,7 @@
         style="background-color: rgba(0,0,0,.85); z-index: 2015;" v-if="modePopupData">
         <div class="viewer-canvas">
           <modelscale :model="modePopupDataModel" :src="modePopupDataSrc" :index="modePopupDataIndex"
-            :width="modePopupDataWidth" :height="modePopupDataHeight" ></modelscale>
+            :width="modePopupDataWidth" :height="modePopupDataHeight"></modelscale>
         </div>
         <div class="viewer-button viewer-close" v-on:click="closeModePopup"></div>
       </div>
@@ -370,8 +370,8 @@
               this.modePopupDataModel = mode;
               this.modePopupDataSrc = src;
               this.modePopupDataIndex = index;
-              this.modePopupDataWidth =  `${document.documentElement.clientWidth}`;
-              this.modePopupDataHeight= `${document.documentElement.clientHeight}`;
+              this.modePopupDataWidth = `${document.documentElement.clientWidth}`;
+              this.modePopupDataHeight = `${document.documentElement.clientHeight}`;
               document.getElementsByTagName('body')[0].style.overflow = 'hidden';
             }
             clearInterval(this.timer);
@@ -783,27 +783,31 @@
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // scene.background = texture;
                 self.scene.environment = texture;
-            });
-            // model
-            new THREE.GLTFLoader()
-              // .setPath( 'models/gltf/' )
-              .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
-              .load(self.src, function (gltf) {
-                // console.log(self.src)
-                let loadscene = gltf.scene;
-                loadscene.scale.set(1, 1, 1);
-                // mixer = new THREE.AnimationMixer( gltf.scene );
-                // mixer.clipAction( gltf.animations[ 0 ] ).play();
-                self.setContent(loadscene)
-              }, function (xhr) {
 
-                //模型加载状态
-                self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
-                if (self.loadedData == '100') {
-                  let ld = document.getElementsByClassName('modelBorder')[self.index];
-                  ld.style.backgroundImage = 'none';
-                }
+                //new加载模型放在材质内可以方便按顺序加载，hdr加载完之后再显示模型，否侧会先显示黑模型再显示hdr灯光
+                // model 
+                new THREE.GLTFLoader()
+                  // .setPath( 'models/gltf/' )
+                  .setDRACOLoader(new THREE.DRACOLoader().setDecoderPath())
+                  .load(self.src, function (gltf) {
+                    // console.log(self.src)
+                    let loadscene = gltf.scene;
+                    loadscene.scale.set(1, 1, 1);
+                    // mixer = new THREE.AnimationMixer( gltf.scene );
+                    // mixer.clipAction( gltf.animations[ 0 ] ).play();
+                    self.setContent(loadscene)
+                  }, function (xhr) {
+
+                    //模型加载状态
+                    self.loadedData = Math.floor(xhr.loaded / xhr.total * 100);
+                    if (self.loadedData == '100') {
+                      let ld = document.getElementsByClassName('modelBorder')[self.index];
+                      ld.style.backgroundImage = 'none';
+                    }
+                  });
               });
+
+
 
           },
 
