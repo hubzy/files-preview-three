@@ -605,14 +605,14 @@
             var projectList = []; // 普通文件夹
 
             var folderList = [];
-            // console.log(dirs)
+
             for (const item of dirs) {
               let _item = _slicedToArray(item, 2);
               let name = _item[0];
               let dirData = _item[1];
               let cover = _item[2];
 
-              if (name !== '..') {
+              if (name !== '..' && name !== 'config') {
                 if (cover) {
                   projectList.push({
                     dirData: dirData,
