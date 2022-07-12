@@ -420,7 +420,7 @@
           },
           //模型调试
           modelDev(itemInfo) {
-            window.open(window.location.origin + '/glTF-Viewer/#model=' + window.location.href + itemInfo.fileName)
+            window.open(window.location.origin + '/三维模型库/glTF-Viewer/#model=' + window.location.href + itemInfo.fileName)
           },
 
           copyLink(itemInfo) {
@@ -810,7 +810,7 @@
 
             new THREE.RGBELoader()
               // .setPath('pisaHDR/')
-              .load(window.location.origin + '/glTF-Viewer/assets/environment/venice_sunset_1k.hdr', function (texture) {
+              .load(window.location.origin + '/三维模型库/glTF-Viewer/assets/environment/venice_sunset_1k.hdr', function (texture) {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
                 // self.scene.background = texture;
