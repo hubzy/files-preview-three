@@ -33,7 +33,7 @@
 
       <h2 class="title">
         <a :href="path[path.length-2].path" class="back-icon" v-if="path && path.length >= 2"></a>
-        <span>{{currentName == '/' ? '项目总览': currentName || '项目总览' }}</span>
+        <span>{{currentName == 'Home' ? '项目总览': currentName || '项目总览' }}</span>
       </h2>
       <p class="path">
         快速导航 :
@@ -586,7 +586,7 @@
 
           initNav: function initNav() {
             var routes = treeData.current.split('/');
-            var path = '';
+            var path = window.location.origin;
             var paths = [];
             routes.forEach(function (item, index) {
               (item || index == 0) && paths.push({
