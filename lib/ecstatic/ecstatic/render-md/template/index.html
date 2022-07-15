@@ -66,7 +66,7 @@
           <div class="fp-tree-links">
             <div class="fp-tree-node-wrap">
               <!-- <div v-for="item in 1000">1</div> -->
-              <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node>
+              <!-- <tree-node v-if="fileTree.length > 0" :tree-data="fileTree" :active-file="currentFile"></tree-node> -->
             </div>
             <!-- <div class="fp-tree-footer">Files preview · <a target="_blank"
                 href="https://gitee.com/hubzyy/files-preview-three">Gitee 地址</a>
@@ -97,7 +97,7 @@
 </body>
 
 <script>
-  let fileTree = '{{fileTree}}';
+  // let fileTree = '{{fileTree}}';
 
   (function () {
     let docConfig = window.localStorage.getItem("FPDocConfig") || "{}";
@@ -228,7 +228,7 @@
 
       data() {
         return {
-          fileTree: [fileTree],
+          // fileTree: [fileTree],
           currentFile: decodeURIComponent(window.location.pathname),
           currentHash: decodeURIComponent(window.location.hash),
           anchor: {},
