@@ -21,7 +21,26 @@ li {
 a {
   text-decoration: none;
 }
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
 
+.tooltip .tooltiptext {
+  visibility: hidden;
+  display: block;
+  width: 130px;
+  right: -135px;
+  bottom: 0;
+  text-align: right;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  transition: visibility 0.5s;
+}
 .header-wrap {
   width: 100%;
   height: 88px;
