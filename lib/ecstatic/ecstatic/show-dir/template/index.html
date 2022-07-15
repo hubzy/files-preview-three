@@ -86,6 +86,7 @@
                   <path
                     d="M150 116.318H38.6611C34.2429 116.318 30.6611 112.736 30.6611 108.318V52.8045C30.6611 48.3862 34.2429 44.8045 38.6611 44.8045H150C154.418 44.8045 158 48.3862 158 52.8045V108.318C158 112.736 154.418 116.318 150 116.318Z"
                     fill="url(#paint0_linear)" fill-opacity="0.1" />
+                    <text  width="100" x="20%" y="65%" fill="#ffffff" font-size="10" fill-opacity="0.6">{{getUpdateTime(item.dirData.mtimeMs)}}</text>
                 </g>
                 <defs>
                   <filter id="filter0_d" x="0.661133" y="0.781319" width="187.339" height="157.536"
@@ -105,8 +106,7 @@
                   </linearGradient>
                 </defs>
               </svg>
-
-              <div class="file-name">{{item.name}} </div>
+              <div class="file-name file-Subtract">{{item.name}} </div>
             </a>
           </li>
         </ul>
@@ -202,7 +202,7 @@
                 </g>
               </svg>
 
-              <div class="file-name">{{item.fileName}}</div>
+              <div class="file-name file-plus">{{item.fileName}}</div>
             </a>
           </li>
         </ul>
