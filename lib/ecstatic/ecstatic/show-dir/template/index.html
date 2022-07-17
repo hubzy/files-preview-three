@@ -50,7 +50,7 @@
 
       <ul class="project-list row row-4" v-if="project.length > 0">
         <li class="project-item col-item" v-for="(item,index) in getProjectList" :key="index">
-          <a class="project" :href="item.name+'/'">
+          <a class="project" :href="item.path">
             <div class="project-cover" :style="{backgroundImage:`url('`+item.cover+`')`}"></div>
             <div class="project-info">
               <div class="file-name">{{item.name}}</div>
@@ -68,7 +68,7 @@
 
         <ul class="folder row row-6">
           <li class="col-item" v-for="(item,index) in folder" :key="index">
-            <a :href="item.name+'/'" class="folder-item">
+            <a :href="item.path" class="folder-item">
               <!-- <i class="folder-icon"></i> -->
               <svg width="100%" viewBox="0 0 188 159" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d)">
