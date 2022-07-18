@@ -7,6 +7,8 @@ body {
   margin: 0;
   font-family: PingFangSC-Regular, sans-serif, Microsoft-Yahei;
   opacity: 0;
+  transition: all 0.1s;
+  
 }
 
 ul,
@@ -19,14 +21,33 @@ li {
 a {
   text-decoration: none;
 }
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
 
+.tooltip .tooltiptext {
+  visibility: hidden;
+  display: block;
+  width: 130px;
+  right: -135px;
+  bottom: 0;
+  text-align: right;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  transition: visibility 0.5s;
+}
 .header-wrap {
   width: 100%;
   height: 88px;
   margin: 0 auto;
   overflow: hidden;
   position: fixed;
-  transition: all 0.2s;
+  transition: all 0.1s;
   background: rgba(255, 255, 255, 0);
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0);
   backdrop-filter: blur(15px);
@@ -94,6 +115,7 @@ a {
   text-align: center;
   line-height: 64px;
   font-size: 14px;
+  opacity: 0.8;
 
   a {
     color: #a0aec0;
@@ -174,6 +196,13 @@ a {
     -webkit-line-clamp: 2;
     word-wrap: break-word;
     word-break: break-all;
+    
+  }
+  .file-Subtract{
+    margin-top: -35px;
+  }
+  .file-plus{
+    margin-top: 15px;
   }
 
   .no-file {
@@ -236,7 +265,7 @@ a {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   display: block;
-  transition: all 0.2s;
+  transition: all 0.1s;
 
   &:nth-child(4n) {
     margin-right: 0;
@@ -330,7 +359,7 @@ a {
       bottom: 2.6rem;
       text-align: left;
       color: #718096;
-      font-size: 0.25rem;
+      font-size: 12px;
       opacity: 0.65;
     }
 
@@ -434,7 +463,7 @@ a {
     opacity: 0;
     z-index: -10;
     transform: scale(0.65);
-    transition: all 0.2s;
+    transition: all 0.1s;
     transform-origin: left top;
     display: none;
 

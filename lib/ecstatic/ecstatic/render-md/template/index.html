@@ -6,10 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Files-Preview</title>
-  <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="./favicon.ico">
+  <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
   <meta name="referrer" content="never">
-  <link rel="stylesheet" href="./indexMd.css">
-  <script src="./vue@v2.6.14.js"></script>
+  <link rel="stylesheet" href="/indexMd.css">
+  <script src="/vue@v2.6.14.js"></script>
+
+
+  <!-- 图片预览服务 -->
+  <script src="/viewer.min@1.10.1.js" async="async"></script>
+  <link href="/viewer.min@1.10.1.css" rel="stylesheet" async="async">
+    <!-- 代码高亮的样式 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+    <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -120,7 +128,7 @@
       template: `
       <ul class="sidebar-links">
         <li :class="['sidebar-group',...groupLinkStyle(item.relative)]" v-for="item in treeData">
-          <p @click="toggleOpen(item.relative)" :class="['sidebar-heading',{close:!!closeKeys[item.relative]}]" v-if="item.name && item.name !== '/'"><a @click.stop :href="item.relative">{{item.name}}</a></p>
+          <p @click="toggleOpen(item.relative)" :class="['sidebar-heading',{close:!!closeKeys[item.relative]}]" v-if="item.name"><a @click.stop :href="item.relative">{{item.name}}</a></p>
           <ul :class="['sidebar-group-items',{close:!!closeKeys[item.relative]}]" style="max-height:auto;" :ref="'groupItem_'+item.relative">
             <template v-if="item.files && item.files.length > 0">
               <li class="group-link-item" v-for="file in item.files">
@@ -239,6 +247,7 @@
         this.toggleFocus(this.focusTree);
         this.highlightAll();
         this.initViewer();
+        document.body.style.opacity = '1';
       },
 
       beforeDestroy() {
@@ -341,14 +350,5 @@
   })();
 
 </script>
-
-<!-- 代码高亮的样式 -->
-<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
-<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet" />
-
-<!-- 图片预览服务 -->
-<script src="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.js"></script>
-<link href="https://cdn.bootcdn.net/ajax/libs/viewerjs/1.10.1/viewer.min.css" rel="stylesheet">
-
 
 </html>
