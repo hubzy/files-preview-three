@@ -24,22 +24,22 @@ files-preview-three是基于[files-preview](https://gitee.com/Jioho/files-previe
 ![01](assets/01.png)
 
 
+
 ## 增加「三维模型预览」
 
 支持三维模型 '.glb', .'gltf' 文件的预览及模型下载，方便浏览和查找所需的模型文件，支持模型调试。
-![02](assets/02.mp4)
-
+![01](assets/02.mp4)
 
 ## 增加「文档模式」
 
 当文件夹内包含 md 格式的文件时，打开该文件夹将会进入文档模式。
-![03](assets/03.png)
+
 
 
 ## 增加「项目」类型
 
-文件夹新增「项目」类型，可通过创建在 config 文件夹，在文件夹中增加 cover.png 来使该文件夹成为「项目」。cover可支持`jpeg`、`png`、`GIF`。
-![04](assets/04.png)
+文件夹新增「项目」类型，可通过在 assets 文件夹（使用 Measure 插件会自动生成一个，也能手动添加）中增加 cover.png 来使该文件夹成为「项目」。
+
 
 
 ## 图片及 svg 预览
@@ -52,7 +52,7 @@ files-preview-three是基于[files-preview](https://gitee.com/Jioho/files-previe
 
 ## 安装
 
-【第一步】通过 `npm` 进行全局安装，打开终端后输入以下命令：
+通过 `npm` 进行全局安装，打开终端后输入以下命令：
 
 ```
 npm install --global files-preview
@@ -60,16 +60,7 @@ npm install --global files-preview
 
 这样能够全局安装 files-preview，你可以在任何地方使用命令行运行该工具。
 
-> 使用 mac 并且要全局安装的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`>
-
-【第二部】替换全局文件，安装完之后替换`lib`文件，将`lib`文件夹拷贝后，macOS下替换` /usr/local/lib/node_modules/files-preview/` ，目录下的`lib`文件即可。
-
-可以手动替换，也可以使用命令npm脚本替换（如果替换不成功）请手动替换，找到`files-preview`全局安装安装的位置，再找到替换即可，替换完之后需要重启服务。
-
-```
-npm run push
-```
-
+> 使用 mac 并且要全局安装的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`
 
 ## 使用
 
@@ -80,12 +71,12 @@ npm run push
 files-preview [path] [options]
 ```
 
-`[]` 内容均为非必填参数，可以看[files-preview](files-preview-three-server.md) 配置说明文档，感兴趣的也可以看http-server 的参数描述[http-server](https://github.com/http-party/http-server) 。
+`[]` 内容均为非必填参数，感兴趣的可以看下 http-server 的参数描述 [Http-server-readme](./Http-server-readme.md)
 
-`[path]` 为要展示的根目录。 默认为 `./exapmple` if the folder exists, and `./exapmple` otherwise.
+`[path]` 为要展示的根目录。 默认为 `./public` if the folder exists, and `./` otherwise.
 
 > path 为展示的文件的根目录，默认是展示当前目录下所有的文件和子文件夹的问题
-> 如果在当前目录下还有一个名为 `exapmple` 的目录，那么根目录会默认指向到 exapmple 文件夹中
+> 如果在当前目录下还有一个名为 `public` 的目录，那么根目录会默认指向到 public 文件夹中
 
 现在可以访问 [http://localhost:8080](http://localhost:8080/) 或终端显示的地址来查看你的服务器。
 
@@ -94,11 +85,12 @@ files-preview [path] [options]
 
 快速操作下载地址：[自动操作 - 快速开启 FP 服务](https://gitee.com/Jioho/files-preview/raw/master/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%90%AF%20FP%20%E6%9C%8D%E5%8A%A1.zip)，解压后双击安装即可。
 
-![05](assets/05.png)
+![](https://gitee.com/Jioho/img/raw/master/tinymce/20211218231103.png)
 
 
-更多功能可查看 [files-preview](files-preview-three-server.md) 的说明文档，虽然没有一一进行过测试，但原版的所有功能应该都是支持的。
+更多功能可查看 http-server 的说明文档，虽然没有一一进行过测试，但原版的所有功能应该都是支持的。
 
+我们对以上文档进行了简单翻译，可在以下地址查阅：[Http-server-readme](./Http-server-readme.md)
 
 ## 更新
 
@@ -113,6 +105,11 @@ npm run server
 //可自定义文件夹
 nodemon ./bin/files-preview 绝对文件夹路径
 ```
+
+
+这样能够全局安装/更新 files-preview，你可以在任何地方使用命令行运行该工具。
+
+> 使用 mac 并且要全局更新的话，请尝试加上 sudo 进行安装 `sudo npm install --global files-preview`
 
 
 # 它有什么优势？
@@ -140,8 +137,3 @@ nodemon ./bin/files-preview 绝对文件夹路径
 - 项目封面支持 gif 格式
 - 修复了 CentOS 下的运行问题
 - 优化图片预览体验
-- 新增支持模型gib gltf文件预览
-- 内嵌[three-gltf-viewer](https://github.com/donmccurdy/three-gltf-viewer)
-- 外部资源改为本地资源
-- 简化了md文档目录
-- 其他bug修复...
